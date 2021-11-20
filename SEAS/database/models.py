@@ -1,13 +1,12 @@
 from django.db import models
 
 # Create your models here.
-class FixedCharField( models.Field ):
-    def __init__( self, max_length, *args, **kwargs ):
-        self.max_length = max_length
-        super().__init__( *args, **kwargs )
 
-    def db_type( self, connection ):
-        return 'CHAR( %s )' % self.max_length
+class FixedCharField(models.CharField):
+    def db_type(self, connection):
+        varchar: str = super().db_type(connection)
+        char: str = varchar.replace('varchar', 'char')
+        return char
 
 class YearField( models.Field ):
     def db_type( self, connection ):
@@ -18,5 +17,5 @@ class TimeField( models.Field ):
         return 'TIME'
 
 class School ( models.Model ):
-    cSchool_ID = models.FixedCharField( max_length = 5 , primary_key = True )
-    cSchoolName = models.CharField( max_length = 50 )
+    cSchool_ID = FixedCharField(max_length = 5, primary_key = True)
+    cSchoolName = models.CharField(max_length = 50)
