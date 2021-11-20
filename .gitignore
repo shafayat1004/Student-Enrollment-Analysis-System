@@ -1,4 +1,4 @@
 .env
 bin/
 lib/
-.vscode
+.vscode/
