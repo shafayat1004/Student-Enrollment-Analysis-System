@@ -1,5 +1,5 @@
 # Student-Enrollment-Analysis-System
-## CSE303 Database Management
+## CSE303 Database Management Autumn 2021
 ### By Section 4 Group 1:
 
 Fahim Ahmed, 
