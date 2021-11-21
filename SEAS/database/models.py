@@ -1,4 +1,5 @@
 from django.db import models
+from django_mysql.models import EnumField
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class YearField( models.Field ):
 class TimeField( models.Field ):
     def db_type( self, connection ):
         return 'TIME'
+
 
 class School ( models.Model ):
     cSchool_ID = FixedCharField(max_length = 5, primary_key = True)
@@ -46,6 +48,23 @@ class CoOfferedCourse ( models.Model ):
     
 
 class Section ( models.Model ): 
+    class DaysEnum(models.TextChoices):
+        ST = 'Sunday and Tuesday'
+        MW = 'Monday and Wednesday'
+        S = 'Sunday'
+        M = 'Monday'
+        T = 'Tuesday'
+        W = 'Wednesday'
+        R = 'Thursday'
+        A = 'Saturday'
+        F = 'Friday'
+
+    class SessionEnum(models.TextChoices):
+        SUMMER = 'Summer'
+        AUTUMN = 'Autumn'
+        SPRING = 'Spring'
+        # NNNNNN = 'Not Found'
+
     # TODO need to figure out FK as PK/Composite keys
     cCoffCode_ID = models.ForeignKey( CoOfferedCourse , on_delete = models.CASCADE )
     dYear = YearField()
@@ -57,5 +76,7 @@ class Section ( models.Model ):
     bIsBlocked = models.BooleanField()
     tStartTime = TimeField()
     tEndTime = TimeField()
-    # eDays 
-    # eSession
+
+    eDays = EnumField(choices=DaysEnum.choices)
+
+    eSession = EnumField(choices=SessionEnum.choices)
