@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'home',
     'database',
     'login',
+    'django_mysql',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'read_default_file': '/etc/mysql/my.cnf',
+            "charset": "utf8mb4",
+        },
+        "TEST": {
+            "CHARSET": "utf8mb4",
+            "COLLATION": "utf8mb4_unicode_ci",
         },
     }
 }
