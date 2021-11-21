@@ -36,12 +36,12 @@ class Faculty ( models.Model ):
     cFacultyName = models.CharField( max_length = 50 )
     
 class Classroom ( models.Model ):
-    cRoom_ID = models.FixedCharField( max_length = 10, primary_key= True )
+    cRoom_ID = FixedCharField( max_length = 10, primary_key= True )
     nRoomCapacity = models.PositiveSmallIntegerField()
 
 
 class CoOfferedCourse ( models.Model ):
-    cCoffCode_ID = models.FixedCharField( max_length = 7, primary_key = True )
+    cCoffCode_ID = FixedCharField( max_length = 7, primary_key = True )
     cCourse_ID =  models.ForeignKey( Course , on_delete = models.CASCADE )
     
 
