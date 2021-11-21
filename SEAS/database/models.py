@@ -72,7 +72,7 @@ class SchoolT(models.Model):
 class SectionT(models.Model):
     section_id = models.BigAutoField(db_column='section_ID', primary_key=True)
     
-    cCoffCode_ID = models.OneToOneField(CoofferedcourseT, models.DO_NOTHING, db_column='cCoffCode_ID')
+    cCoffCode_ID = models.ForeignKey(CoofferedcourseT, models.DO_NOTHING, db_column='cCoffCode_ID', blank=True, null=True)
     
     eSession = EnumField(choices=['Autumn', 'Summer', 'Spring'], db_column='eSession')
     eDays = EnumField(choices=['ST', 'MW', 'S', 'M', 'T', 'W', 'R', 'F', 'A'], db_column='eDays', blank=True, null=True)
