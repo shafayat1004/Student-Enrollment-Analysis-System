@@ -34,3 +34,28 @@ class Course ( models.Model ):
 class Faculty ( models.Model ):
     cFaculty_ID = FixedCharField( max_length = 4, primary_key = True )
     cFacultyName = models.CharField( max_length = 50 )
+    
+class Classroom ( models.Model ):
+    cRoom_ID = models.FixedCharField( max_length = 10, primary_key= True )
+    nRoomCapacity = models.PositiveSmallIntegerField()
+
+
+class CoOfferedCourse ( models.Model ):
+    cCoffCode_ID = models.FixedCharField( max_length = 7, primary_key = True )
+    cCourse_ID =  models.ForeignKey( Course , on_delete = models.CASCADE )
+    
+
+class Section ( models.Model ): 
+    # TODO need to figure out FK as PK/Composite keys
+    cCoffCode_ID = models.ForeignKey( CoOfferedCourse , on_delete = models.CASCADE )
+    dYear = YearField()
+    nSectionNumber = models.IntegerField()
+    cFaculty_ID = models.ForeignKey( Faculty , on_delete = models.CASCADE )
+    cRoom_ID = models.ForeignKey( Classroom , on_delete = models.CASCADE )
+    nSectionCapacity = models.PositiveSmallIntegerField()
+    nEnrolled = models.PositiveSmallIntegerField()
+    bIsBlocked = models.BooleanField()
+    tStartTime = models.TimeField()
+    tEndTime = models.TimeField()
+    # eDays 
+    # eSession
