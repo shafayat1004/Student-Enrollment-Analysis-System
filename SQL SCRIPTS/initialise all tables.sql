@@ -25,7 +25,7 @@ CREATE TABLE `CoOfferedCourse_T` (`cCoffCode_ID` char(7) NOT NULL PRIMARY KEY, `
 --
 -- Create model SectionT
 --
-CREATE TABLE `Section_T` (`section_ID` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `eSession` enum('Autumn','Summer','Spring') NOT NULL, `eDays` enum('ST','MW','S','M','T','W','R','F','A') NULL, `dYear` YEAR NOT NULL, `nSectionNumber` integer NULL, `nSectionCapacity` integer NULL, `nEnrolled` integer NULL, `bIsBlocked` bool NULL, `tStartTime` time(4) NULL, `tEndTime` time(4) NULL, `cCoffCode_ID` char(7) NOT NULL UNIQUE, `cFaculty_ID` char(4) NULL, `cRoom_ID` char(10) NULL);
+CREATE TABLE `Section_T` (`section_ID` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `eSession` enum('Autumn','Summer','Spring') NOT NULL, `eDays` enum('ST','MW','S','M','T','W','R','F','A') NULL, `dYear` YEAR NOT NULL, `nSectionNumber` integer NULL, `nSectionCapacity` integer NULL, `nEnrolled` integer NULL, `bIsBlocked` bool NULL, `tStartTime` time(4) NULL, `tEndTime` time(4) NULL, `cCoffCode_ID` char(7) NULL, `cFaculty_ID` char(4) NULL, `cRoom_ID` char(10) NULL);
 ALTER TABLE `Department_T` ADD CONSTRAINT `Department_T_cSchool_ID_63ec4e50_fk_School_T_cSchool_ID` FOREIGN KEY (`cSchool_ID`) REFERENCES `School_T` (`cSchool_ID`);
 ALTER TABLE `Course_T` ADD CONSTRAINT `Course_T_cDepartment_ID_db6f888e_fk_Department_T_cDepartment_ID` FOREIGN KEY (`cDepartment_ID`) REFERENCES `Department_T` (`cDepartment_ID`);
 ALTER TABLE `CoOfferedCourse_T` ADD CONSTRAINT `CoOfferedCourse_T_cCourse_ID_978180ee_fk_Course_T_cCourse_ID` FOREIGN KEY (`cCourse_ID`) REFERENCES `Course_T` (`cCourse_ID`);
