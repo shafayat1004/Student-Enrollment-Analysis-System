@@ -1,5 +1,6 @@
 asgiref==3.4.1
 Django==3.2.7
+django-mysql==4.2.0
 mysql-connector-python==8.0.26
 mysqlclient==2.1.0
 protobuf==3.18.1
