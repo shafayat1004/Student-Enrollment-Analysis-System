@@ -1,7 +1,6 @@
 from django.db import models
 from django_mysql.models import EnumField
 
-# Create your models here.
 
 class FixedCharField(models.CharField):
     def db_type(self, connection):
@@ -13,70 +12,85 @@ class YearField( models.Field ):
     def db_type( self, connection ):
         return 'YEAR'
 
-class TimeField( models.Field ):
-    def db_type( self, connection ):
-        return 'TIME'
+class TimeField( models.CharField ):
+    def db_type(self, connection):
+        varchar: str = super().db_type(connection)
+        time: str = varchar.replace('varchar', 'time')
+        return time
+
+class ClassroomT(models.Model):
+    cRoom_ID = FixedCharField(db_column='cRoom_ID', primary_key=True, max_length=10)
+    nRoomCapacity = models.IntegerField(db_column='nRoomCapacity', blank=True, null=True)
+
+    class Meta:
+        db_table = 'Classroom_T'
 
 
-class School ( models.Model ):
-    cSchool_ID = FixedCharField(max_length = 5, primary_key = True)
-    cSchoolName = models.CharField(max_length = 50)
+class CoofferedcourseT(models.Model):
+    cCoffCode_ID = FixedCharField(db_column='cCoffCode_ID', primary_key=True, max_length=7)
+    cCourse_ID = models.ForeignKey('CourseT', models.DO_NOTHING, db_column='cCourse_ID', blank=True, null=True)
 
-class Department ( models.Model ):
-    cDepartment_ID = FixedCharField( max_length = 3, primary_key = True )
-    cDepartmentName = models.CharField( max_length = 50 )
-    cSchool_ID = models.ForeignKey( School, on_delete = models.CASCADE )
+    class Meta:
+        db_table = 'CoOfferedCourse_T'
 
-class Course ( models.Model ):
-    cCourse_ID = FixedCharField( max_length = 7, primary_key = True )
-    cCourseName = models.CharField( max_length = 50 )
-    nCreditHours = models.PositiveSmallIntegerField()
-    cDepartment_ID = models.ForeignKey( Department, on_delete = models.CASCADE )
 
-class Faculty ( models.Model ):
-    cFaculty_ID = FixedCharField( max_length = 4, primary_key = True )
-    cFacultyName = models.CharField( max_length = 50 )
+class CourseT(models.Model):
+    cCourse_ID = FixedCharField(db_column='cCourse_ID', primary_key=True, max_length=7)
+    cCourseName = models.CharField(db_column='cCourseName', max_length=30, blank=True, null=True)
+    nCreditHours = models.IntegerField(db_column='nCreditHours', blank=True, null=True)
+    cDepartment_ID = models.ForeignKey('DepartmentT', models.DO_NOTHING, db_column='cDepartment_ID', blank=True, null=True)
+
+    class Meta:
+        db_table = 'Course_T'
+
+
+class DepartmentT(models.Model):
+    cDepartment_ID = FixedCharField(db_column='cDepartment_ID', primary_key=True, max_length=3)
+    cDepartmentName = models.CharField(db_column='cDepartmentName', max_length=50, blank=True, null=True)
+    cSchool_ID = models.ForeignKey('SchoolT', models.DO_NOTHING, db_column='cSchool_ID', blank=True, null=True)
+
+    class Meta:
+        db_table = 'Department_T'
+
+
+class FacultyT(models.Model):
+    cFaculty_ID = FixedCharField(db_column='cFaculty_ID', max_length=4, primary_key=True)
+    cFacultyName = models.CharField(db_column='cFacultyName', max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'Faculty_T'
+
+
+class SchoolT(models.Model):
+    cSchool_ID = FixedCharField(db_column='cSchool_ID', primary_key=True, max_length=5)
+    cSchoolName = models.CharField(db_column='cSchoolName', max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'School_T'
+
+
+class SectionT(models.Model):
+    section_id = models.BigAutoField(db_column='section_ID', primary_key=True)
     
-class Classroom ( models.Model ):
-    cRoom_ID = FixedCharField( max_length = 10, primary_key= True )
-    nRoomCapacity = models.PositiveSmallIntegerField()
-
-
-class CoOfferedCourse ( models.Model ):
-    cCoffCode_ID = FixedCharField( max_length = 7, primary_key = True )
-    cCourse_ID =  models.ForeignKey( Course , on_delete = models.CASCADE )
+    cCoffCode_ID = models.OneToOneField(CoofferedcourseT, models.DO_NOTHING, db_column='cCoffCode_ID')
     
+    eSession = EnumField(choices=['Autumn', 'Summer', 'Spring'], db_column='eSession')
+    eDays = EnumField(choices=['ST', 'MW', 'S', 'M', 'T', 'W', 'R', 'F', 'A'], db_column='eDays', blank=True, null=True)
 
-class Section ( models.Model ): 
-    class DaysEnum(models.TextChoices):
-        ST = 'Sunday and Tuesday'
-        MW = 'Monday and Wednesday'
-        S = 'Sunday'
-        M = 'Monday'
-        T = 'Tuesday'
-        W = 'Wednesday'
-        R = 'Thursday'
-        A = 'Saturday'
-        F = 'Friday'
+    dYear = YearField(db_column='dYear')
 
-    class SessionEnum(models.TextChoices):
-        SUMMER = 'Summer'
-        AUTUMN = 'Autumn'
-        SPRING = 'Spring'
-        # NNNNNN = 'Not Found'
+    nSectionNumber = models.IntegerField(db_column='nSectionNumber', blank=True, null=True)
 
-    # TODO need to figure out FK as PK/Composite keys
-    cCoffCode_ID = models.ForeignKey( CoOfferedCourse , on_delete = models.CASCADE )
-    dYear = YearField()
-    nSectionNumber = models.IntegerField()
-    cFaculty_ID = models.ForeignKey( Faculty , on_delete = models.CASCADE )
-    cRoom_ID = models.ForeignKey( Classroom , on_delete = models.CASCADE )
-    nSectionCapacity = models.PositiveSmallIntegerField()
-    nEnrolled = models.PositiveSmallIntegerField()
-    bIsBlocked = models.BooleanField()
-    tStartTime = TimeField()
-    tEndTime = TimeField()
+    cFaculty_ID = models.ForeignKey(FacultyT, models.DO_NOTHING, db_column='cFaculty_ID', blank=True, null=True)
+    cRoom_ID = models.ForeignKey(ClassroomT, models.DO_NOTHING, db_column='cRoom_ID', blank=True, null=True)
+    nSectionCapacity = models.IntegerField(db_column='nSectionCapacity', blank=True, null=True)
+    nEnrolled = models.IntegerField(db_column='nEnrolled', blank=True, null=True)
+    bIsBlocked = models.BooleanField(db_column='bIsBlocked', blank=True, null=True)
 
-    eDays = EnumField(choices=DaysEnum.choices)
+    tStartTime = TimeField(max_length=4,db_column='tStartTime', blank=True, null=True)
+    tEndTime = TimeField(max_length=4, db_column='tEndTime', blank=True, null=True)
 
-    eSession = EnumField(choices=SessionEnum.choices)
+    class Meta:
+        db_table = 'Section_T'
+        unique_together = ('cCoffCode_ID', 'eSession', 'dYear', 'nSectionNumber')
+
