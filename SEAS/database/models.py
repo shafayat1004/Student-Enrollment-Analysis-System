@@ -55,7 +55,7 @@ class Section ( models.Model ):
     nSectionCapacity = models.PositiveSmallIntegerField()
     nEnrolled = models.PositiveSmallIntegerField()
     bIsBlocked = models.BooleanField()
-    tStartTime = models.TimeField()
-    tEndTime = models.TimeField()
+    tStartTime = TimeField()
+    tEndTime = TimeField()
     # eDays 
     # eSession
