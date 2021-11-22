@@ -4,7 +4,7 @@ from pandas import read_excel, read_csv
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
     csv_variables = ''
 
-    firstRow = read_csv(csvPath, nrows=1)
+    firstRow = read_csv(csvPath, nrows=1, sep='\t')
     for i in firstRow:
         if i in csvColumns:
             if csv_variables=='':
@@ -32,7 +32,7 @@ def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO 
     if local is True:
         sqlQuery+= 'LOCAL'
 
-    sqlQuery+='\nINFILE "' + str(csvPath) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY ","\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
+    sqlQuery+='\nINFILE "' + str(csvPath) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY "\\t"\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
     
     return sqlQuery
 
@@ -41,7 +41,7 @@ def xlsxToMySQL(xlsxPath, xlsxColumns, tableName, tableColumns):
         return
     read_file = read_excel (xlsxPath)
     csvSavePath = Path.joinpath(xlsxPath.parent, xlsxPath.stem + '.csv')
-    read_file.to_csv (csvSavePath, index = None, header=True, columns=xlsxColumns)
+    read_file.to_csv (csvSavePath, index = None, header=True, columns=xlsxColumns, sep='\t')
     return csvToMySQL(csvSavePath, xlsxColumns, tableName, tableColumns)
 
 def fillClassroom_T(csvPath):
@@ -99,17 +99,41 @@ def fillSection_T(csvPath):
     tableColumns = ['eSession', 'eDays', 'dYear', 'nSectionNumber', 'nSectionCapacity', 'nEnrolled', 'bIsBlocked', 'tStartTime', 'tEndTime', 'cCoffCode_ID', 'cFaculty_ID', 'cRoom_ID']
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
-def populateAllTables(xlsxPath):
+def xlsxToCSV(xlsxPath):
     read_file = read_excel (xlsxPath)
     csvSavePath = Path.joinpath(xlsxPath.parent, xlsxPath.stem + '.csv')
-    read_file.to_csv (csvSavePath, index = None, header=True)
+    read_file.to_csv (csvSavePath, sep='\t', index = None, header=True)
+    return csvSavePath
 
-    return '-- AUTO-GENERATED QUERY FROM populateALLTables FUNCTION\n\n\n' + fillClassroom_T(csvSavePath) + fillFaculty_T(csvSavePath) + fillSchool_T(csvSavePath) + fillDepartment_T(csvSavePath) + fillCourse_T(csvSavePath) + fillCoOfferedCourse_T(csvSavePath) + fillSection_T(csvSavePath)
+def populateAllTables(csvPath):
+
+    return '-- AUTO-GENERATED QUERY FROM populateALLTables FUNCTION\n\n\n' + fillClassroom_T(csvPath) + fillFaculty_T(csvPath) + fillSchool_T(csvPath) + fillDepartment_T(csvPath) + fillCourse_T(csvPath) + fillCoOfferedCourse_T(csvPath) + fillSection_T(csvPath)
 
 
 def optimiseXLSX(xlsxPath):
-    # TODO We will have to fix the problems outlined in the previous functions then send to populate Function
-    return
+    csvPath = xlsxToCSV(xlsxPath)
+    dataset = read_csv(csvPath, sep='\t')
+    dataset.dropna(inplace=True)
+
+    # Separating faculty id and name
+    facultyData = dataset['FACULTY_FULL_NAME'].str.split("-", n = 1, expand = True)
+    dataset['FACULTY_ID'] = facultyData[0]
+    dataset['FACULTY_NAME'] = facultyData[1]
+    dataset.drop(columns =["FACULTY_FULL_NAME"], inplace = True)
+
+    #Creating SCHOOL_NAME Column
+    schoolNameDict = {
+        'SBE'   : 'School of Business',
+        'SLASS' : 'School of Liberal Arts and Social Sciences',
+        'SETS'  : 'School of Engineering, Technology and Sciences',
+        'SPPH'  : 'School of Pharmacy and Public Health',
+        'SELS'  : 'School of Environment and Life Sciences'
+    }
+    dataset['SCHOOL_NAME'] = dataset['SCHOOL_TITLE'].replace(schoolNameDict)
+
+
+    dataset.to_csv(csvPath, sep='\t',index = None, header=True)
+    return csvPath
 
 
 xlsxPath = Path('/home/shafayat/Coding/django/2021 Summer and Spring original.xlsx')
@@ -118,8 +142,9 @@ xlsxPath = Path('/home/shafayat/Coding/django/2021 Summer and Spring original.xl
 # tableColumns = ['cRoom_ID', 'nRoomCapacity']
 # tableName = 'TESTSite_Database.Classroom_T'
 
-output = populateAllTables(xlsxPath)
+output = populateAllTables(optimiseXLSX(xlsxPath))
 print(output)
 with open("PopulateDatabase.sql", "w") as text_file:
     text_file.write(output)
+
 

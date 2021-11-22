@@ -5,9 +5,9 @@
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE Classroom_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@d,@d,@d,@d,@d,@d,@d,@ROOM_ID,@ROOM_CAPACITY,@d,@d,@d,@d,@d,@d,@d,@d)
+(@d,@d,@d,@d,@d,@d,@d,@d,@ROOM_ID,@ROOM_CAPACITY,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cRoom_ID=@ROOM_ID,nRoomCapacity=@ROOM_CAPACITY;
 
@@ -16,9 +16,9 @@ SET cRoom_ID=@ROOM_ID,nRoomCapacity=@ROOM_CAPACITY;
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE Faculty_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@FACULTY_ID,@FACULTY_NAME,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cFaculty_ID=@FACULTY_ID,cFacultyName=@FACULTY_NAME;
 
@@ -27,9 +27,9 @@ SET cFaculty_ID=@FACULTY_ID,cFacultyName=@FACULTY_NAME;
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE School_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@SCHOOL_TITLE,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@SCHOOL_TITLE,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@SCHOOL_NAME)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cSchool_ID=@SCHOOL_TITLE,cSchoolName=@SCHOOL_NAME;
 
@@ -38,9 +38,9 @@ SET cSchool_ID=@SCHOOL_TITLE,cSchoolName=@SCHOOL_NAME;
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE Department_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@SCHOOL_TITLE,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@SCHOOL_TITLE,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cDepartment_ID=@DEPARTMENT_ID,cDepartmentName=@DEPARTMENT_NAME,cSchool_ID=@SCHOOL_TITLE;
 
@@ -49,9 +49,9 @@ SET cDepartment_ID=@DEPARTMENT_ID,cDepartmentName=@DEPARTMENT_NAME,cSchool_ID=@S
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE Course_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@COFFER_COURSE_ID,@d,@d,@CREDIT_HOUR,@d,@d,@d,@d,@d,@d,@COURSE_NAME,@d,@d,@d,@d,@d,@d)
+(@d,@COFFER_COURSE_ID,@d,@d,@CREDIT_HOUR,@d,@d,@d,@d,@d,@d,@COURSE_NAME,@d,@d,@d,@d,@d,@d,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cCourse_ID=@COFFER_COURSE_ID,cCourseName=@COURSE_NAME,nCreditHours=@CREDIT_HOUR,cDepartment_ID=@DEPARTMENT_ID;
 
@@ -60,9 +60,9 @@ SET cCourse_ID=@COFFER_COURSE_ID,cCourseName=@COURSE_NAME,nCreditHours=@CREDIT_H
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE CoOfferedCourse_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@COFFER_COURSE_ID,@COFFERED_WITH,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@d,@COFFER_COURSE_ID,@COFFERED_WITH,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFER_COURSE_ID;
 
@@ -71,9 +71,9 @@ SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFER_COURSE_ID;
 LOAD DATA LOCAL
 INFILE "/home/shafayat/Coding/django/2021 Summer and Spring original.csv" 
 INTO TABLE Section_T 
-FIELDS TERMINATED BY ","
+FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@COFFER_COURSE_ID,@d,@SECTION,@d,@CAPACITY,@ENROLLED,@d,@ROOM_ID,@d,@BLOCKED,@d,@d,@d,@END_TIME,@ST_MW,@Year,@Semester)
+(@d,@COFFER_COURSE_ID,@d,@SECTION,@d,@CAPACITY,@ENROLLED,@d,@ROOM_ID,@d,@BLOCKED,@d,@d,@END_TIME,@ST_MW,@Year,@Semester,@FACULTY_ID,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
 SET eSession=@Semester,eDays=@ST_MW,dYear=@Year,nSectionNumber=@SECTION,nSectionCapacity=@CAPACITY,nEnrolled=@ENROLLED,bIsBlocked=@BLOCKED,tStartTime=@START_TIME,tEndTime=@END_TIME,cCoffCode_ID=@COFFER_COURSE_ID,cFaculty_ID=@FACULTY_ID,cRoom_ID=@ROOM_ID;
 
