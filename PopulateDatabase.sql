@@ -48,7 +48,7 @@ INTO TABLE Course_T
 FIELDS TERMINATED BY ","
 IGNORE 1 LINES 
 (@d,@COFFER_COURSE_ID,@d,@d,@CREDIT_HOUR,@d,@d,@d,@d,@d,@d,@COURSE_NAME,@d,@d,@d,@d,@d,@d) 
-SET cCourse_ID=@COFFER_COURSE_ID,cCourseName=@COURSE_NAME,nCreditHours=@CREDIT_HOUR;
+SET cCourse_ID=@COFFER_COURSE_ID,cCourseName=@COURSE_NAME,nCreditHours=@CREDIT_HOUR,cDepartment_ID=@DEPARTMENT_ID;
 
 
 -- Populating CoOfferedCourse_T

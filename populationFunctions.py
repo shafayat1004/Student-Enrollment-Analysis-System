@@ -76,8 +76,8 @@ def fillDepartment_T(csvPath):
 
 def fillCourse_T(csvPath):
     table = 'Course_T'
-    csvColumns = ['COFFER_COURSE_ID', 'COURSE_NAME', 'CREDIT_HOUR']
-    tableColumns = ['cCourse_ID', 'cCourseName', 'nCreditHours'] 
+    csvColumns = ['COFFER_COURSE_ID', 'COURSE_NAME', 'CREDIT_HOUR', 'DEPARTMENT_ID']
+    tableColumns = ['cCourse_ID', 'cCourseName', 'nCreditHours', 'cDepartment_ID'] 
     #TODO  There is no such thing as department id in classsize dataset so omitted mentioning 'cDepartment_ID'] 
     
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
