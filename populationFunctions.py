@@ -27,12 +27,13 @@ def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO 
         else:
             tableAssignments+=',' + tableColumns[i] + '=@' + csvColumns[i]
 
+    colNotInCSVComment = '\n-- If any @variable in SET is not in above line, query wont work. Needs optimization'
 
     sqlQuery = 'LOAD DATA '
     if local is True:
         sqlQuery+= 'LOCAL'
 
-    sqlQuery+='\nINFILE "' + str(csvPath) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY ","\nIGNORE 1 LINES \n' + csv_variables + ' \nSET ' + tableAssignments + ';'
+    sqlQuery+='\nINFILE "' + str(csvPath) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY ","\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
     
     return sqlQuery
 
