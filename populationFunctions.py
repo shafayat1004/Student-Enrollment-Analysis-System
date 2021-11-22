@@ -1,4 +1,3 @@
-import csv
 from pathlib import Path
 from pandas import read_excel, read_csv
 
