@@ -115,7 +115,7 @@ def populateAllTables(csvPath):
 def optimiseXLSX(xlsxPath):
     csvPath = xlsxToCSV(xlsxPath)
     dataset = read_csv(csvPath, sep='\t')
-    dataset.dropna(inplace=True)
+    # dataset.dropna(inplace=True)
 
     # Separating faculty id and name
     facultyDataFrame = dataset['FACULTY_FULL_NAME'].str.split("-", n = 1, expand = True)
@@ -188,9 +188,9 @@ with open("PopulateDatabase2021.sql", "w") as text_file:
     text_file.write(output1)
     print('Output 1 complete')
 
-# output2 = populateAllTables(optimiseXLSX(xlsxPath2))
-# with open("PopulateDatabasePre2021.sql", "w") as text_file:
-#     text_file.write(output2)
-#     print('Output 2 complete')
+output2 = populateAllTables(optimiseXLSX(xlsxPath2))
+with open("PopulateDatabasePre2021.sql", "w") as text_file:
+    text_file.write(output2)
+    print('Output 2 complete')
 
 
