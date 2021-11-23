@@ -1,5 +1,7 @@
 from pathlib import Path
 from pandas import read_excel, read_csv
+from re import compile
+from numpy import nan
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
     csv_variables = ''
@@ -116,10 +118,14 @@ def optimiseXLSX(xlsxPath):
     dataset.dropna(inplace=True)
 
     # Separating faculty id and name
-    facultyData = dataset['FACULTY_FULL_NAME'].str.split("-", n = 1, expand = True)
-    dataset['FACULTY_ID'] = facultyData[0]
-    dataset['FACULTY_NAME'] = facultyData[1]
+    facultyDataFrame = dataset['FACULTY_FULL_NAME'].str.split("-", n = 1, expand = True)
+
+    # TODO for some reason the code didn't work for the larger xlsx file.
+    # print(facultyDataFrame[0])
+    dataset['FACULTY_ID'] = facultyDataFrame[0]
+    dataset['FACULTY_NAME'] = facultyDataFrame[1] 
     dataset.drop(columns =["FACULTY_FULL_NAME"], inplace = True)
+
 
     #Creating SCHOOL_NAME Column
     schoolNameDict = {
@@ -131,20 +137,60 @@ def optimiseXLSX(xlsxPath):
     }
     dataset['SCHOOL_NAME'] = dataset['SCHOOL_TITLE'].replace(schoolNameDict)
 
+    #Creating DEPT_ID Column
+    courseToDepDict = {
+        r'^CCR....?$' : 'CSE',
+        r'^ETE....?$' : 'EEE',
+        r'^PHY....?$' : 'PS',
+        r'^ECR....?$' : 'EEE',
+        r'^CNC....?$' : 'CSE',
+        r'^CEN....?$' : 'CSE',
+        r'^SEN....?$' : 'CSE',
+        r'^CIS....?$' : 'CSE',
+        r'^CSC....?$' : 'CSE',
+        r'^CSE....?$' : 'CSE',
+        r'^EEE....?$' : 'EEE',
+        r'^MAT....?$' : 'PS',
+        r'^TCL....?$' : 'PS',
+        r'.......?$'  : nan
+    }
+    dataset['DEPARTMENT_ID'] = dataset['COFFER_COURSE_ID'].replace(regex=courseToDepDict)
+
+    #Creating DEPARTMENT_NAME Column
+    depNameDict = {
+        'CSE'  : 'Department of Computer Science and Engineering',
+        'PS'   : 'Department of Physical Sciences',
+        'EEE'  : 'Department of Electrical and Electronic Engineering'
+    }
+    dataset['DEPARTMENT_NAME'] = dataset['DEPARTMENT_ID'].replace(depNameDict)
+
+
+    #Optimizing BLOCKED Column
+    blockDict = {
+        r'^B..?$' : 1,
+        r'..?$'   : 0
+    }
+    dataset['BLOCKED'] = dataset['BLOCKED'].replace(regex=blockDict)
+
 
     dataset.to_csv(csvPath, sep='\t',index = None, header=True)
     return csvPath
 
 
-xlsxPath = Path('/home/shafayat/Coding/django/2021 Summer and Spring original.xlsx')
 
-# xlsxColumns = ['ROOM_ID', 'ROOM_CAPACITY']
-# tableColumns = ['cRoom_ID', 'nRoomCapacity']
-# tableName = 'TESTSite_Database.Classroom_T'
 
-output = populateAllTables(optimiseXLSX(xlsxPath))
-print(output)
-with open("PopulateDatabase.sql", "w") as text_file:
-    text_file.write(output)
+
+xlsxPath1 = Path('/home/shafayat/Coding/django/2021 Summer and Spring.xlsx')
+xlsxPath2 = Path('/home/shafayat/Coding/django/2009 Spring to 2021 Summer.xlsx')
+
+output1 = populateAllTables(optimiseXLSX(xlsxPath1))
+with open("PopulateDatabase2021.sql", "w") as text_file:
+    text_file.write(output1)
+    print('Output 1 complete')
+
+# output2 = populateAllTables(optimiseXLSX(xlsxPath2))
+# with open("PopulateDatabasePre2021.sql", "w") as text_file:
+#     text_file.write(output2)
+#     print('Output 2 complete')
 
 
