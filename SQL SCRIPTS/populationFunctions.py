@@ -54,7 +54,6 @@ def fillClassroom_T(csvPath):
 
 def fillFaculty_T(csvPath):
     table = 'Faculty_T'
-    # TODO need to separate FACULTY ID and NAME
 
     csvColumns = ['FACULTY_ID', 'FACULTY_NAME']
     tableColumns = ['cFaculty_ID', 'cFacultyName']
@@ -62,15 +61,12 @@ def fillFaculty_T(csvPath):
 
 def fillSchool_T(csvPath):
     table = 'School_T'
-    #TODO  There is no such thing as schoolname in any dataset
 
     csvColumns = ['SCHOOL_TITLE', 'SCHOOL_NAME']
     tableColumns = ['cSchool_ID', 'cSchoolName']
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
 def fillDepartment_T(csvPath):
-    #TODO  There is no such thing as department id in classsize dataset
-
     table = 'Department_T'
     csvColumns = ['DEPARTMENT_ID', 'DEPARTMENT_NAME', 'SCHOOL_TITLE']
     tableColumns = ['cDepartment_ID', 'cDepartmentName', 'cSchool_ID']
@@ -80,13 +76,13 @@ def fillCourse_T(csvPath):
     table = 'Course_T'
     csvColumns = ['COFFER_COURSE_ID', 'COURSE_NAME', 'CREDIT_HOUR', 'DEPARTMENT_ID']
     tableColumns = ['cCourse_ID', 'cCourseName', 'nCreditHours', 'cDepartment_ID'] 
-    #TODO  There is no such thing as department id in classsize dataset so omitted mentioning 'cDepartment_ID'] 
     
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
 def fillCoOfferedCourse_T(csvPath):
     table = 'CoOfferedCourse_T'
-    csvColumns = ['COFFERED_WITH', 'COFFER_COURSE_ID']
+    # csvColumns = ['COFFERED_WITH', 'COFFER_COURSE_ID']
+    csvColumns = ['COFFER_COURSE_ID', 'COFFER_COURSE_ID'] #TODO HACKY WAY, NEED TO FIX!!!!!!!
     # TODO need to separate multivalued COFFERED_WITH ids
 
     tableColumns = ['cCoffCode_ID', 'cCourse_ID']
@@ -96,7 +92,7 @@ def fillSection_T(csvPath):
     table = 'Section_T'
     csvColumns = ['Semester', 'ST_MW', 'Year', 'SECTION', 'CAPACITY', 'ENROLLED', 'BLOCKED', 'START_TIME', 'END_TIME', 'COFFER_COURSE_ID', 'FACULTY_ID', 'ROOM_ID'] 
     #Took liberty here with start time. In dataset it's STRAT_TIME 
-    # TODO need to separate FACULTY ID and NAME
+    
 
     tableColumns = ['eSession', 'eDays', 'dYear', 'nSectionNumber', 'nSectionCapacity', 'nEnrolled', 'bIsBlocked', 'tStartTime', 'tEndTime', 'cCoffCode_ID', 'cFaculty_ID', 'cRoom_ID']
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
@@ -120,7 +116,6 @@ def optimiseXLSX(xlsxPath):
     # Separating faculty id and name
     facultyDataFrame = dataset['FACULTY_FULL_NAME'].str.split("-", n = 1, expand = True)
 
-    # TODO for some reason the code didn't work for the larger xlsx file.
     # print(facultyDataFrame[0])
     dataset['FACULTY_ID'] = facultyDataFrame[0]
     dataset['FACULTY_NAME'] = facultyDataFrame[1] 
@@ -189,7 +184,7 @@ with open("PopulateDatabase2021.sql", "w") as text_file:
     print('Output 1 complete')
 
 output2 = populateAllTables(optimiseXLSX(xlsxPath2))
-with open("PopulateDatabasePre2021.sql", "w") as text_file:
+with open("PopulateDatabaseAll.sql", "w") as text_file:
     text_file.write(output2)
     print('Output 2 complete')
 
