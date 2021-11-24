@@ -62,9 +62,9 @@ INFILE "/home/shafayat/Coding/django/2021 Summer and Spring.csv"
 INTO TABLE CoOfferedCourse_T 
 FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@COFFER_COURSE_ID,@COFFERED_WITH,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@d,@d,@COFFERED_WITH,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
-SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFER_COURSE_ID;
+SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFERED_WITH;
 
 
 -- Populating Section_T
