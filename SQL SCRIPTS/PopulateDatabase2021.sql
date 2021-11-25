@@ -58,13 +58,13 @@ SET cCourse_ID=@COFFER_COURSE_ID,cCourseName=@COURSE_NAME,nCreditHours=@CREDIT_H
 
 -- Populating CoOfferedCourse_T
 LOAD DATA LOCAL
-INFILE "/home/shafayat/Coding/django/2021 Summer and Spring.csv" 
+INFILE "/home/shafayat/Coding/django/courseCodeData.csv" 
 INTO TABLE CoOfferedCourse_T 
 FIELDS TERMINATED BY "\t"
 IGNORE 1 LINES 
-(@d,@d,@COFFERED_WITH,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
+(@COFFER_COURSE_ID,@COFFERED_WITH)
 -- If any @variable in SET is not in above line, query wont work. Needs optimization 
-SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFERED_WITH;
+SET cCoffCode_ID=@COFFERED_WITH,cCourse_ID=@COFFER_COURSE_ID;
 
 
 -- Populating Section_T

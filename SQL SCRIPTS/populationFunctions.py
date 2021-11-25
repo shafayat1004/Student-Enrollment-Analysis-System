@@ -1,6 +1,5 @@
 from pathlib import Path
-from pandas import read_excel, read_csv
-from re import compile
+from pandas import read_excel, read_csv, DataFrame, concat
 from numpy import nan
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
@@ -80,13 +79,37 @@ def fillCourse_T(csvPath):
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
 def fillCoOfferedCourse_T(csvPath):
+
+    #Creating a separate csv for cooffered courses
+    dataset = read_csv(csvPath, sep='\t')
+
+    courseCodeData = DataFrame(dataset['COFFER_COURSE_ID'])
+    courseCodeData = concat([courseCodeData, dataset['COFFERED_WITH'].str.split(',', expand=True)], axis=1)
+
+    courseCodeData.drop_duplicates('COFFER_COURSE_ID', inplace=True)    
+    
+    for col in range(len(courseCodeData.columns)-1, 1, -1):
+        df = DataFrame(courseCodeData['COFFER_COURSE_ID'])
+        df[0] = courseCodeData.iloc[:,col]  
+        df.dropna(inplace=True)
+
+        courseCodeData = courseCodeData.append(df)
+        courseCodeData.drop(courseCodeData.columns[col], axis=1, inplace=True)
+        
+    courseCodeData.rename(columns={0:'COFFERED_WITH'}, inplace=True)  
+    
+    coOfferedCourseCSVPath = Path.joinpath(csvPath.parent, 'courseCodeData.csv')
+
+    courseCodeData.to_csv(coOfferedCourseCSVPath, sep='\t', index = None, header=True)
+    
+    
     table = 'CoOfferedCourse_T'
-    # csvColumns = ['COFFERED_WITH', 'COFFER_COURSE_ID']
-    csvColumns = ['COFFER_COURSE_ID', 'COFFER_COURSE_ID'] #TODO HACKY WAY, NEED TO FIX!!!!!!!
-    # TODO need to separate multivalued COFFERED_WITH ids
+    csvColumns = ['COFFERED_WITH', 'COFFER_COURSE_ID']
+    # csvColumns = ['COFFER_COURSE_ID', 'COFFER_COURSE_ID'] #TODO HACKY WAY, NEED TO FIX!!!!!!!
+    # # TODO need to separate multivalued COFFERED_WITH ids
 
     tableColumns = ['cCoffCode_ID', 'cCourse_ID']
-    return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
+    return '-- Populating ' + table + '\n' + csvToMySQL(coOfferedCourseCSVPath, csvColumns, table, tableColumns) + '\n\n\n'
 
 def fillSection_T(csvPath):
     table = 'Section_T'
@@ -177,11 +200,12 @@ def optimiseXLSX(xlsxPath):
 
 xlsxPath1 = Path('/home/shafayat/Coding/django/2021 Summer and Spring.xlsx')
 xlsxPath2 = Path('/home/shafayat/Coding/django/2009 Spring to 2021 Summer.xlsx')
+# scriptFolder = Path('/SQL SCRIPTS')
 
-output1 = populateAllTables(optimiseXLSX(xlsxPath1))
-with open("PopulateDatabase2021.sql", "w") as text_file:
-    text_file.write(output1)
-    print('Output 1 complete')
+# output1 = populateAllTables(optimiseXLSX(xlsxPath1))
+# with open("PopulateDatabase2021.sql", "w") as text_file:
+#     text_file.write(output1)
+#     print('Output 1 complete')
 
 output2 = populateAllTables(optimiseXLSX(xlsxPath2))
 with open("PopulateDatabaseAll.sql", "w") as text_file:
