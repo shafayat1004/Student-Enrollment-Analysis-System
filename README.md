@@ -8,3 +8,5 @@ Mir Shafayat Ahmed,
 Dewan Wakil Ahmed, 
 Ahmad Reyad Onik, 
 Ariful Islam Shiam
+
+Please use the dataset stored in the Group project folder
