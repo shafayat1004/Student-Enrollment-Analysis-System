@@ -1,4 +1,7 @@
 .env
+Scripts/
+Include/
 bin/
 lib/
 .vscode/
+pyvenv.cfg
