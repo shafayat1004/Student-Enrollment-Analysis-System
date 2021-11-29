@@ -5,3 +5,4 @@ bin/
 lib/
 .vscode/
 pyvenv.cfg
+SEAS.code-workspace
