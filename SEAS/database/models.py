@@ -36,7 +36,7 @@ class CoofferedcourseT(models.Model):
 
 class CourseT(models.Model):
     cCourse_ID = FixedCharField(db_column='cCourse_ID', primary_key=True, max_length=7)
-    cCourseName = models.CharField(db_column='cCourseName', max_length=30, blank=True, null=True)
+    cCourseName = models.CharField(db_column='cCourseName', max_length=50, blank=True, null=True)
     nCreditHours = models.IntegerField(db_column='nCreditHours', blank=True, null=True)
     cDepartment_ID = models.ForeignKey('DepartmentT', models.DO_NOTHING, db_column='cDepartment_ID', blank=True, null=True)
 
@@ -45,7 +45,7 @@ class CourseT(models.Model):
 
 
 class DepartmentT(models.Model):
-    cDepartment_ID = FixedCharField(db_column='cDepartment_ID', primary_key=True, max_length=3)
+    cDepartment_ID = FixedCharField(db_column='cDepartment_ID', primary_key=True, max_length=5)
     cDepartmentName = models.CharField(db_column='cDepartmentName', max_length=50, blank=True, null=True)
     cSchool_ID = models.ForeignKey('SchoolT', models.DO_NOTHING, db_column='cSchool_ID', blank=True, null=True)
 
@@ -75,7 +75,7 @@ class SectionT(models.Model):
     cCoffCode_ID = models.ForeignKey(CoofferedcourseT, models.DO_NOTHING, db_column='cCoffCode_ID', blank=True, null=True)
     
     eSession = EnumField(choices=['Autumn', 'Summer', 'Spring'], db_column='eSession')
-    eDays = EnumField(choices=['ST', 'MW', 'S', 'M', 'T', 'W', 'R', 'F', 'A'], db_column='eDays', blank=True, null=True)
+    eDays = EnumField(choices=['ST', 'MW', 'S', 'M', 'T', 'W', 'R', 'F', 'A', 'AR', 'TR', 'MWA', 'STR', 'AMW', 'SMW'], db_column='eDays', blank=True, null=True)
 
     dYear = YearField(db_column='dYear')
 
