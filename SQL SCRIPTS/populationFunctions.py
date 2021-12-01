@@ -172,7 +172,8 @@ def optimiseXLSX(xlsxPath):
         r'^TCL....?$' : 'PS',
         r'.......?$'  : nan
     }
-    dataset['DEPARTMENT_ID'] = dataset['COFFER_COURSE_ID'].replace(regex=courseToDepDict)
+    incompleteCol = dataset['COFFER_COURSE_ID'].replace(regex=courseToDepDict)
+    dataset['DEPARTMENT_ID'] = incompleteCol.where(incompleteCol.notnull(), dataset['DEPARTMENT_ID'])
 
     #Creating DEPARTMENT_NAME Column
     depNameDict = {
