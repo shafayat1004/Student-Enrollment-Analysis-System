@@ -11,3 +11,6 @@ SEAS.code-workspace
 */*/migrations/
 */*/__pycache__/
 */__pycache__/
+PopulateDatabaseAll.sql
+courseCodeData.csv
+2009 Spring to 2021 Summer.csv
