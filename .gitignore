@@ -8,3 +8,5 @@ pyvenv.cfg
 SEAS.code-workspace
 2009 Spring to 2021 Summer.xlsx
 2021 Summer and Spring.xlsx
+*/*/migrations/
+*/*/__pycache__/
