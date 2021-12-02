@@ -199,8 +199,12 @@ def optimiseXLSX(xlsxPath):
 
 
 
-xlsxPath1 = Path('/home/shafayat/Coding/django/2021 Summer and Spring.xlsx')
-xlsxPath2 = Path('/home/shafayat/Coding/django/2009 Spring to 2021 Summer.xlsx')
+xlsxPath1 = Path('./2021 Summer and Spring.xlsx').absolute()
+xlsxPath2 = Path('./2009 Spring to 2021 Summer.xlsx').absolute()
+
+# xlsxPath = Path('./2009 Spring to 2021 Summer.xlsx').absolute()
+# print(xlsxPath)
+# print(Path.joinpath(xlsxPath.parent, xlsxPath.stem + '.csv'))
 # scriptFolder = Path('/SQL SCRIPTS')
 
 # output1 = populateAllTables(optimiseXLSX(xlsxPath1))
