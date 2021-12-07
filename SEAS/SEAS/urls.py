@@ -16,17 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from SEAS import revenue
+# from SEAS import revenue
 
 urlpatterns = [
-    path('login/', include('login.urls')),
+    path('', include('login.urls')),
     path('home/', include('home.urls')),
     path('admin/', admin.site.urls),
-
+    
     # Fahim's stuff
-    path( "iub-revenue/", revenue.views.iubRevenue, name = "Revenue of IUB" ),
-    path( "depts-revenue/", revenue.views.schoolRevenue, name = "Revenue of Departments" ),
-
+    # path( "iub-revenue/", revenue.views.iubRevenue, name = "Revenue of IUB" ),
+    # path( "depts-revenue/", revenue.views.schoolRevenue, name = "Revenue of Departments" ),
+    
     # Suhailia's stuff
 
+    # Shafayat's stuff
+    path('databaseupdate/', include('databaseupdate.urls')),
+    path('classroom_requirement/', include('classroom_requirement.urls')),
 ]
