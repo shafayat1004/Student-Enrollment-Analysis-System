@@ -32,7 +32,7 @@ def index(request):
                 AND C.cDepartment_ID = D.cDepartment_ID 
                 AND dYear= "2021" 
                 AND eSession = "Spring"
-            GROUP BY Class_Size WITH ROLLUP
+            GROUP BY Class_Size
             HAVING Class_Size != '0'
 
             UNION
@@ -50,7 +50,7 @@ def index(request):
                 AND C.cDepartment_ID = D.cDepartment_ID 
                 AND dYear= "2021" 
                 AND eSession = "Spring"
-            GROUP BY Class_Size WITH ROLLUP
+            GROUP BY Class_Size
             HAVING Class_Size != '0'
             ORDER BY Class_Size ASC
             """
