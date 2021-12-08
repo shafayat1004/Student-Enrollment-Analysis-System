@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'database',
     'login',
     'django_mysql',
+    'revenue',
+    'databaseupdate',
+    'classroom_requirement',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'SEAS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [Path.joinpath(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
