@@ -55,11 +55,13 @@ def schoolWiseEnrollExpand( request ):
 
     # return HttpResponse( labels )       # for debug only
     
-    return render( request, "School-Wise-Enroll-Expand.html", { 
-            'labels': labels,
-            'data': data,
-        }
-    )
+    context = {
+        'labels': labels,
+        'data'  : data,
+    }
+    return render(request, 'Enrollment/School-Wise-Enroll-Expand.html', context)
+    
+
 def schoolWiseEnrollCompact( request ):
     ''' School wise enrollment Table [Compact]'''
     # Fetch all schools and create select clause for them
@@ -116,12 +118,11 @@ def schoolWiseEnrollCompact( request ):
         data = cursor.fetchall()
 
     # return HttpResponse( labels )       # for debug only
-    
-    return render( request, "School-Wise-Enroll-Compact.html", { 
-            'labels': labels,
-            'data': data,
-        }
-    )
+    context = {
+        'labels': labels,
+        'data'  : data,
+    }
+    return render(request, 'Enrollment/School-Wise-Enroll-Compact.html', context)
     
 
 

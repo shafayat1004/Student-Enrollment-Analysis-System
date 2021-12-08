@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Enrollment Expanded{% endblock title %}
+
+{% block content %}
+  <caption>School Wise Enrollment</caption>
+  <table style="width:50%">
+      ​​<thead>
+          <tr> <th colspan="7">SPRING</th></tr>
+          </thead>
+          <thead>
+          <tr>
+          ​    {% for colName in labels %}​
+                  <th>​{{colName}}​</th>
+          ​    {% endfor %} 
+          ​</tr> 
+      </thead>
+      <tbody>
+          {% for row in data %} 
+​            ​<tr>
+              {% for item in row %} 
+  ​                ​​<td>​{{item}}​</td> 
+  ​            {% endfor %}
+          </tr>
+​                {% endfor %}
+      </tbody> 
+  </table>
+  <div class="row">
+      <div class="col-6">
+        <canvas id="salesChart"></canvas>
+      </div>
+      <div class="col-6">
+        <canvas id="paymentSuccessChart"></canvas>
+      </div>
+    </div>
+    <script>
+      let salesCtx = document.getElementById("salesChart").getContext("2d");
+      let mixedChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              datasets: [{
+         
+                  label:[​​ {​%​ ​for​ ​l ​in​ ​labels ​%}'{{l}}',​{​%​ ​endfor​ ​%​}​] ​
+                  data: [{​%​ ​for​ ​l ​in​ ​labels ​%}'{{l}}',​{​%​ ​endfor​ ​%​}],
+                  // this dataset is drawn below
+                  order: 2
+              }, {
+                  label: 'Line Dataset',
+                  data: [{​%​ ​for​ ​d ​in​ ​data ​%}'{{d}}',​{​%​ ​endfor​ ​%​}],
+                  type: 'line',
+                  // this dataset is drawn on top
+                  order: 1
+              }],
+              labels: []
+          },
+          options: options
+      });
+    </script>
+  </div>
+{% endblock content %}
