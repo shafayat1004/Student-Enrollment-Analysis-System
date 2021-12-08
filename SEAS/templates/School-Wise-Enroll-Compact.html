@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <title> Enrollment Expanded</title>
+    <style>
+        table, th, td {
+          border: 1px solid white;
+          border-collapse: collapse;
+        }
+        th {
+          text-align: center;
+          background-color: #96D4D4;
+        }
+        td {
+            text-align: center;
+            background-color: #96D4D4;
+        }
+        </style>
+</head>
+<body>
+    <caption>School Wise Enrollment</caption>
+    <table style="width:50%">
+        ​​<thead>
+            <tr> <th colspan="7">SPRING</th></tr>
+            </thead>
+            <thead>
+            <tr>
+            ​    {% for colName in labels %}​
+                    <th>​{{colName}}​</th>
+            ​    {% endfor %} 
+            ​</tr> 
+        </thead>
+        <tbody>
+            {% for row in data %} 
+ ​            ​<tr>
+                {% for item in row %} 
+    ​                ​​<td>​{{item}}​</td> 
+    ​            {% endfor %}
+            </tr>
+ ​                {% endfor %}
+        </tbody> 
+    </table>
+    <div class="row">
+        <div class="col-6">
+          <canvas id="salesChart"></canvas>
+        </div>
+        <div class="col-6">
+          <canvas id="paymentSuccessChart"></canvas>
+        </div>
+      </div>
+      <script>
+        let salesCtx = document.getElementById("salesChart").getContext("2d");
+        let salesChart = new Chart(salesCtx, {
+          type: "bar",
+          options: {
+            responsive: true,
+          }
+        });
+      </script>
+    </div>
+
+
+    
+</body>
+</html>
