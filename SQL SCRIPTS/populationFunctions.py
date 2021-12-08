@@ -1,6 +1,7 @@
 from pathlib import Path
 from pandas import read_excel, read_csv, DataFrame, concat
 from numpy import nan
+import os, posixpath
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
     csv_variables = ''
@@ -33,7 +34,7 @@ def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO 
     if local is True:
         sqlQuery+= 'LOCAL'
 
-    sqlQuery+='\nINFILE "' + str(csvPath) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY "\\t"\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
+    sqlQuery+='\nINFILE "' + str(csvPath).replace(os.sep, posixpath.sep) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY "\\t"\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
     
     return sqlQuery
 
