@@ -27,6 +27,7 @@ urlpatterns = [
     path( 'revenue/', include('revenue.urls') ),
 
     # Suhailia's stuff
+    path( 'Enrollment/', include('Enrollment.urls') ),
 
     # Shafayat's stuff
     path('databaseupdate/', include('databaseupdate.urls')),
