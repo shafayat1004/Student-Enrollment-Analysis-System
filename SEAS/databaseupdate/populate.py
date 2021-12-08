@@ -196,26 +196,8 @@ def optimiseXLSX(xlsxPath):
     dataset.to_csv(csvPath, sep='\t',index = None, header=True)
     return csvPath
 
-
-
-
-
-xlsxPath1 = Path('./2021 Summer and Spring.xlsx').absolute()
-xlsxPath2 = Path('./2009 Spring to 2021 Summer.xlsx').absolute()
-
-# xlsxPath = Path('./2009 Spring to 2021 Summer.xlsx').absolute()
-# print(xlsxPath)
-# print(Path.joinpath(xlsxPath.parent, xlsxPath.stem + '.csv'))
-# scriptFolder = Path('/SQL SCRIPTS')
-
-# output1 = populateAllTables(optimiseXLSX(xlsxPath1))
-# with open("PopulateDatabase2021.sql", "w") as text_file:
-#     text_file.write(output1)
-#     print('Output 1 complete')
-
+def populate(file):
+    
 output2 = populateAllTables(optimiseXLSX(xlsxPath2))
-with open("PopulateDatabaseAll.sql", "w") as text_file:
-    text_file.write(output2)
-    print('Output 2 complete')
 
 
