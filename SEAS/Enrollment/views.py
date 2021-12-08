@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 def schoolWiseEnroll( request ):
-    ''' School wise enrollment Table [Compact]'''
+    ''' School wise enrollment Table [Expanded]'''
     # Fetch all schools and create select clause for them
     query = """
         SELECT cSchool_ID AS sch
@@ -44,21 +44,22 @@ def schoolWiseEnroll( request ):
 			ORDER BY D.cSchool_ID, Enrollment ASC
         
     ) E 
+    WHERE Enrollment != 0
     GROUP BY Enrollment
-    ORDER BY Enrollment ASC
+    ORDER BY Enrollment ASC;
     """
     with connection.cursor() as cursor:
         cursor.execute( query )
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    return HttpResponse( labels )       # for debug only
-    '''
-    return render( request, "revenue.html", { 
+    # return HttpResponse( labels )       # for debug only
+    
+    return render( request, "School-Wise-Enrollment.html", { 
             'labels': labels,
             'data': data,
         }
     )
-    '''
+    
 
 
