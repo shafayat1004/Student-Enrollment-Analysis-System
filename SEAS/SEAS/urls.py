@@ -24,10 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Fahim's stuff
-    # path( "iub-revenue/", revenue.views.iubRevenue, name = "Revenue of IUB" ),
-    # path( "depts-revenue/", revenue.views.schoolRevenue, name = "Revenue of Departments" ),
-    
+    path( 'revenue/', include('revenue.urls') ),
+
     # Suhailia's stuff
+    path( 'Enrollment/', include('Enrollment.urls') ),
 
     # Shafayat's stuff
     path('databaseupdate/', include('databaseupdate.urls')),

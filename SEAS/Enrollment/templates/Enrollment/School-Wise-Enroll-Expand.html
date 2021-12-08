@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Enrollment Expanded{% endblock title %}
+
+{% block content %}
+    <caption>School Wise Enrollment</caption>
+    <table style="width:50%">
+        ​​<thead>
+            <tr> <th colspan="7">SPRING</th></tr>
+            </thead>
+            <thead>
+            <tr>
+            ​    {% for colName in labels %}​
+                    <th>​{{colName}}​</th>
+            ​    {% endfor %} 
+            ​</tr> 
+        </thead>
+        <tbody>
+            {% for row in data %} 
+ ​            ​<tr>
+                {% for item in row %} 
+    ​                ​​<td>​{{item}}​</td> 
+    ​            {% endfor %}
+            </tr>
+ ​                {% endfor %}
+        </tbody> 
+    </table>
+{% endblock content %}

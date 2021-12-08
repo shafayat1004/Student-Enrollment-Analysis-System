@@ -52,7 +52,7 @@ def index(request):
                 AND eSession = "Spring"
             GROUP BY Class_Size
             HAVING Class_Size != '0'
-            ORDER BY Class_Size ASC
+            ORDER BY Class_Size ASC;
             """
 
     with connection.cursor() as cursor:
@@ -61,10 +61,10 @@ def index(request):
         data = cursor.fetchall()
         
 
-   
     context = {
         'labels': labels,
         'data'  : data,
     }
+
     return render(request, 'classroom_requirement/tablechart.html', context)
 
