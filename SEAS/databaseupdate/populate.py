@@ -1,8 +1,11 @@
 from pathlib import Path
+from django.http import request
 from pandas import read_excel, read_csv, DataFrame, concat
 from numpy import nan
 import os, posixpath
 from django.db import connection
+from django.core.files.storage import default_storage
+from django.conf import settings
 
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
@@ -199,19 +202,12 @@ def optimiseXLSX(xlsxPath):
     return csvPath
 
 def populate(file):
-    # query = populateAllTables(optimiseXLSX(file))
-    query = '''
-            -- Populating Classroom_T
-            LOAD DATA LOCAL
-            INFILE "/mnt/1b0986ad-5fa2-40a2-a9da-401e2fa25194/Coding/django/testvenv/2009 Spring to 2021 Summer.csv" 
-            INTO TABLE Classroom_T 
-            FIELDS TERMINATED BY "\t"
-            IGNORE 1 LINES 
-            (@d,@d,@d,@d,@d,@d,@d,@ROOM_ID,@ROOM_CAPACITY,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d,@d)
-            -- If any @variable in SET is not in above line, query wont work. Needs optimization 
-            SET cRoom_ID=@ROOM_ID,nRoomCapacity=@ROOM_CAPACITY;
-            '''
-    print(file.absolute())
+
+    with default_storage.open(str(file), 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    
+    query = populateAllTables(optimiseXLSX(Path.joinpath(settings.MEDIA_ROOT, file.name)))
 
     with connection.cursor() as cursor:
         cursor.execute(query)
