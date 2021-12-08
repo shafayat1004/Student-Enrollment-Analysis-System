@@ -77,7 +77,7 @@ def iubRevenue( request ):
 def deptRevenue( request ):
     ''' Historical revenue data and change of all the departments in the selected school'''
     # Fetch departments of the selected school and create select clause for them
-    schoolSelected = "FETCH FROM FORM"
+    schoolSelected = "SETS"     # fetch from form
 
     query = f"""
         SELECT cDepartment_ID AS dep
@@ -119,7 +119,7 @@ def deptRevenue( request ):
                     S.cCoffCode_ID = O.cCoffCode_ID
                 AND O.cCourse_ID = C.cCourse_ID 
                 AND C.cDepartment_ID = D.cDepartment_ID
-                AND D.cSchool_ID = {schoolSelected}
+                AND D.cSchool_ID = '{schoolSelected}'
                 AND S.dYear = M.Years
                 AND S.eSession = M.Sessions
             GROUP BY Years, Sessions, Department
@@ -132,7 +132,7 @@ def deptRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
     
-    return HttpResponse( data )     # for debug only
+    return HttpResponse( labels )     # for debug only
 
     return render( request, "revenue.html", { 
             'labels': labels,
