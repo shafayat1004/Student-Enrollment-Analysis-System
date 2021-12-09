@@ -1,6 +1,6 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
-
+from django.contrib import messages
 # Create your views here.
 from django.http import HttpResponse
 from django.db import connection
@@ -14,7 +14,7 @@ def upload_file(request):
         if form.is_valid():
             print('valid')
             populate(request.FILES['file'])
-            return HttpResponseRedirect('/success/url/')
+            messages.success(request, 'Database Update Successful')
         
     else:
         print('notvalid')
