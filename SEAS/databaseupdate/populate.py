@@ -1,7 +1,12 @@
 from pathlib import Path
+from django.http import request
 from pandas import read_excel, read_csv, DataFrame, concat
 from numpy import nan
 import os, posixpath
+from django.db import connection
+from django.core.files.storage import default_storage
+from django.conf import settings
+
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
     csv_variables = ''
@@ -197,7 +202,14 @@ def optimiseXLSX(xlsxPath):
     return csvPath
 
 def populate(file):
+
+    with default_storage.open(str(file), 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
     
-output2 = populateAllTables(optimiseXLSX(xlsxPath2))
+    query = populateAllTables(optimiseXLSX(Path.joinpath(settings.MEDIA_ROOT, file.name)))
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
 
 
