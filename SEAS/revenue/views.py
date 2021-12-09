@@ -29,7 +29,7 @@ def iubRevenue( request ):
     # Run query for revenue data of all schools
     query = f"""
         SELECT 
-            CONCAT( Years, ' ',  Sessions ) AS ' ',
+            CONCAT( Years, ' ',  Sessions ) AS 'Semester',
             {sqlClause}
             SUM( Revenue ) AS Total
         FROM (
@@ -64,12 +64,10 @@ def iubRevenue( request ):
         cursor.execute( query )
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
-
-    return HttpResponse( labels )       # for debug only
-    
-    return render( request, "revenue.html", { 
-            'labels': labels,
-            'data': data,
+        
+    return render( request, "revenue_iub.html", { 
+            'colNames': labels,
+            'revenues': data,
         }
     )
 
@@ -95,7 +93,7 @@ def deptRevenue( request ):
     # Run query for revenue data for the departments
     query = f"""
         SELECT 
-            CONCAT( Years, ' ',  Sessions ) AS ' ',
+            CONCAT( Years, ' ',  Sessions ) AS 'Semester',
             {sqlClause}
             SUM( Revenue ) AS {schoolSelected}
         FROM (
@@ -131,11 +129,9 @@ def deptRevenue( request ):
         cursor.execute( query )
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
-    
-    return HttpResponse( labels )     # for debug only
 
-    return render( request, "revenue.html", { 
-            'labels': labels,
-            'data': data,
+    return render( request, "revenue_dept.html", { 
+            'colNames': labels,
+            'revenues': data,
         }
     )
