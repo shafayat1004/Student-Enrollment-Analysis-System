@@ -6,25 +6,36 @@
 
 
     <h1>Classroom Requirement As Per Course Requirement (Summary)</h1>
-    {% comment %} <div class="row">
-        <form action="/classroom_requirement/" method="post">
-            <label for="year">Year: </label>
-            <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
-            <label for="semester">Semester: </label>
-            <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
-            <input type="submit" value="OK">
-        </form>
-    </div> {% endcomment %}
-    <div class="row">
+    <div class= "title row">
+        <h1>{{selectedSession}}, {{selectedYear}}</h1>
+    </div>
+    <div class= "search row">
+        <form method="POST">
+            {% csrf_token %}
+            {% comment %} {{ forms }} {% endcomment %}
+            <select name="selectedSession">
+                {% for session in sessions %}
+                    <option value="{{ session.0 }}">{{session.0}}</option>
+                {% endfor %}
+            </select>
+            <select name="selectedYear">
+                {% for year in years %}
+                    <option value="{{ year.0 }}">{{ year.0}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Load</button>
+        </form> 
+    </div>
+    <div class="view row">
         <div class='col-md-6'>
             <table>
                 <thead>
                     <tr>
-                        {% for colName in labels %}<th>{{colName}}</th>{% endfor %}
+                        {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in data %}
+                    {% for row in tableData %}
                         <tr>
                             {% for item in row %}
                                 <td>{{item}}</td>
@@ -44,11 +55,11 @@
                 type: 'pie',
                 data: {
 
-                    labels: [{% for data in data|slice:":-1" %} '{{data.0}}', {% endfor %}],
+                    labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
 
                     datasets: [{
                         label: '# of Votes',
-                        data: [{% for data in data|slice:":-1" %} '{{data.2}}', {% endfor %}],
+                        data: [{% for data in tableData|slice:":-1" %} '{{data.2}}', {% endfor %}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',

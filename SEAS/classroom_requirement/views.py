@@ -2,11 +2,46 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.db import connection
+# from .forms import SessionSelectorForm
+
 
 def index(request):
 
-    labels = []
-    data = []
+    query = """     
+            SELECT dYear
+            FROM Section_T
+            GROUP BY dYear
+            """
+    years = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        years = cursor.fetchall()
+
+    query = """     
+            SELECT eSession
+            FROM Section_T
+            GROUP BY eSession
+            """
+    sessions = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        sessions = cursor.fetchall()
+
+        
+    tableHeaders = []
+    tableData = []
+
+    year = ''
+    session = ''
+
+
+    if request.method == 'POST':
+        year = request.POST.get('selectedYear', 2021)
+        session = request.POST.get('selectedSession', "Summer")
+
+    else:
+        year = years[0][0]
+        session = sessions[0][0]
 
     query = """
             SELECT ( 
@@ -20,7 +55,7 @@ def index(request):
                     WHEN S.nEnrolled BETWEEN 51 AND 55 THEN '51-55' 
                     WHEN S.nEnrolled BETWEEN 56 AND 65 THEN '56-65' 
                     WHEN S.nEnrolled > 65 THEN '65+'
-                    ELSE '0'
+                    ELSE '0'    
                 END 
             ) AS Class_Size, COUNT(*) AS Sections, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
             FROM Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
@@ -28,8 +63,8 @@ def index(request):
                     S.cCoffCode_ID = O.cCoffCode_ID
                 AND O.cCourse_ID = C.cCourse_ID 
                 AND C.cDepartment_ID = D.cDepartment_ID 
-                AND dYear= "2021" 
-                AND eSession = "Spring"
+                AND dYear= %(year)s 
+                AND eSession = %(session)s
             GROUP BY Class_Size
             HAVING Class_Size != '0'
 
@@ -46,22 +81,30 @@ def index(request):
                     S.cCoffCode_ID = O.cCoffCode_ID
                 AND O.cCourse_ID = C.cCourse_ID 
                 AND C.cDepartment_ID = D.cDepartment_ID 
-                AND dYear= "2021" 
-                AND eSession = "Spring"
+                AND dYear= %(year)s 
+                AND eSession = %(session)s
             GROUP BY Class_Size
             HAVING Class_Size != '0'
             ORDER BY Class_Size ASC;
             """
-
+    values={
+        "year" : str(year),
+        "session" : session,
+    }
     with connection.cursor() as cursor:
-        cursor.execute( query )
-        labels = [ col[0] for col in cursor.description ]
-        data = cursor.fetchall()
-        
+        cursor.execute( query , values)
+        # print(connection.queries)
+        tableHeaders = [ col[0] for col in cursor.description ]
+        tableData = cursor.fetchall()   
+
 
     context = {
-        'labels': labels,
-        'data'  : data,
+        'tableHeaders': tableHeaders,
+        'tableData'   : tableData,
+        'years'       : years,
+        'sessions'    : sessions,
+        'selectedSession' : session,
+        'selectedYear'    : year,
     }
 
     return render(request, 'classroom_requirement/tablechart.html', context)
