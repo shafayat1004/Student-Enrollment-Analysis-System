@@ -44,19 +44,8 @@
 
         let chart1 = new Chart( revTrendCtx, {
                 type: "line",
-
-                labels: // all the semesters  [ {​%​ ​for​ ​semester ​in​ data[][0] ​%} '{{semester}}',​ {​%​ ​endfor​ ​%​} ],
-
-                datasets: [ 
-                    // dictionary constructor inside list constructor
-                    {
-                        label: "SETS",
-                        data: // all the SETS revenue rows
-                        borderColor: // generate something
-                    }
-                    
-
-                ],
+                labels: xAxis,
+                datasets: yAxis,
                 options: {
                     title: {
                         text: "Revenue Trend of Schools",
