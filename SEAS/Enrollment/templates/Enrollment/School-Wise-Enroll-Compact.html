@@ -3,6 +3,27 @@
 
 {% block content %}
   <caption>School Wise Enrollment</caption>
+  h1>Classroom Requirement As Per Course Requirement (Summary)</h1>
+    <div class= "title row">
+        <h1>{{selectedSession}}, {{selectedYear}}</h1>
+    </div>
+    <div class= "searchRow">
+        <form method="POST" class="semesterSelection">
+            {% csrf_token %}
+            {% comment %} {{ forms }} {% endcomment %}
+            <select name="selectedSession">
+                {% for session in sessions %}
+                    <option value="{{ session.0 }}">{{session.0}}</option>
+                {% endfor %}
+            </select>
+            <select name="selectedYear">
+                {% for year in years %}
+                    <option value="{{ year.0 }}">{{ year.0}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Load</button>
+        </form> 
+    </div>
   <div class="row">
     <div class='col-md-6'>
   <table style="width:50%">
