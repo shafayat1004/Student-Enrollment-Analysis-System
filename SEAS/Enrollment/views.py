@@ -9,6 +9,29 @@ from django.http import HttpResponse
 # Create your views here.
 def schoolWiseEnrollExpand( request ):
     ''' School wise enrollment Table [Expanded]'''
+
+    '''' Store all years '''
+    query = """     
+            SELECT dYear
+            FROM Section_T
+            GROUP BY dYear
+            """
+    years = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        years = cursor.fetchall()
+
+    '''' Store all sessions '''
+    query = """     
+            SELECT eSession
+            FROM Section_T
+            GROUP BY eSession
+            """
+    sessions = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        sessions = cursor.fetchall()
+
     # Fetch all schools and create select clause for them
     query = """
         SELECT cSchool_ID AS sch
@@ -21,6 +44,17 @@ def schoolWiseEnrollExpand( request ):
         sqlClause = ""
         for school in schools:
             sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
+    
+    year = ''
+    session = ''
+    
+    if request.method == 'POST':
+        year = request.POST.get('selectedYear', 2021)
+        session = request.POST.get('selectedSession', "Summer")
+
+    else:
+        year = years[0][0]
+        session = sessions[0][0]
 
     # Run query for School wise enrollment data
     query = f"""
@@ -38,32 +72,74 @@ def schoolWiseEnrollExpand( request ):
 				S.cCoffCode_ID = O.cCoffCode_ID
 			AND O.cCourse_ID = C.cCourse_ID 
 			AND C.cDepartment_ID = D.cDepartment_ID 
-			AND dYear= '2021'					 	-- replace with {{django}}
-			AND eSession = 'Spring'					-- replace with {{django}}
+			AND dYear= '{year}'					 
+			AND eSession = '{session}'					
 			GROUP BY Enrollment, School
 			ORDER BY D.cSchool_ID, Enrollment ASC
         
     ) E 
-    WHERE Enrollment != 0
+    WHERE Enrollment > 0
     GROUP BY Enrollment
-    ORDER BY Enrollment ASC;
+    UNION
+    SELECT 
+        9999,
+		{sqlClause}
+        SUM( Counter) AS T  
+        FROM
+		(SELECT School ,COUNT(Enrolled) AS Counter  FROM sections_v WHERE  Years = '{year}' AND Sessions = '{session}' AND Enrolled != 0
+		GROUP BY School) E
+        ORDER BY Enrollment ASC;
     """
+
+    values={
+        "year" : str(year),
+        "session" : session,
+    }
     with connection.cursor() as cursor:
-        cursor.execute( query )
+        cursor.execute( query,values )
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
+    
 
     # return HttpResponse( labels )       # for debug only
     
     context = {
         'labels': labels,
         'data'  : data,
+        'years'       : years,
+        'sessions'    : sessions,
+        'selectedSession' : session,
+        'selectedYear'    : year,
     }
     return render(request, 'Enrollment/School-Wise-Enroll-Expand.html', context)
     
 
 def schoolWiseEnrollCompact( request ):
     ''' School wise enrollment Table [Compact]'''
+
+    '''' Store all years '''
+    query = """     
+            SELECT dYear
+            FROM Section_T
+            GROUP BY dYear
+            ORDER BY dYear
+            """
+    years = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        years = cursor.fetchall()
+
+    '''' Store all sessions '''
+    query = """     
+            SELECT eSession
+            FROM Section_T
+            GROUP BY eSession
+            """
+    sessions = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        sessions = cursor.fetchall()
+
     # Fetch all schools and create select clause for them
     query = """
         SELECT cSchool_ID AS sch
@@ -76,6 +152,17 @@ def schoolWiseEnrollCompact( request ):
         sqlClause = ""
         for school in schools:
             sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
+
+    year = ''
+    session = ''
+    
+    if request.method == 'POST':
+        year = request.POST.get('selectedYear', 2021)
+        session = request.POST.get('selectedSession', "Summer")
+
+    else:
+        year = years[0][0]
+        session = sessions[0][0]
 
     # Run query for school wise enrollment data
     query = f"""
@@ -103,8 +190,8 @@ def schoolWiseEnrollCompact( request ):
 				S.cCoffCode_ID = O.cCoffCode_ID
 			AND O.cCourse_ID = C.cCourse_ID 
 			AND C.cDepartment_ID = D.cDepartment_ID 
-			AND dYear= '2021'					 -- replace with {{django}}
-			AND eSession = 'Spring'				 -- replace ''     ''
+			AND dYear= '{year}'					 -- replace with {{django}}
+			AND eSession = '{session}'				 -- replace ''     ''
 		GROUP BY Enrollment, School
 		ORDER BY School, Enrollment ASC
     ) E
@@ -117,10 +204,19 @@ def schoolWiseEnrollCompact( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
+    values={
+        "year" : str(year),
+        "session" : session,
+    }
+
     # return HttpResponse( labels )       # for debug only
     context = {
         'labels': labels,
         'data'  : data,
+        'years'       : years,
+        'sessions'    : sessions,
+        'selectedSession' : session,
+        'selectedYear'    : year,
     }
     return render(request, 'Enrollment/School-Wise-Enroll-Compact.html', context)
     

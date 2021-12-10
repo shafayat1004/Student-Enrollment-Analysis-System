@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Classroom Requirement As Per Course Requirement (Summary){% endblock title %}
 
-
 {% block content %}
 
 
@@ -9,8 +8,8 @@
     <div class= "title row">
         <h1>{{selectedSession}}, {{selectedYear}}</h1>
     </div>
-    <div class= "search row">
-        <form method="POST">
+    <div class= "searchRow">
+        <form method="POST" class="semesterSelection">
             {% csrf_token %}
             {% comment %} {{ forms }} {% endcomment %}
             <select name="selectedSession">
@@ -26,9 +25,9 @@
             <button type="submit">Load</button>
         </form> 
     </div>
-    <div class="view row">
-        <div class='col-md-4 table'>
-            <table>
+    <div class="table row">
+        <div class='col-xs-1 table'>
+            <table class="mytable">
                 <thead>
                     <tr>
                         {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
@@ -44,22 +43,26 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>  
-    
-        <div class="col-md-5" style="width:25vw;">
+        </div> 
+    </div>
+    <div class="chart row">
+        <div class="col-xs-1" style="width:50%;">
             <canvas id="pieChartD6" width="400" height="400"></canvas>
             <script>
+                Chart.register(ChartDataLabels);
                 const ctx1 = document.getElementById('pieChartD6').getContext('2d');
                 var data = [{
-                    //label: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
                     data: [{% for data in tableData|slice:":-1" %} '{{data.2}}', {% endfor %}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(217, 248, 77, 0.5)',
+                        'rgba(248, 77, 220, 0.5)',
+                        'rgba(140, 248, 77, 0.5)'
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
@@ -71,39 +74,49 @@
                     ],
                     borderWidth: 1
                 }]
-                {% comment %} TODO PERCENTAGE DOESN"T WORK
                 var options = {
                     tooltips: {
                         enabled: false
                     },
                     plugins: {
-                        datalabels: {
-                            formatter: (value, ctx1) => {
-                                let sum = 0;
-                                let dataArr = ctx1.data.datasets[0];
-                                dataArr.map(data => {
-                                    sum += data;
-                                });
-                                let percentage = (value*100 / sum).toFixed(2)+"%";
-                                return percentage;
+                        title: {
+                            display: true,
+                            text: 'Class size 6 requirement',
+                            font: {
+                                size: 20
                             },
-                            color: '#fff',
+                        },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                {% with lastTableRow=tableData|last %}
+                                let total = {{lastTableRow.2}}
+                                {% endwith %}
+                                return (context.chart.data.datasets[0].data[context.dataIndex]/total*100).toFixed(1)+"%";
+                            },
+                            labels: {
+                                value: {
+                                    color: 'blue'
+                                }
+                            },
+                            anchor: 'end',
+                            align: 'start',
+
                         }
                     }
                 } 
-                {% endcomment %}
+                
                 var pieChartD6 = new Chart(ctx1, {
                     type: 'pie',
                     data: {
                         labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
                         datasets: data
                     },
-                    //options: options
+                    options: options
                 }); 
             </script>
         </div>
 
-        <div class="col-md-5" style="width:25vw;">
+        <div class="col-xs-1" style="width:50%;">
             <canvas id="pieChartD7" width="400" height="400"></canvas>
             <script>
                 const ctx2 = document.getElementById('pieChartD7').getContext('2d');
@@ -111,12 +124,15 @@
                     //label: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
                     data: [{% for data in tableData|slice:":-1" %} '{{data.3}}', {% endfor %}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(217, 248, 77, 0.5)',
+                        'rgba(248, 77, 220, 0.5)',
+                        'rgba(140, 248, 77, 0.5)'
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
@@ -128,38 +144,45 @@
                     ],
                     borderWidth: 1
                 }]
-                {% comment %} TODO PERCENTAGE DOESN"T WORK 
+                
                 var options = {
                     tooltips: {
                         enabled: false
                     },
                     plugins: {
-                        datalabels: {
-                            formatter: (value, ctx2) => {
-                                /*
-                                let sum = 0;
-                                let dataArr = ctx2.chart.data.datasets[0].data;
-                                
-                                dataArr.map(data => {
-                                    sum += data;
-                                });
-                                */  
-                                let sum = ctx2.dataset._meta[0].total
-                                let percentage = (value*100 / sum).toFixed(2)+"%";
-                                return percentage;
+                        title: {
+                            display: true,
+                            text: 'Class size 7 requirement',
+                            font: {
+                                size: 20
                             },
-                            color: '#fff',
+                        },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                {% with lastTableRow=tableData|last %}
+                                let total = {{lastTableRow.3}}
+                                {% endwith %}
+                                return (context.chart.data.datasets[0].data[context.dataIndex]/total*100).toFixed(1)+"%";
+                            },
+                            labels: {
+                                value: {
+                                    color: 'blue'
+                                }
+                            },
+                            anchor: 'end',
+                            align: 'start',
+
                         }
                     }
                 } 
-                {% endcomment %}
+                
                 var pieChartD7 = new Chart(ctx2, {
                     type: 'pie',
                     data: {
                         labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
                         datasets: data
                     },
-                    //options: options
+                    options: options
                 }); 
             </script>
         </div>

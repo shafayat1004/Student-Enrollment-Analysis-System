@@ -11,6 +11,7 @@ def index(request):
             SELECT dYear
             FROM Section_T
             GROUP BY dYear
+            ORDER BY dYear
             """
     years = []
     with connection.cursor() as cursor:
