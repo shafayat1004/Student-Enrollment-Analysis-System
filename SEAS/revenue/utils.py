@@ -22,20 +22,18 @@ def revenueChartDataPacker( dataTable, colNames, isArea = False ):
         "dataTable" is a list of tuples, where each tuple is a row of the table,         
         "colNames" is the column names of the table, "isArea" = false is for line chart selector '''
 
-    columns = [ zip( *dataTable ) ]                              # unzips tuples of rows, and aligns corresponding elements to form tuples of cols
+    columns = [ list(t) for t in zip( *dataTable ) ]             # unzips tuples of rows, and aligns corresponding elements to form tuples of cols
 
     colors = generate_color_palette( len( columns ) )            # unique color list for every column
 
     xAxisValues = columns[0]                                     # first element of each row tuple is semester alt: [ row[0] for row in dataTable ]
 
-    print( xAxisValues )
-    
-    yAxisValues = [                                              
+    yAxisValues = [                                       
         { 'labels': label, 'data': columns[i+1], 'borderColor': colors[i+1],  'fill': isArea }
-        for i, label in enumerate( colNames[ 1 : ] )
+        for i, label in enumerate( colNames[1:] )
     ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], borderColor:'#55efc4', fill: true }
 
-    return xAxisValues, yAxisValues         
+    return xAxisValues, yAxisValues 
     
     
     
