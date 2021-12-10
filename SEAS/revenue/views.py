@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
 
-from .utils import revenueChartDataPacker
+from .utils import iubRevenueChartDataPacker
 
 # Fahim's stuff
 # path( 'revenue/', include('revenue.urls') ),
@@ -67,15 +67,19 @@ def iubRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    xAxis, yAxis = revenueChartDataPacker( data, labels )
-        
+    xAxis, yAxis, totals, changes = iubRevenueChartDataPacker( data, labels )
+
     return render( request, "revenue_iub.html", { 
             'colNames': labels,
             'revenues': data,
             'xAxis': xAxis,
-            'yAxis': yAxis 
+            'yAxis': yAxis ,
+            'totals': totals,
+            'changes': changes 
         }
     )
+
+
 
 
 def deptRevenue( request ):
@@ -136,12 +140,14 @@ def deptRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    xAxis, yAxis = revenueChartDataPacker( data, labels )
+    xAxis, yAxis, totals, changes = revenueChartDataPacker( data, labels )
         
     return render( request, "revenue_iub.html", { 
             'colNames': labels,
             'revenues': data,
             'xAxis': xAxis,
-            'yAxis': yAxis 
+            'yAxis': yAxis,
+            'totals': totals,
+            'changes': changes 
         }
     )
