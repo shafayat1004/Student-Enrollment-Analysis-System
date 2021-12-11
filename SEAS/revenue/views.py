@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
 
-from .utils import iubRevenueChartDataPacker
+from .utils import iubRevenueChartDataPacker, deptRevenueChartDataPacker
 
 # Fahim's stuff
 # path( 'revenue/', include('revenue.urls') ),
@@ -33,7 +33,8 @@ def iubRevenue( request ):
         SELECT 
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
             {sqlClause}
-            SUM( Revenue ) AS Total
+            SUM( Revenue ) AS Total,
+            ROUND( 100 * ( SUM( Revenue ) - LAG( SUM( Revenue ), 1,  SUM( Revenue ) ) OVER ( PARTITION BY Sessions ) ) / SUM( Revenue ) ) AS '% Change'
         FROM (
             SELECT 
                 Years, 
@@ -61,6 +62,7 @@ def iubRevenue( request ):
             ORDER BY Years, Sessions DESC
         ) E
         GROUP BY Years, Sessions
+        ORDER BY Years, Sessions DESC
     """
     with connection.cursor() as cursor:
         cursor.execute( query )
@@ -69,7 +71,7 @@ def iubRevenue( request ):
 
     xAxis, yAxis, totals, changes = iubRevenueChartDataPacker( data, labels )
 
-    return render( request, "revenue_iub.html", { 
+    return render( request, "revenue/revenue_iub.html", { 
             'colNames': labels,
             'revenues': data,
             'xAxis': xAxis,
@@ -140,7 +142,7 @@ def deptRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    xAxis, yAxis, totals, changes = revenueChartDataPacker( data, labels )
+    xAxis, yAxis, totals, changes = deptRevenueChartDataPacker( data, labels )
         
     return render( request, "revenue_iub.html", { 
             'colNames': labels,

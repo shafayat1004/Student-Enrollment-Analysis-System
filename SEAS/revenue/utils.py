@@ -17,10 +17,10 @@ def generate_color_palette( amount ):
 
 
 
-def iubRevenueChartDataPacker( dataTable, colNames, isArea = False ):
+def iubRevenueChartDataPacker( dataTable, colNames ):
     ''' Packages rows and their column labels into an easy-to-chart form.         
         "dataTable" is a list of tuples, where each tuple is a row of the table,         
-        "colNames" is the column names of the table, "isArea" = false is for line chart selector '''
+        "colNames" is the column names of the table '''
 
     columns = [ list(t) for t in zip( *dataTable ) ]             # unzips tuples of rows, and aligns corresponding elements to form tuples of cols
 
@@ -38,3 +38,7 @@ def iubRevenueChartDataPacker( dataTable, colNames, isArea = False ):
     ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], borderColor:'#55efc4', fill: true }
 
     return xAxisValues, yAxisValues, totals, changes 
+
+
+def deptRevenueChartDataPacker( dataTable, colNames ):
+    pass

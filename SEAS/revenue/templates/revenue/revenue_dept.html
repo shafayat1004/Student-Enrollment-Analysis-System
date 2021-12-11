@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Revenue of Departments{% endblock title %}
+
+{% block content %}
+
+  <caption>Revenue of ......</caption>
+  <table class='table' style="width:50%">
+      ​​<thead>
+          <tr> <th colspan="7">Historical Revenue Data</th></tr>
+          </thead>
+          <thead>
+          <tr>
+          ​    {% for colName in labels %}​
+                  <th>​{{colName}}​</th>
+          ​    {% endfor %} 
+          ​</tr> 
+      </thead>
+      <tbody>
+          {% for row in data %} 
+​            ​<tr>
+              {% for item in row %} 
+  ​                ​​<td>​{{item}}​</td> 
+  ​            {% endfor %}
+          </tr>
+​                {% endfor %}
+      </tbody> 
+  </table>
+
+  <div class="row">
+      <div class="col-6">
+        <canvas id="schoolRevTrendChart"></canvas>     <!-- Revenue trend of all departments of the selected school -->
+      </div>
+
+      <div class="col-7">
+        <canvas id="schoolRevDistChart"></canvas>      <!-- Revenue distribution of all departments of the selected school -->
+      </div>
+
+      <div class="col-8">
+        <canvas id="deptRevChart"></canvas>            <!-- Revenue trend of selected department of the school -->
+      </div>
+  </div>
+
+
+  </div>
+{% endblock content %}

@@ -1,0 +1,15 @@
+h1{
+    text-align: center;
+}
+table{
+    border: 1px;
+}
+table td + td {
+    border-left:1px solid rgb(0, 0, 0); 
+}
+
+.searchRow {
+	display:flex;
+	justify-content: center;
+    background-color: rgba(140, 248, 77, 0.5);
+}
