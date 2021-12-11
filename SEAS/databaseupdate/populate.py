@@ -6,6 +6,7 @@ import os, posixpath
 from django.db import connection
 from django.core.files.storage import default_storage
 from django.conf import settings
+from platform import system
 
 
 def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO might have to set this to false for the actual app
@@ -39,7 +40,9 @@ def csvToMySQL(csvPath, csvColumns, tableName, tableColumns, local=True): #TODO 
     if local is True:
         sqlQuery+= 'LOCAL'
 
-    sqlQuery+='\nINFILE "' + str(csvPath).replace(os.sep, posixpath.sep) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY "\\t"\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
+    lineTerminator = "\nLINES TERMINATED BY '\\r\\n'" if system() == "Windows" else '\n'
+
+    sqlQuery+='\nINFILE "' + str(csvPath).replace(os.sep, posixpath.sep) + '" \nINTO TABLE ' + tableName + ' \nFIELDS TERMINATED BY "\\t"' + lineTerminator + '\nIGNORE 1 LINES \n' + csv_variables + colNotInCSVComment + ' \nSET ' + tableAssignments + ';'
     
     return sqlQuery
 
