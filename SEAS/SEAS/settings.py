@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'databaseupdate',
     'classroom_requirement',
     'Enrollment',
+    'resources',
 ]
 
 MIDDLEWARE = [
