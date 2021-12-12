@@ -2,7 +2,78 @@
 {% block title %}Usage Of The Resources{% endblock title %}
 
 {% block content %}
-
-
-
+    <h1>Usage Of The Resources</h1>
+    <div class= "title row">
+        <h1>{{selectedSession}}, {{selectedYear}}</h1>
+    </div>
+    <div class= "searchRow">
+        <form method="POST" class="semesterSelection">
+            {% csrf_token %}
+            <select name="selectedSession">
+                {% for session in sessions %}
+                    <option value="{{ session.0 }}">{{session.0}}</option>
+                {% endfor %}
+            </select>
+            <select name="selectedYear">
+                {% for year in years %}
+                    <option value="{{ year.0 }}">{{ year.0}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Load</button>
+        </form> 
+    </div>
+    <div class="table row">
+        <div class='col-xs-1 table'>
+            <table class="mytable">
+                <thead>
+                    <tr>
+                        {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in tableData|slice:":-1" %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{item}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        {% with lastTableRow=tableData|last %}
+                        {% for item in lastTableRow %}
+                            <th>{{item}}</th>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+    <div class="table row">
+        <div class='col-xs-1 table'>
+            <table class="mytable">
+                {% comment %} 
+                <thead>
+                    <tr>
+                        <th></th><th>{{selectedSession}}, {{selectedYear}}</th>
+                    </tr>
+                </thead>
+                {% endcomment %}
+                <tbody>
+                    <tr>
+                        <td>Average Of Room Capacity</td><td>{{lastTableRow.3}}</td>
+                    </tr>
+                    <tr>
+                        <td>Average Of Enrolled</td><td>{{lastTableRow.2}}</td>
+                    </tr>
+                    <tr>
+                        <td>Average Of Unused Space</td><td>{{lastTableRow.4}}</td>
+                    </tr>
+                    <tr>
+                        <td>Unused Percent</td><td>{{lastTableRow.5}}</td>
+                        {% endwith %}
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
 {% endblock content %}
