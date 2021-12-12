@@ -32,4 +32,5 @@ urlpatterns = [
     # Shafayat's stuff
     path('databaseupdate/', include('databaseupdate.urls')),
     path('classroom_requirement/', include('classroom_requirement.urls')),
+    path('resources/', include('resources.urls')),
 ]
