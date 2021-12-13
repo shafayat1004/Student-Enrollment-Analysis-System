@@ -16,14 +16,12 @@ def generate_color_palette( amount ):
     return palette
 
 
-
 def iubRevenueChartDataPacker( dataTable, colNames ):
     ''' Packages rows and their column labels into an easy-to-chart form.         
         "dataTable" is a list of tuples, where each tuple is a row of the table,         
         "colNames" is the column names of the table '''
 
     columns = [ list(t) for t in zip( *dataTable ) ]             # unzips tuples of rows, and aligns corresponding elements to form tuples of cols
-
     colors = generate_color_palette( len( columns ) )            # a unique color for every column
 
     xAxisValues = columns[0]                                     # first element of each row tuple is semester alt: [ row[0] for row in dataTable ]
@@ -35,10 +33,30 @@ def iubRevenueChartDataPacker( dataTable, colNames ):
     yAxisValues = [                                       
         { 'label': label, 'data': columns[i+1], 'borderColor': colors[i+1] }
         for i, label in enumerate( colNames[1:-2] )
-    ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], borderColor:'#55efc4', fill: true }
+    ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], borderColor:'#55efc4' }
 
     return xAxisValues, yAxisValues, totals, changes 
 
 
 def deptRevenueChartDataPacker( dataTable, colNames ):
-    pass
+    ''' Packages rows and their column labels into an easy-to-chart form.         
+        "dataTable" is a list of tuples, where each tuple is a row of the table,         
+        "colNames" is the column names of the table '''
+
+    columns = [ list(t) for t in zip( *dataTable ) ]             # unzips tuples of rows, and aligns corresponding elements to form tuples of cols
+    colors = generate_color_palette( len( columns ) )            # a unique color for every column
+    numOfDep = ( len( colNames )//2 )                            # used for slicing between department rev and % change
+
+    xAxisValues = columns[0]                                     # first element of each row tuple is semester alt: [ row[0] for row in dataTable ]
+
+    yAxisValues = [                                       
+        { 'label': label, 'data': columns[i+1], 'borderColor': colors[i+1] }
+        for i, label in enumerate( colNames[ 1 : numOfDep ] )
+    ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], borderColor:'#55efc4'}
+
+    percChanges = [
+        { 'label': label, 'data': columns[i+1], 'backgroundColor': colors[i+1] }
+        for i, label in enumerate( colNames[ numOfDep+1 : -1 ] )        
+    ] # list of dictionaries containing e.g. { label: "%SETS", data: [ 34,7,12..], backgroundColor:'#55efc4',}
+
+    return xAxisValues, yAxisValues, percChanges 

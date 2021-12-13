@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
-
+from .utils import schoolEnrollChartDataPacker
 # Suhaila's stuff
-# path( 'Enrollment/', include('Enrollment.urls') ),
+
 
 
 # Create your views here.
@@ -57,6 +57,33 @@ def schoolWiseEnrollExpand( request ):
     else:
         year = years[0][0]
         session = sessions[0][0]
+    
+    #create section view 
+    query = '''
+        CREATE VIEW Sections_V AS
+    SELECT *, ( T.Enrolled * T.Credits ) AS TotalCredits
+    FROM (
+        SELECT 
+            CONCAT( C.cCourse_ID, '-', S.nSectionNumber ) AS Section, 
+            S.dYear AS Years, 
+            S.eSession AS Sessions,
+            S.nEnrolled AS Enrolled,
+            C.nCreditHours AS Credits,
+            D.cDepartment_ID AS Department,
+            D.cSchool_ID AS School
+        FROM 
+            Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
+        WHERE 
+                S.cCoffCode_ID = O.cCoffCode_ID
+            AND O.cCourse_ID = C.cCourse_ID 
+            AND C.cDepartment_ID = D.cDepartment_ID
+        ORDER BY Years, Sessions DESC, Section, Credits, Department, School
+    ) T;
+      '''
+    
+    with connection.cursor() as cursor:
+        cursor.execute( query )
+      #  section = cursor.fetchall() 
 
     # Run query for School wise enrollment data
     query = f"""
@@ -207,8 +234,8 @@ def schoolWiseEnrollCompact( request ):
         "year" : str(year),
         "session" : session,
     }
-
-    # return HttpResponse( labels )       # for debug only
+    xAxis, yAxis, totals = schoolEnrollChartDataPacker( data, labels )
+    
     context = {
         'labels': labels,
         'data'  : data,
@@ -216,8 +243,11 @@ def schoolWiseEnrollCompact( request ):
         'sessions'    : sessions,
         'selectedSession' : session,
         'selectedYear'    : year,
+        #'xAxis' : xAxis,
+        #'yAxis': yAxis ,
+       # 'totals' : totals,
     }
     return render(request, 'Enrollment/School-Wise-Enroll-Compact.html', context)
     
-
+#'Enrollment/School-Wise-Enroll-Compact.html'
 

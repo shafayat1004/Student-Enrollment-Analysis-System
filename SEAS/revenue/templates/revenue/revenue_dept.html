@@ -2,9 +2,91 @@
 {% block title %}Revenue of Departments{% endblock title %}
 
 {% block content %}
-	<table class='table' style="width:90%">
+	<div>
+		<h1>Department-wise Revenue of {{schoolSelected}}</h1>
+		<canvas id="schoolRevTrendChart"></canvas> 
+		<h1>Revenue Distribution among {{schoolSelected}} Departments</h1>
+		<canvas id="schoolRevDistChart"></canvas>
+
+		<script>
+			let ctx1 = document.getElementById("schoolRevTrendChart").getContext("2d");
+            let ctx2 = document.getElementById("schoolRevDistChart").getContext("2d");
+
+			let chartX = [ {% for semester in xAxis %} '{{semester}}', {% endfor %} ];
+
+			let chart1_Y = [ 
+                {% for key in yAxis %} 
+                {
+                    label: '{{key.label}}',
+                    data: [ {% for rev in key.data %} {{rev}}, {% endfor %} ],
+                    borderColor: '{{key.borderColor}}',
+                    fill: false
+                },
+                {% endfor %}
+            ]
+
+			const chartTrend = new Chart( ctx1, {
+					type: "line",
+					data: {
+						labels:   chartX,
+						datasets: chart1_Y
+					},
+					options: {
+						responsive: true,
+						title: {
+							text: "Revenue Trend of Departments",
+							display: true,
+							padding: {
+								top: 10,
+								bottom: 30
+							}
+						}
+					}
+				}          
+			);
+
+			let chart2_Y = [ 
+				{% for key in yAxis %} 
+				{
+					label: '{{key.label}}',
+					data: [ {% for rev in key.data %} {{rev}}, {% endfor %} ],
+					borderColor: '{{key.borderColor}}',
+					backgroundColor: '{{key.borderColor}}',
+					fill: true
+				},
+				{% endfor %}
+			]
+
+			const chartDist = new Chart( ctx2, {
+					type: "line",
+					data: {
+						labels:   chartX,
+						datasets: chart2_Y
+					},
+					options: {
+						responsive: true,
+						title: {
+							text: 'Revenue Distribution among Departments',
+							display: true,
+							padding: {
+								top: 10,
+								bottom: 30
+							}
+						},
+						scales: {
+							y: { stacked: 'single' }
+						}
+					}
+				}          
+			);
+
+
+		</script>		
+	</div>
+
+	<table class='table'>
 		<thead>
-			<tr><th colspan="8" style="text-align:center">Historical Revenue Data of ____</th></tr>
+			<tr><th colspan="10" style="text-align:center">Historical Revenue Data of {{schoolSelected}}</th></tr>
 		</thead>
 		<thead>
 			<tr>
@@ -23,27 +105,5 @@
 			{% endfor %}
 		</tbody> 
 	</table>
-
-	<div class="row">
-
-		<div class="col-6">
-			<canvas id="schoolRevTrendChart"></canvas>     <!-- Revenue trend of all departments of the selected school -->
-		</div>
-
-		<div class="col-7">
-			<canvas id="schoolRevDistChart"></canvas>      <!-- Revenue distribution of all departments of the selected school -->
-		</div>
-
-		<div class="col-8">
-			<canvas id="deptRevChart"></canvas>            <!-- Revenue trend of selected department of the school -->
-		</div>
-
-		<script>
-				
-		</script>
-		
-	</div>
-
-
 </div>
 {% endblock content %}

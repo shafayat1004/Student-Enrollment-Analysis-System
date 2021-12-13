@@ -23,21 +23,21 @@
             <button type="submit">Load</button>
         </form> 
     </div>
-    <table style="width:50%">
+    <table class='table' style="width:80%">
         ​​<thead>
     
-            <tr  style = "border: 1px solid black" >
+            <tr style = "border: 2px solid black", >
                
                 <th colspan="7", style="text-align:center">{{selectedSession}}</th></tr>
             </thead>
             <thead>
-            <tr style = "border: 1px solid black">
+            <tr style = " border-bottom: 1px solid #ddd">
             ​    {% for colName in tableCol %}​
                     <th style="text-align:center">​{{colName}}​</th>
             ​    {% endfor %} 
             ​</tr> 
         </thead>
-        <tbody  style = "border: 1px solid black">
+        <tbody  style = "border: 2px solid black">
             {% for row in tableRow|slice:":-1"%} 
  ​            ​<tr>
                 {% for item in row %} 
@@ -46,9 +46,10 @@
             </tr>
  ​           {% endfor %}
 
-            <tr style = "border: 1px solid black">
+            <tr style = "border: 2px solid black">
+                <th style="text-align:center">Total</th>
                 {% with lastTableRow=tableRow|last %}
-                {% for item in lastTableRow %}
+                {% for item in lastTableRow|slice:"-6:" %} 
                     <th style="text-align:center">{{item}}</th>
                 {% endfor %}
                 {% endwith %}
