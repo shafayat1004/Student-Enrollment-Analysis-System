@@ -24,9 +24,9 @@ def iubRevenue( request ):
         cursor.execute( query )
         schools = [ row[0] for row in cursor.fetchall() ]
 
-        sqlClause = ""
-        for school in schools:
-            sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Revenue ELSE 0 END ) AS {school},\n"
+    sqlClause = ""
+    for school in schools:
+        sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Revenue ELSE 0 END ) AS {school},\n"
 
     # Run query for revenue data of all schools
     query = f"""
@@ -96,13 +96,13 @@ def deptRevenue( request ):
         cursor.execute( query )
         departments = [ row[0] for row in cursor.fetchall() ]
 
-        depNames = ""
-        depColSqlClause = ""
-        depPercentColSqlClause = ""
-        for dept in departments:
-            depNames += f"{dept}, "
-            depColSqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
-            depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 1,  SUM( {dept} ) ) OVER ( PARTITION BY Sessions ) ) / SUM( {dept} ) ) AS '%{dept}', \n"
+    depNames = ""
+    depColSqlClause = ""
+    depPercentColSqlClause = ""
+    for dept in departments:
+        depNames += f"{dept}, "
+        depColSqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
+        depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 1,  SUM( {dept} ) ) OVER ( PARTITION BY Sessions ) ) / SUM( {dept} ) ) AS '%{dept}', \n"
   
     # Run query for revenue data for the departments
     query = f"""
@@ -160,14 +160,14 @@ def deptRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-   # xAxis, yAxis, totals, changes = deptRevenueChartDataPacker( data, labels )
+    xAxis, yAxis, changes = deptRevenueChartDataPacker( data, labels )
         
     return render( request, "revenue/revenue_dept.html", { 
             'colNames': labels,
             'revenues': data,
-           # 'xAxis': xAxis,
-           # 'yAxis': yAxis,
-           # 'totals': totals,
-           # 'changes': changes 
+            'xAxis': xAxis,
+            'yAxis': yAxis,
+            'changes': changes,
+            'schoolSelected': schoolSelected
         }
     )

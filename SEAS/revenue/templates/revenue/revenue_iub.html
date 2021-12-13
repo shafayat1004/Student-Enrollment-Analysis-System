@@ -2,43 +2,19 @@
 {% block title %}Revenue of Schools{% endblock title %}
 
 {% block content %}
-    <table class='table' style="width:90%">
-        <thead>
-            <tr><th colspan="8" style="text-align:center">Historical Revenue Data of all Schools in IUB</th></tr>
-        </thead>
-        <thead>
-            <tr>
-            ​    {% for colName in colNames %}​
-                <th>​{{colName}}​</th>
-            ​    {% endfor %} 
-            ​</tr> 
-        </thead>
-        <tbody>
-            {% for row in revenues %} 
-​            <tr>
-                {% for item in row %}
-​                ​​<td>​{{item}}​</td> 
-    ​            {% endfor %}
-            </tr>
-    ​        {% endfor %}
-        </tbody> 
-    </table>
 
-    <div class="col-md-6" style="width:100%; height:75%;">
+    <div>
+        <h1>Revenue Trend of the Schools</h1>
+        <canvas id="iubRevTrendChart"></canvas> 
 
-        <div class="col-8">
-            <canvas id="iubRevTrendChart"></canvas>             <!-- Revenue trend of all schools -->
-        </div>
+        <h1>Revenue Distribution among the Schools</h1>
+        <canvas id="iubRevDistChart"></canvas>
 
-        <div class="col-8">
-            <canvas id="iubRevDistChart"></canvas>          <!-- Revenue distribution of all schools -->
-        </div>
-
-        <div class="col-8">
-            <canvas id="iubRevChangeChart"></canvas>     <!-- Revenue trend of IUB and change -->
-        </div>
+        <h1>IUB Revenue and % Change</h1>
+        <canvas id="iubRevChangeChart"></canvas> 
 
         <script>
+            // Chart.register(ChartDataLabels);
             let ctx1 = document.getElementById("iubRevTrendChart").getContext("2d");
             let ctx2 = document.getElementById("iubRevDistChart").getContext("2d");
             let ctx3 = document.getElementById("iubRevChangeChart").getContext("2d");
@@ -164,4 +140,27 @@
             );
         </script>
     </div>
+
+    <table class='table' style="width:50%">
+        <thead>
+            <tr><th colspan="8" style="text-align:center">Historical Revenue Data of all Schools in IUB</th></tr>
+        </thead>
+        <thead>
+            <tr>
+                {% for colName in colNames %}​
+                <th>​{{colName}}​</th>
+                {% endfor %} 
+            ​</tr> 
+        </thead>
+        <tbody>
+            {% for row in revenues %} 
+            <tr>
+                {% for item in row %}
+                <td>​{{item}}​</td> 
+                {% endfor %}
+            </tr>
+             {% endfor %}
+        </tbody> 
+     </table>
+
 {% endblock content %}
