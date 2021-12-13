@@ -2,7 +2,34 @@
 {% block title %}IUB Available Resources{% endblock title %}
 
 {% block content %}
-
-
+<h1>Usage Of The Resources</h1>
+    <div class="table row">
+        <div class='col-xs-1 table'>
+            <table class="mytable" style="width:50%">
+                <thead>
+                    <tr>
+                        {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in tableData|slice:":-1" %}
+                    <tr>
+                        
+                        {% for item in row %}
+                            <td>{{item}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        {% with lastTableRow=tableData|last %}
+                        {% for item in lastTableRow %}
+                            <th>{{item}}</th>
+                        {% endfor %}
+                        {% endwith %}
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
 
 {% endblock content %}
