@@ -23,37 +23,37 @@
             <button type="submit">Load</button>
         </form> 
     </div>
-    <table class='table' style="width:80%">
-        ​​<thead>
-    
-            <tr style = "border: 2px solid black", >
-               
-                <th colspan="7", style="text-align:center">{{selectedSession}}</th></tr>
-            </thead>
-            <thead>
-            <tr style = " border-bottom: 1px solid #ddd">
-            ​    {% for colName in tableCol %}​
-                    <th style="text-align:center">​{{colName}}​</th>
-            ​    {% endfor %} 
-            ​</tr> 
+    <table class="increment1Table">
+        <thead>
+            <tr>
+                <th colspan="7">{{selectedSession}}</th></tr>
         </thead>
-        <tbody  style = "border: 2px solid black">
+        <thead class="fixedHeader">
+            <tr>
+                {% for colName in tableCol %}
+                    <th>{{colName}}</th>
+                {% endfor %} 
+            </tr> 
+        </thead>
+        <tbody class="scrollContent">
             {% for row in tableRow|slice:":-1"%} 
- ​            ​<tr>
+             <tr>
                 {% for item in row %} 
-    ​                ​​<td style="text-align:center">​{{item}}​</td> 
-    ​            {% endfor %}
-            </tr>
- ​           {% endfor %}
-
-            <tr style = "border: 2px solid black">
-                <th style="text-align:center">Total</th>
-                {% with lastTableRow=tableRow|last %}
-                {% for item in lastTableRow|slice:"-6:" %} 
-                    <th style="text-align:center">{{item}}</th>
+                    <td>{{item}}</td> 
                 {% endfor %}
+            </tr>
+            {% endfor %}
+
+        </tbody> 
+        <thead class="fixedHeader">
+            <tr">
+                <th>Total</th>
+                {% with lastTableRow=tableRow|last %}
+                    {% for item in lastTableRow|slice:"-6:" %} 
+                        <th>{{item}}</th>
+                    {% endfor %}
                 {% endwith %}
             </tr>
-        </tbody> 
+        </thead>
     </table>
 {% endblock content %}
