@@ -98,89 +98,64 @@ def resourceUsage(request):
         tableHeaders = [ col[0] for col in cursor.description ]
         tableData = cursor.fetchall()   
 
-
-    context = {
-        'tableHeaders': tableHeaders,
-        'tableData'   : tableData,
-        'years'       : years,
-        'sessions'    : sessions,
-        'selectedSession' : session,
-        'selectedYear'    : year,
-    }
-
-    return render(request, 'resources/resource_usage.html', context)
-
-def iubResources(request):
-
-    tableHeaders = []
-    tableData = []
+    tableHeaders2 = []
+    tableData2 = []
 
     query = """
         SELECT 
-		    Class_Size,
-            Counter AS "IUB Resources",
-            (Class_Size*Counter) AS "Capacity"
-        FROM (
-		    SELECT ( 
-			    CASE 
-                    WHEN C.nRoomCapacity = 20 THEN '20'  
-                    WHEN C.nRoomCapacity = 30 THEN '30' 
-                    WHEN C.nRoomCapacity = 40 THEN '40'  
-                    WHEN C.nRoomCapacity = 50 THEN '50'   
-                    WHEN C.nRoomCapacity = 54 THEN '54' 
-                    WHEN C.nRoomCapacity = 64 THEN '64' 
-                    WHEN C.nRoomCapacity = 124 THEN '124'  
-                    WHEN C.nRoomCapacity = 168 THEN '168'
-                END 
-		    ) AS Class_Size, COUNT(*) AS Counter
-		    FROM  Classroom_T AS C
-		    GROUP BY Class_Size -- ,C.nRoomCapacity
-            HAVING Class_Size >=20
-		    ORDER BY Class_Size ASC
-        
-        ) E
-        GROUP BY Class_Size
-        -- ORDER BY Class_Size
+            C.nRoomCapacity AS "Class Size", 
+            COUNT(DISTINCT S.cRoom_ID) AS "IUB Resources",
+            (COUNT(DISTINCT S.cRoom_ID) * C.nRoomCapacity) AS "Capacity"
+        FROM Classroom_T C, Section_T S
+        WHERE C.cRoom_ID=S.cRoom_ID AND S.dYear >= 2019
+        GROUP BY C.nRoomCapacity
 
         UNION
-        SELECT 
-	        "Total",
-            SUM(Counter),
-            SUM(Class_Size*Counter)
-        FROM (
-            SELECT ( 
-                CASE 
-                    WHEN C.nRoomCapacity = 20 THEN '20'  
-                    WHEN C.nRoomCapacity = 30 THEN '30' 
-                    WHEN C.nRoomCapacity = 40 THEN '40'  
-                    WHEN C.nRoomCapacity = 50 THEN '50'   
-                    WHEN C.nRoomCapacity = 54 THEN '54' 
-                    WHEN C.nRoomCapacity = 64 THEN '64' 
-                    WHEN C.nRoomCapacity = 124 THEN '124'  
-                    WHEN C.nRoomCapacity = 168 THEN '168'
-                END 
-		    ) AS Class_Size, COUNT(*) AS Counter
-		    FROM  Classroom_T AS C
-		    GROUP BY Class_Size,C.nRoomCapacity
-            HAVING Class_Size >=20
-		    ORDER BY Class_Size ASC
-        ) T
 
+        SELECT "Total", SUM(X.resources), SUM(X.capacity)
+        FROM (
+            SELECT 
+                C.nRoomCapacity AS "Class Size", 
+                COUNT(DISTINCT S.cRoom_ID) AS resources,
+                (COUNT(DISTINCT S.cRoom_ID) * C.nRoomCapacity) AS capacity
+            FROM Classroom_T C, Section_T S
+            WHERE C.cRoom_ID=S.cRoom_ID AND S.dYear >= 2019
+            GROUP BY C.nRoomCapacity
+        ) AS X;
         """
     
     with connection.cursor() as cursor:
         cursor.execute( query)
         # print(connection.queries)
-        tableHeaders = [ col[0] for col in cursor.description ]
-        tableData = cursor.fetchall()   
+        tableHeaders2 = [ col[0] for col in cursor.description ]
+        tableData2 = cursor.fetchall()
 
-
+    totCap6  = float(tableData2[-1][-1] * 12)
+    totCap7 = float(tableData2[-1][-1] * 14)
+    avg6 = round(totCap6/3.5)
+    avg7 = round(totCap7/3.5)
+    free6 = round(avg6 * (100 - tableData[-1][-1])/100)
+    free7 = round(avg7 * (100 - tableData[-1][-1])/100)
+    
     context = {
         'tableHeaders': tableHeaders,
         'tableData'   : tableData,
+        'tableHeaders2': tableHeaders2,
+        'tableData2'   : tableData2,
+        'years'       : years,
+        'sessions'    : sessions,
+        'selectedSession' : session,
+        'selectedYear'    : year,
+        'totCap6'     : round(totCap6),
+        'totCap7'     : round(totCap7),
+        'avg6'        : avg6,
+        'avg7'        : avg7,
+        'free6'       : free6,
+        'free7'       : free7,
     }
 
-    return render(request, 'resources/iub_resources.html', context)
+    return render(request, 'resources/resource_usage.html', context)
+
 
 def resourceComp(request):
    
