@@ -42,12 +42,12 @@ def resourceUsage(request):
 
     query = """
             SELECT
-                School AS " ", 
+                School AS '', 
                 Sum,
                 ROUND( AvgEnroll , 2) AS AvgEnroll,
                 ROUND( AvgRoom, 2 ) AS AvgRoom,
                 ROUND( Difference, 2 ) AS Difference,
-                ROUND( ( (Difference / AvgRoom)*100 ), 2 ) AS "UNUSED%"
+                ROUND( ( (Difference / AvgRoom)*100 ), 2 ) AS 'Unused%%'
             FROM (
                 SELECT 
                     D.cSchool_id AS School,
@@ -68,31 +68,25 @@ def resourceUsage(request):
                 GROUP BY D.cSchool_id
             ) T
             UNION
-            SELECT
-                %(session)s,
-                SUM( Sum ),
-                ROUND( SUM(AvgEnroll), 2 ),
-                ROUND( SUM(AvgRoom), 2 ),
-                ROUND( SUM( Difference ), 2 ),
-                ROUND( ( SUM( Difference ) / SUM( AvgRoom ) )*100 , 2 )
-            FROM (
-                SELECT 
-                    D.cSchool_id AS School,
-                    SUM( S.nEnrolled ) AS Sum,
-                    AVG( S.nEnrolled ) AS AvgEnroll, 
-                    AVG( Cr.nRoomCapacity ) AS AvgRoom,
-                    ( AVG( Cr.nRoomCapacity ) - AVG( S.nEnrolled ) ) AS Difference
-                FROM
-                    Department_T AS D
-                    INNER JOIN Course_T AS C            ON D.cDepartment_ID = C.cDepartment_ID
-                    INNER JOIN CoOfferedCourse_T AS Co  ON C.cCourse_ID = Co.cCourse_ID
-                    INNER JOIN Section_T AS S           ON Co.cCoffCode_ID = S.cCoffCode_ID
-                    INNER JOIN Classroom_T AS Cr        ON S.cRoom_ID = Cr.cRoom_ID
-                WHERE
-                        S.eSession = %(session)s
-                    AND S.dYear = %(year)s 
-                GROUP BY D.cSchool_id
-            )K;
+            SELECT 
+                S.eSession AS Session,
+                SUM( S.nEnrolled ) AS Sum,
+                ROUND( AVG( S.nEnrolled ), 2) AS AvgEnroll, 
+                ROUND( AVG( Cr.nRoomCapacity ), 2) AS AvgRoom,
+                ROUND( ( AVG( Cr.nRoomCapacity ) - AVG( S.nEnrolled ) ), 2) AS Difference,
+                -- ROUND( ( (Difference / AvgRoom)*100 ), 2 )
+                ROUND( ( (( AVG( Cr.nRoomCapacity ) - AVG( S.nEnrolled ) ) / (ROUND( AVG( Cr.nRoomCapacity ), 2)))*100 ), 2 )
+                
+            FROM
+                Department_T AS D
+                INNER JOIN Course_T AS C            ON D.cDepartment_ID = C.cDepartment_ID
+                INNER JOIN CoOfferedCourse_T AS Co  ON C.cCourse_ID = Co.cCourse_ID
+                INNER JOIN Section_T AS S           ON Co.cCoffCode_ID = S.cCoffCode_ID
+                INNER JOIN Classroom_T AS Cr        ON S.cRoom_ID = Cr.cRoom_ID
+            WHERE
+                    S.eSession = %(session)s
+                AND S.dYear = %(year)s
+            GROUP BY Session;
             """
     values={
         "year" : str(year),
@@ -118,4 +112,6 @@ def resourceUsage(request):
 
 def iubResources(request):
 
+    return render(request, 'resources/iub_resources.html')
 def resourceComp(request):
+    return render(request, 'resources/resource_comparison.html')
