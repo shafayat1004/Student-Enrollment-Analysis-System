@@ -4,6 +4,7 @@ Include/
 bin/
 lib/
 .vscode/
+SEAS/media
 pyvenv.cfg
 SEAS.code-workspace
 2009 Spring to 2021 Summer.xlsx

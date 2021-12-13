@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'SEAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-      #  'NAME': 'SEAS_database',
-      #  'USER': 'djangouser',
-      #  'PASSWORD': '12345',
-      #  'HOST': '127.0.0.1',
-      #  'PORT': '3306',
+        'NAME': 'SEAS_database',
+        'USER': 'djangouser',
+        'PASSWORD': '12345',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'read_default_file': '../my.cnf',
             "charset": "utf8mb4",
