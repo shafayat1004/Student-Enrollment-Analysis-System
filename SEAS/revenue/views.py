@@ -83,7 +83,6 @@ def iubRevenue( request ):
 
 
 def deptRevenue( request ):
-    ''' Historical revenue data and change of all the departments in the selected school'''
     # Fetch departments of the selected school and create select clause for them
     schoolSelected = "SETS"     # fetch from form
 
