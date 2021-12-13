@@ -2,7 +2,7 @@
 {% block title %}Enrollment Data{% endblock title %}
 
 {% block content %}
-  <caption>School Wise Enrollment</caption>
+
   <h1> School Wise Enrollment Compact</h1>
     <div class= "title row">
         <h1>{{selectedSession}}, {{selectedYear}}</h1>
@@ -25,23 +25,23 @@
         </form> 
     </div>
   <div class="row">
-    <div class='col-md-6'>
-  <table style="width:50%">
-      ​​<thead>
-          <tr> <th colspan="7">{{""}}</th></tr>
+    <div class="col-md-6" style="width:100%; height:75%;">
+  <table class='table' style="width:90%">
+      ​​<thead style = "border: 1px solid black">
+          <tr> <th colspan="7", style="text-align:center">{{selectedSession}}</th></tr>
           </thead>
-          <thead>
+          <thead style = "border: 1px solid black">
           <tr>
           ​    {% for colName in labels %}​
-                  <th>​{{colName}}​</th>
+                  <th style="text-align:center">​{{colName}}​</th>
           ​    {% endfor %} 
           ​</tr> 
       </thead>
-      <tbody>
+      <tbody style = "border: 1px solid black">
           {% for row in data %} 
 ​            ​<tr>
               {% for item in row %} 
-  ​                ​​<td>​{{item}}​</td> 
+  ​                ​​<td style="text-align:center">​{{item}}​</td> 
   ​            {% endfor %}
           </tr>
 ​                {% endfor %}
@@ -52,6 +52,7 @@
 <div class="col-md-6" style="width:50%; height:50%;">
   <canvas id="myChart" width="400" height="400"></canvas>
   <script>
+        Chart.register(ChartDataLabels);
   const ctx = document.getElementById('myChart').getContext('2d');
   
   const myChart = new Chart(ctx, {
@@ -59,36 +60,80 @@
       data: {
           
           labels: [{% for data in data %} '{{data.0}}', {% endfor %}],
-
+          
           datasets: [
                
-              {label: [{% for label in labels%} '{{label}}', {% endfor %}],
-              data: [{% for data in data %} '{{data.1}}', {% endfor %}
-              ],},
-              {label: [{% for label in labels%} '{{label}}', {% endfor %}],
-              data: [{% for data in data %} '{{data.2}}', {% endfor %}
-              ],},
-              {label: [{% for label in labels%} '{{label}}', {% endfor %}],
-              data: [{% for data in data %} '{{data.3}}', {% endfor %}
-              ],},
-              {label: [{% for label in labels%} '{{label}}', {% endfor %}],
-              data: [{% for data in data %} '{{data.4}}', {% endfor %}
-              ],},
-              {label: [{% for label in labels%} '{{label}}', {% endfor %}],
-              data: [{% for data in data %} '{{data.5}}', {% endfor %}],
-             
-              borderWidth: 1
+            { 
+                label: "SBE",
+                data: [{% for data in data %} '{{data.1}}', {% endfor %}],
+                backgroundColor:'#415c5c'
+            },
+            {
+                label: "SELS",
+                data: [{% for data in data %} '{{data.2}}', {% endfor %}],
+                backgroundColor: '#367a63'
+            },
+            {
+                label:"SETS",
+                data: [{% for data in data %} '{{data.3}}', {% endfor %}],
+                backgroundColor: '#5b944c'
+            },
+            {
+                label: "SLASS",
+                data: [{% for data in data %} '{{data.4}}', {% endfor %}],
+                backgroundColor: '#a2a51f'
+            },
+            {
+                label:"SPPH",
+                data: [{% for data in data %} '{{data.5}}', {% endfor %}],
+                backgroundColor: '#ffa600',
+                borderWidth: 1
           },
           {
-            label: [{% for label in labels%} '{{label}}', {% endfor %}],
-           data: [{% for data in data %} '{{data.6}}', {% endfor %}],
-           type: 'line',
+            label:"Total",
+           
+            data: [{% for data in data %} '{{data.6}}', {% endfor %}],
+            type: 'line',
+            borderColor: '#003f5c',
+            backgroundColor: '#003f5c',
            // this dataset is drawn on top
            order: 1
           }]
-      },
-      
-  });
+  }
+  
+  
+});
+var options = {
+    responsive: true,
+    tooltips: {
+        enabled: false
+    },
+    plugins: {
+        title: {
+            display: true,
+            text: 'View chart',
+            font: {
+                size: 20
+            },
+        },
+        datalabels: {
+            formatter: (value, context) => {
+                {% with lastTableRow=data|last %}
+                let total = {{lastTableRow.6}}
+                {% endwith %}
+                return (context.chart.data.labels[context.dataIndex]);
+            },
+            labels: {
+                value: {
+                    color: 'black'
+                }
+            },
+            anchor: 'end',
+            align: 'start'
+        }
+    }
+}
+
   </script>
 </div>
 </div>

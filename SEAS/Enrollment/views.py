@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
-
+from .utils import schoolEnrollChartDataPacker
 # Suhaila's stuff
-# path( 'Enrollment/', include('Enrollment.urls') ),
+
 
 
 # Create your views here.
@@ -207,8 +207,8 @@ def schoolWiseEnrollCompact( request ):
         "year" : str(year),
         "session" : session,
     }
-
-    # return HttpResponse( labels )       # for debug only
+    xAxis, yAxis, totals = schoolEnrollChartDataPacker( data, labels )
+    
     context = {
         'labels': labels,
         'data'  : data,
@@ -216,8 +216,11 @@ def schoolWiseEnrollCompact( request ):
         'sessions'    : sessions,
         'selectedSession' : session,
         'selectedYear'    : year,
+        #'xAxis' : xAxis,
+        #'yAxis': yAxis ,
+       # 'totals' : totals,
     }
     return render(request, 'Enrollment/School-Wise-Enroll-Compact.html', context)
     
-
+#'Enrollment/School-Wise-Enroll-Compact.html'
 
