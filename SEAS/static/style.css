@@ -5,11 +5,33 @@ table{
     margin-left: auto;
     margin-right: auto;
     border: 1px;
+    text-align:center
 }
 table td + td {
     border-left:1px solid rgb(0, 0, 0); 
 }
+tr{
+    border: 2px solid rgba(0, 0, 0, 0.452);
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
 
+table.increment1Table{
+    width:80%;
+    background-color: rgba(165, 255, 228, 0.295);
+    table-layout:fixed;
+    border: 2px solid black;
+    min-width: 500px;
+}
+
+table.increment1Table thead.fixedHeader{
+    position:sticky;
+    top: 0;  
+    bottom: 0;  
+    z-index: 0;
+    background-color: antiquewhite;
+    border: 2px solid black;
+}
 .searchRow {
 	display:flex;
 	justify-content: center;
