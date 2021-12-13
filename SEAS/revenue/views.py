@@ -82,8 +82,6 @@ def iubRevenue( request ):
     )
 
 
-
-
 def deptRevenue( request ):
     ''' Historical revenue data and change of all the departments in the selected school'''
     # Fetch departments of the selected school and create select clause for them
@@ -98,58 +96,78 @@ def deptRevenue( request ):
         cursor.execute( query )
         departments = [ row[0] for row in cursor.fetchall() ]
 
-        sqlClause = ""
+        depNames = ""
+        depColSqlClause = ""
+        depPercentColSqlClause = ""
         for dept in departments:
-            sqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
+            depNames += f"{dept}, "
+            depColSqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
+            depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 1,  SUM( {dept} ) ) OVER ( PARTITION BY Sessions ) ) / SUM( {dept} ) ) AS '%{dept}', \n"
   
     # Run query for revenue data for the departments
     query = f"""
         SELECT 
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
-            {sqlClause}
-            SUM( Revenue ) AS {schoolSelected}
+            {depNames}
+            {schoolSelected},
+            {depPercentColSqlClause}
+            ROUND( 
+                100 * ( 
+                    {schoolSelected} - ( LAG( {schoolSelected}, 1,  {schoolSelected} )  OVER ( PARTITION BY Sessions ) )
+                ) / SUM( {schoolSelected} )
+            ) AS '%{schoolSelected}'
         FROM (
             SELECT 
                 Years, 
                 Sessions, 
-                SUM( S.nEnrolled * C.nCreditHours ) AS Revenue, 
-                D.cDepartment_ID AS Department
-            FROM 
-                Section_T S, 
-                CoOfferedCourse_T O, 
-                Course_T C,
-                Department_T D, 
-                (	
-                    SELECT dYear AS Years, eSession AS Sessions
-                    FROM Section_T
-                    GROUP BY dYear, eSession
-                    ORDER BY dYear, eSession
-                ) M
-            WHERE 
-                    S.cCoffCode_ID = O.cCoffCode_ID
-                AND O.cCourse_ID = C.cCourse_ID 
-                AND C.cDepartment_ID = D.cDepartment_ID
-                AND D.cSchool_ID = '{schoolSelected}'
-                AND S.dYear = M.Years
-                AND S.eSession = M.Sessions
-            GROUP BY Years, Sessions, Department
+                {depColSqlClause}
+                SUM( Revenue ) AS {schoolSelected}
+            FROM (
+                SELECT 
+                    Years, 
+                    Sessions, 
+                    SUM( S.nEnrolled * C.nCreditHours ) AS Revenue, 
+                    D.cDepartment_ID AS Department
+                FROM 
+                    Section_T S, 
+                    CoOfferedCourse_T O, 
+                    Course_T C,
+                    Department_T D, 
+                    (	
+                        SELECT dYear AS Years, eSession AS Sessions
+                        FROM Section_T
+                        GROUP BY dYear, eSession
+                        ORDER BY dYear, eSession
+                    ) M
+                WHERE 
+                        S.cCoffCode_ID = O.cCoffCode_ID
+                    AND O.cCourse_ID = C.cCourse_ID 
+                    AND C.cDepartment_ID = D.cDepartment_ID
+                    AND D.cSchool_ID = '{schoolSelected}'
+                    AND S.dYear = M.Years
+                    AND S.eSession = M.Sessions
+                GROUP BY Years, Sessions, Department
+                ORDER BY Years, Sessions DESC
+            ) E
+            GROUP BY Years, Sessions
             ORDER BY Years, Sessions DESC
-        ) E
-        GROUP BY Years, Sessions;
+        ) K
+        GROUP BY Years, Sessions
+        ORDER BY Years, Sessions DESC;
     """
     with connection.cursor() as cursor:
         cursor.execute( query )
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    xAxis, yAxis, totals, changes = deptRevenueChartDataPacker( data, labels )
+   # xAxis, yAxis, totals, changes = deptRevenueChartDataPacker( data, labels )
         
-    return render( request, "revenue_iub.html", { 
+    return render( request, "revenue/revenue_dept.html", { 
             'colNames': labels,
             'revenues': data,
-            'xAxis': xAxis,
-            'yAxis': yAxis,
-            'totals': totals,
-            'changes': changes 
+           # 'xAxis': xAxis,
+           # 'yAxis': yAxis,
+           # 'totals': totals,
+           # 'changes': changes 
         }
     )
