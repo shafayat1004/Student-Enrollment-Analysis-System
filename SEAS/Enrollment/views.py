@@ -10,6 +10,8 @@ from django.http import HttpResponse
 def schoolWiseEnrollExpand( request ):
     ''' School wise enrollment Table [Expanded]'''
 
+    tableCol = []
+    tableRow = []
     '''' Store all years '''
     query = """     
             SELECT dYear
@@ -97,15 +99,12 @@ def schoolWiseEnrollExpand( request ):
     }
     with connection.cursor() as cursor:
         cursor.execute( query,values )
-        labels = [ col[0] for col in cursor.description ]
-        data = cursor.fetchall()
-    
-
-    # return HttpResponse( labels )       # for debug only
+        tableCol = [ col[0] for col in cursor.description ]
+        tableRow = cursor.fetchall()
     
     context = {
-        'labels': labels,
-        'data'  : data,
+        'tableCol': tableCol,
+        'tableRow'  : tableRow,
         'years'       : years,
         'sessions'    : sessions,
         'selectedSession' : session,

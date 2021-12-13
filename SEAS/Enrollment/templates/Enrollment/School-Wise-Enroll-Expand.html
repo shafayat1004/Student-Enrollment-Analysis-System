@@ -25,23 +25,34 @@
     </div>
     <table style="width:50%">
         ​​<thead>
-            <tr> <th colspan="7">SPRING</th></tr>
+    
+            <tr  style = "border: 1px solid black" >
+               
+                <th colspan="7", style="text-align:center">{{selectedSession}}</th></tr>
             </thead>
             <thead>
-            <tr>
-            ​    {% for colName in labels %}​
-                    <th>​{{colName}}​</th>
+            <tr style = "border: 1px solid black">
+            ​    {% for colName in tableCol %}​
+                    <th style="text-align:center">​{{colName}}​</th>
             ​    {% endfor %} 
             ​</tr> 
         </thead>
-        <tbody>
-            {% for row in data %} 
+        <tbody  style = "border: 1px solid black">
+            {% for row in tableRow|slice:":-1"%} 
  ​            ​<tr>
                 {% for item in row %} 
-    ​                ​​<td>​{{item}}​</td> 
+    ​                ​​<td style="text-align:center">​{{item}}​</td> 
     ​            {% endfor %}
             </tr>
- ​                {% endfor %}
+ ​           {% endfor %}
+
+            <tr style = "border: 1px solid black">
+                {% with lastTableRow=tableRow|last %}
+                {% for item in lastTableRow %}
+                    <th style="text-align:center">{{item}}</th>
+                {% endfor %}
+                {% endwith %}
+            </tr>
         </tbody> 
     </table>
 {% endblock content %}
