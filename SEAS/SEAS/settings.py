@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'SEAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SEAS_database',
+        'NAME': 'SEAS_Database',
         'USER': 'djangouser',
         'PASSWORD': '12345',
         'HOST': '127.0.0.1',
