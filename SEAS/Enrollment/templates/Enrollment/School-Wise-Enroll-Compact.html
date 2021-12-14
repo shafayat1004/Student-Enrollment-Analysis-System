@@ -75,6 +75,8 @@
                         drawOnChartArea: false
                     },
                     max: 175,
+                    anchor: 'end',
+                    align: 'start',
                 },
                 'right-y-axis': {
                     type: "linear",
@@ -84,6 +86,7 @@
                     },
                     min: -50,
                 },
+                
             }, 
             plugins: {
                 title: {
@@ -92,8 +95,17 @@
                     font: {
                         size: 20
                     },
+                    
                 },
+                datalabels:{
+                    color: 'black',
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 1,
+                }
+                
             }
+            
         }
 
         const myChart = new Chart(ctx, {
