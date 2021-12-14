@@ -19,7 +19,7 @@ from django.urls import path, include
 # from SEAS import revenue
 
 urlpatterns = [
-    path('', include('login.urls')),
+    path('', include('login.urls', namespace='login')),
     path('home/', include('home.urls', namespace='home')),
     path('admin/', admin.site.urls),
     
