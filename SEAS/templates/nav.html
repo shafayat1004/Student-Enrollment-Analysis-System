@@ -1,3 +1,53 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+   
+<div class="container">
+  <h2>Multi-Level Dropdowns</h2>
+  <p>In this example, we have created a .dropdown-submenu class for multi-level dropdowns (see style section above).</p>
+  <p>Note that we have added jQuery to open the multi-level dropdown on click (see script section below).</p>                                        
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Tutorials
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a tabindex="-1" href="#">HTML</a></li>
+      <li><a tabindex="-1" href="#">CSS</a></li>
+      <li class="dropdown-submenu">
+        <a class="test" tabindex="-1" href="#">New dropdown <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+          <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+          <li class="dropdown-submenu">
+            <a class="test" href="#">Another dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">3rd level dropdown</a></li>
+              <li><a href="#">3rd level dropdown</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endcomment %}
+
+<script>
+$(document).ready(function(){
+  $('.dropdown-submenu a.test').on("click", function(e){
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+    e.preventDefault();
+  });
+});
+</script> 
+
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SEAS</a>
@@ -18,7 +68,7 @@
           <a
             class="nav-link active"
             aria-current="page"
-            href="{% url 'home:index' %}"
+            href="{% url 'home:home' %}"
             method="post"
             >Home</a
           >
@@ -36,19 +86,51 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-              <a class="dropdown-item" href="#">Revenue Related Information</a>
+              <a class="dropdown-item" href="{% url 'update:upload_file' %}">Update Database</a>
             </li>
             <li>
               <a class="dropdown-item" href="{% url 'classReq:index' %}">Classroom Requirements</a>
             </li>
-            <li >
-              <a class="dropdown-item" href="#">Enrollment Information</a>
+            <li class="dropdown-submenu">
+              <a 
+                class="test" 
+                tabindex="-1" 
+                href="#"
+                >Revenue Related Information
+              </a>
+                <ul class="dropdown-menu"  aria-labelledby="navbarDropdown">
+                  <li><a tabindex="-1" href="{% url 'revenue:revenueMain' %}">Main Revenue</a></li>
+                  <li><a tabindex="-1" href="{% url 'revenue:iubRevenue' %}">Revenue Of IUB</a></li>
+                  <li><a tabindex="-1" href="{% url 'revenue:schoolRevenue' %}">School Revenue Breakdown</a></li>
+                </ul>
             </li>
-            <li><a class="dropdown-item" href="#">Resources Information</a></li>
-            <li><hr class="dropdown-divider" /></li>
+            <li class="dropdown-submenu">
+              <a 
+                class="test" 
+                tabindex="-1" 
+                href="#"
+                >Enrollment Information
+              </a>
+                <ul class="dropdown-menu"  aria-labelledby="navbarDropdown">
+                  <li><a tabindex="-1" href="{% url 'enrollment:expanded' %}">Expanded</a></li>
+                  <li><a tabindex="-1" href="{% url 'enrollment:compact' %}">Compact</a></li>
+                </ul>
+            </li>
+            <li class="dropdown-submenu">
+              <a 
+                class="test" 
+                tabindex="-1" 
+                href="#"
+                >Resources Information
+              </a>
+                <ul class="dropdown-menu"  aria-labelledby="navbarDropdown">
+                  <li><a tabindex="-1" href="{% url 'resources:Resource_Usage' %}">Usage Of The Resources</a></li>
+                  <li><a tabindex="-1" href="{% url 'resources:Resource_Comparison' %}">Availability and course offering comparison</a></li>
+                </ul>
+            </li>
           </ul>
         </li>
-        <li class="nav-item">
+        {% comment %} <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
         <li class="nav-item">
@@ -63,7 +145,7 @@
           aria-label="Search"
         />
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form> {% endcomment %}
     </div>
   </div>
 </nav>
