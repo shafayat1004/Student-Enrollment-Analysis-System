@@ -8,20 +8,15 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-
-	<h1> Department-wise Revenue Breakdown of {{schoolSelected}}</h1>
+    <h1> Department-wise Revenue Breakdown</h1>
+	<h1>{{schoolSelected}}</h1>
 	<div class= "searchRow">
-		<form method="POST" class="semesterSelection">
+		<form method="POST">
+			<label>Select a school to view</label><br>
 			{% csrf_token %}
-			{% comment %} {{ forms }} {% endcomment %}
-			<select name="selectedSession">
-				{% for session in sessions %}
-					<option value="{{ session.0 }}">{{session.0}}</option>
-				{% endfor %}
-			</select>
-			<select name="selectedYear">
-				{% for year in years %}
-					<option value="{{ year.0 }}">{{ year.0}}</option>
+			<select name="selectedSchool">
+				{% for school in schools %}
+					<option value="{{ school }}">{{ school }}</option>
 				{% endfor %}
 			</select>
 			<button type="submit">Load</button>
@@ -223,7 +218,5 @@
 			</div>
 		</div>
 	</div> 
-
-	
 </div>
 {% endblock content %}

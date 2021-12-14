@@ -58,6 +58,7 @@ def iubRevenue( request ):
                 AND S.dYear = M.Years
                 AND S.eSession = M.Sessions
             GROUP BY Years, Sessions, School
+            ORDER BY Years, Sessions
         ) E
         GROUP BY Years, Sessions
         ORDER BY Years, Sessions DESC
@@ -81,9 +82,21 @@ def iubRevenue( request ):
 
 
 def deptRevenue( request ):
-    # Fetch departments of the selected school and create select clause for them
-    schoolSelected = "SETS"     # fetch from form
+    # Fetch all schools for form
+    query = """
+        SELECT cSchool_ID AS sch
+	    FROM School_T;
+    """
+    with connection.cursor() as cursor:
+        cursor.execute( query )
+        schools = [ row[0] for row in cursor.fetchall() ]
 
+    if request.method == 'POST':
+        schoolSelected = request.POST.get("selectedSchool")
+    else:
+        return render( request, "revenue/revenue_dept.html", { 'schools': schools, } )
+
+    # Fetch departments of the selected school and create select clause for them
     query = f"""
         SELECT cDepartment_ID AS dep
         FROM Department_T
@@ -141,6 +154,7 @@ def deptRevenue( request ):
                 GROUP BY Years, Sessions, Department
             ) E
             GROUP BY Years, Sessions
+            ORDER BY Years, Sessions
         ) K
         GROUP BY Years, Sessions
         ORDER BY Years, Sessions DESC;
@@ -157,6 +171,7 @@ def deptRevenue( request ):
             'revenues': data,
             'xAxis': xAxis,
             'yAxis': yAxis,
-            'schoolSelected': schoolSelected
+            'schoolSelected': schoolSelected,
+            'schools': schools,
         }
     )
