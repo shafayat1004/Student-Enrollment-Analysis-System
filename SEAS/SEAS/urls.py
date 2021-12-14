@@ -20,7 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('login.urls')),
-    path('home/', include('home.urls')),
+    path('home/', include(('home.urls', 'home'), namespace='home')),
     path('admin/', admin.site.urls),
     
     # Fahim's stuff
@@ -31,6 +31,6 @@ urlpatterns = [
 
     # Shafayat's stuff
     path('databaseupdate/', include('databaseupdate.urls')),
-    path('classroom_requirement/', include('classroom_requirement.urls')),
+    path('classroom_requirement/', include(('classroom_requirement.urls', 'index'), namespace='classReq')),
     path('resources/', include('resources.urls')),
 ]
