@@ -55,7 +55,7 @@ def iubRevenue( request ):
             WHERE 
                     S.cCoffCode_ID = O.cCoffCode_ID
                 AND O.cCourse_ID = C.cCourse_ID 
-                AND C.cDepartment_ID = D.cDepartment_ID
+                AND S.cDepartment_ID = D.cDepartment_ID
                 AND S.dYear = M.Years
                 AND S.eSession = M.Sessions
             GROUP BY Years, Sessions, School
@@ -141,7 +141,7 @@ def deptRevenue( request ):
                 WHERE 
                         S.cCoffCode_ID = O.cCoffCode_ID
                     AND O.cCourse_ID = C.cCourse_ID 
-                    AND C.cDepartment_ID = D.cDepartment_ID
+                    AND S.cDepartment_ID = D.cDepartment_ID
                     AND D.cSchool_ID = '{schoolSelected}'
                     AND S.dYear = M.Years
                     AND S.eSession = M.Sessions
