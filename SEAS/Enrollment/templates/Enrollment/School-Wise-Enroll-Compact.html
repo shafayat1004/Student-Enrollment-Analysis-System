@@ -3,11 +3,6 @@
 
 {% block content %}
 
-<h1> School Wise Enrollment Compact</h1>
-<div class="title row">
-    <h1>{{selectedSession}}, {{selectedYear}}</h1>
-</div>
-
 <div class="searchRow">
     <form method="POST" class="semesterSelection">
         {% csrf_token %}
@@ -26,12 +21,19 @@
     </form>
 </div>
 
+
+<h1> School Wise Enrollment Compact</h1>
+<div class="title row">
+    <h1>{{selectedSession}}, {{selectedYear}}</h1>
+</div>
+
+
 <div class="row">
     <div class="col-md-6" style="width:100%; height:75%;">
         <table style="width:90%">
             <thead style="border: 1px solid black">
                 <tr>
-                    <th colspan="7" , style="text-align:center">{{selectedSession}}</th>
+                    <th colspan="7" , style="text-align:center">School-Wise Enrollment: {{selectedSession}} {{selectedYear}}</th>
                 </tr>
             </thead>
             <thead class="fixedHeader">
@@ -72,7 +74,7 @@
                     grid: {
                         drawOnChartArea: false
                     },
-                    max: 200,
+                    max: 175,
                 },
                 'right-y-axis': {
                     type: "linear",
@@ -80,13 +82,13 @@
                     grid: {
                         drawOnChartArea: false
                     },
-                    min: -200,
+                    min: -50,
                 },
             }, 
             plugins: {
                 title: {
                     display: true,
-                    text: 'Class size distribution: {{selectedSession}}, {{selectedYear}}',
+                    text: 'Class size distribution: {{selectedSession}} {{selectedYear}}',
                     font: {
                         size: 20
                     },
