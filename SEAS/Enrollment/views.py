@@ -76,7 +76,7 @@ def schoolWiseEnrollExpand( request ):
                 WHERE 
                         S.cCoffCode_ID = O.cCoffCode_ID
                     AND O.cCourse_ID = C.cCourse_ID 
-                    AND C.cDepartment_ID = D.cDepartment_ID
+                    AND S.cDepartment_ID = D.cDepartment_ID
                 ORDER BY Years, Sessions DESC, Section, Credits, Department, School
             ) T;
             '''
@@ -103,7 +103,7 @@ def schoolWiseEnrollExpand( request ):
 		WHERE 
 				S.cCoffCode_ID = O.cCoffCode_ID
 			AND O.cCourse_ID = C.cCourse_ID 
-			AND C.cDepartment_ID = D.cDepartment_ID 
+			AND S.cDepartment_ID = D.cDepartment_ID 
 			AND dYear= '{year}'					 
 			AND eSession = '{session}'					
 			GROUP BY Enrollment, School
@@ -218,7 +218,7 @@ def schoolWiseEnrollCompact( request ):
 		WHERE 
 				S.cCoffCode_ID = O.cCoffCode_ID
 			AND O.cCourse_ID = C.cCourse_ID 
-			AND C.cDepartment_ID = D.cDepartment_ID 
+			AND S.cDepartment_ID = D.cDepartment_ID 
 			AND dYear= '{year}'					 -- replace with {{django}}
 			AND eSession = '{session}'				 -- replace ''     ''
 		GROUP BY Enrollment, School
