@@ -4,4 +4,4 @@ def index(request):
     context = {
 
     }
-    render(request, 'home/home.html')
+    return render(request, 'home/home.html', context)
