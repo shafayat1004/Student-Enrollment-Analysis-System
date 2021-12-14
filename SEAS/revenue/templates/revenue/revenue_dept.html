@@ -3,7 +3,8 @@
 
 {% block content %}
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'collapsibletable.css' %}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
@@ -200,9 +201,9 @@
 			<div id="collapse2" class="panel-collapse collapse">
 				<table class='table'>
 					<thead>
-						<tr><th colspan="10" style="text-align:center">Historical Revenue Data of {{schoolSelected}}</th></tr>
+						<tr><th colspan="9" style="text-align:center">Historical Revenue Data of {{schoolSelected}}</th></tr>
 					</thead>
-					<thead>
+					<thead class="fixedHeader">
 						<tr>
 							{% for colName in colNames %}​
 							<th>​{{colName}}​</th>
