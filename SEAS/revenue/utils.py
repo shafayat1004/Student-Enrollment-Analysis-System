@@ -53,13 +53,5 @@ def deptRevenueChartDataPacker( dataTable, colNames ):
         { 'label': label, 'data': columns[i+1], 'change': columns[i+numOfDep+1], 'borderColor': colors[i+1], 'backgroundColor': colors[i+numOfDep+1] }
         for i, label in enumerate( colNames[ 1 : numOfDep ] )
     ]  # list of dictionaries containing e.g. { label: "SETS", data: [134,67,67..], change: [3,6,12,..], borderColor:'#55efc4'}
-
-    print( yAxisValues )
-
-    percChanges = [
-        { 'label': label, 'data': columns[i+1], 'backgroundColor': colors[i+1] }
-        for i, label in enumerate( colNames[ numOfDep+1 : -1 ] )        
-    ] # list of dictionaries containing e.g. { label: "%SETS", data: [ 34,7,12..], backgroundColor:'#55efc4',}
-    print( percChanges )
     
     return xAxisValues, yAxisValues

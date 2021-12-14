@@ -8,13 +8,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <div>
-        <h1>Revenue Trend of the Schools</h1>
         <canvas id="iubRevTrendChart"></canvas> 
-
-        <h1>Revenue Distribution among the Schools</h1>
         <canvas id="iubRevDistChart"></canvas>
-
-        <h1>IUB Revenue and % Change</h1>
         <canvas id="iubRevChangeChart"></canvas> 
 
         <script>
@@ -44,12 +39,14 @@
                     },
                     options: {
                         responsive: true,
-                        title: {
-                            text: "Revenue Trend of Schools",
-                            display: true,
-                            padding: {
-                                top: 10,
-                                bottom: 30
+                        plugins: {
+                            title: {
+                                text: "Revenue Trend of Schools",
+                                display: true,
+                                padding: {
+                                    top: 10,
+                                    bottom: 30
+                                }
                             }
                         }
                     }
@@ -76,12 +73,14 @@
                     },
                     options: {
                         responsive: true,
-                        title: {
-                            text: 'Revenue Distribution among Schools',
-                            display: true,
-                            padding: {
-                                top: 10,
-                                bottom: 30
+                        plugins: {
+                            title: {
+                                text: 'Revenue Distribution among Schools',
+                                display: true,
+                                padding: {
+                                    top: 10,
+                                    bottom: 30
+                                }
                             }
                         },
                         scales: {
@@ -115,12 +114,14 @@
                     },
                     options: {
                         responsive: true,
-                        title: {
-                            text: "Revenue and % Change",
-                            display: true,
-                            padding: {
-                                top: 10,
-                                bottom: 30
+                        plugins: {
+                            title: {
+                                text: "Revenue and % Change",
+                                display: true,
+                                padding: {
+                                    top: 10,
+                                    bottom: 30
+                                }
                             }
                         },
                         scales: {

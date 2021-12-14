@@ -34,7 +34,7 @@ def iubRevenue( request ):
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
             {sqlClause}
             SUM( Revenue ) AS Total,
-            ROUND( 100 * ( SUM( Revenue ) - LAG( SUM( Revenue ), 1,  SUM( Revenue ) ) OVER ( PARTITION BY Sessions ) ) / SUM( Revenue ) ) AS '% Change'
+            ROUND( 100 * ( SUM( Revenue ) - LAG( SUM( Revenue ), 3,  SUM( Revenue ) ) OVER () ) / SUM( Revenue ) ) AS '% Change'
         FROM (
             SELECT 
                 Years, 
@@ -50,7 +50,6 @@ def iubRevenue( request ):
                     SELECT dYear AS Years, eSession AS Sessions
                     FROM Section_T
                     GROUP BY dYear, eSession
-                    ORDER BY dYear, eSession
                 ) M
             WHERE 
                     S.cCoffCode_ID = O.cCoffCode_ID
@@ -59,7 +58,6 @@ def iubRevenue( request ):
                 AND S.dYear = M.Years
                 AND S.eSession = M.Sessions
             GROUP BY Years, Sessions, School
-            ORDER BY Years, Sessions DESC
         ) E
         GROUP BY Years, Sessions
         ORDER BY Years, Sessions DESC
@@ -101,7 +99,7 @@ def deptRevenue( request ):
     for dept in departments:
         depNames += f"{dept}, "
         depColSqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
-        depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 1,  SUM( {dept} ) ) OVER ( PARTITION BY Sessions ) ) / SUM( {dept} ) ) AS '%{dept}', \n"
+        depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 3,  SUM( {dept} ) ) OVER () ) / SUM( {dept} ) ) AS '%{dept}',\n"
   
     # Run query for revenue data for the departments
     query = f"""
@@ -110,14 +108,10 @@ def deptRevenue( request ):
             {depNames}
             {schoolSelected},
             {depPercentColSqlClause}
-            ROUND( 
-                100 * ( 
-                    {schoolSelected} - ( LAG( {schoolSelected}, 1,  {schoolSelected} )  OVER ( PARTITION BY Sessions ) )
-                ) / SUM( {schoolSelected} )
-            ) AS '%{schoolSelected}'
+            ROUND( 100 * ( {schoolSelected} - ( LAG( {schoolSelected}, 3,  {schoolSelected} )  OVER () ) ) / SUM( {schoolSelected} ) ) AS '%{schoolSelected}'
         FROM (
             SELECT 
-                Years, 
+                Years,
                 Sessions, 
                 {depColSqlClause}
                 SUM( Revenue ) AS {schoolSelected}
@@ -136,7 +130,6 @@ def deptRevenue( request ):
                         SELECT dYear AS Years, eSession AS Sessions
                         FROM Section_T
                         GROUP BY dYear, eSession
-                        ORDER BY dYear, eSession
                     ) M
                 WHERE 
                         S.cCoffCode_ID = O.cCoffCode_ID
@@ -146,10 +139,8 @@ def deptRevenue( request ):
                     AND S.dYear = M.Years
                     AND S.eSession = M.Sessions
                 GROUP BY Years, Sessions, Department
-                ORDER BY Years, Sessions DESC
             ) E
             GROUP BY Years, Sessions
-            ORDER BY Years, Sessions DESC
         ) K
         GROUP BY Years, Sessions
         ORDER BY Years, Sessions DESC;
