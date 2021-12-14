@@ -59,12 +59,9 @@ def index(request):
                     ELSE '0'    
                 END 
             ) AS Class_Size, COUNT(*) AS Sections, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
-            FROM Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
+            FROM Section_T S
             WHERE 
-                    S.cCoffCode_ID = O.cCoffCode_ID
-                AND O.cCourse_ID = C.cCourse_ID 
-                AND C.cDepartment_ID = D.cDepartment_ID 
-                AND dYear= %(year)s 
+                    dYear = %(year)s 
                 AND eSession = %(session)s
             GROUP BY Class_Size
             HAVING Class_Size != '0'
@@ -77,12 +74,9 @@ def index(request):
                     ELSE '0'
                 END 
             ) AS Class_Size, COUNT(*), ROUND(COUNT(*)/12, 1), ROUND(COUNT(*)/14, 1)
-            FROM Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
+            FROM Section_T S
             WHERE 
-                    S.cCoffCode_ID = O.cCoffCode_ID
-                AND O.cCourse_ID = C.cCourse_ID 
-                AND C.cDepartment_ID = D.cDepartment_ID 
-                AND dYear= %(year)s 
+                    dYear= %(year)s 
                 AND eSession = %(session)s
             GROUP BY Class_Size
             HAVING Class_Size != '0'
