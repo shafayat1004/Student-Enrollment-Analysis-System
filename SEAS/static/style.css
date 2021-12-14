@@ -45,3 +45,8 @@ table.increment1Table thead.fixedHeader{
 	justify-content: center;
     background-color: rgba(140, 248, 77, 0.5);
 }
+
+.compactChart{
+    margin-left: auto;
+    margin-right: auto;
+}
