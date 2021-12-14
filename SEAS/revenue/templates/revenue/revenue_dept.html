@@ -28,9 +28,7 @@
 	</div>
 
 	<div>
-		<h1>Department-wise Revenue of {{schoolSelected}}</h1>
 		<canvas id="schoolRevTrendChart"></canvas> 
-		<h1>Revenue Distribution among {{schoolSelected}} Departments</h1>
 		<canvas id="schoolRevDistChart"></canvas>
 		<script>
 			let ctxTrend = document.getElementById("schoolRevTrendChart").getContext("2d");
@@ -57,12 +55,14 @@
 					},
 					options: {
 						responsive: true,
-						title: {
-							text: "Revenue Trend of Departments",
-							display: true,
-							padding: {
-								top: 10,
-								bottom: 30
+						plugins: {
+							title: {
+								text: "Revenue Trend of Departments",
+								display: true,
+								padding: {
+									top: 10,
+									bottom: 30
+								}
 							}
 						}
 					}
@@ -89,13 +89,15 @@
 					},
 					options: {
 						responsive: true,
-						title: {
-							text: 'Revenue Distribution among Departments',
-							display: true,
-							padding: {
-								top: 10,
-								bottom: 30
-							}
+						plugins: {
+							title: {
+								text: 'Revenue Distribution among Departments',
+								display: true,
+								padding: {
+									top: 10,
+									bottom: 30
+								}
+							},
 						},
 						scales: {
 							y: { stacked: 'single' }
@@ -114,7 +116,6 @@
 				</div>
 				<div id="collapse1" class="panel-collapse collapse">
 					{% for dep in yAxis %}
-					<h1>Revenue and % Change of {{dep.label}}</h1>
 					<canvas id="{{dep.label}}RevTrendChart"></canvas> 
 					{% endfor %}
 
@@ -142,7 +143,7 @@
 								label: '% Change in Revenue',
 								data: [ {% for change in dep.change %} {{change}}, {% endfor %} ],
 								borderColor: '{{dep.backgroundColor}}',
-								backgroundColor: '{{dep.backgroundColor}}'
+								backgroundColor: '{{dep.backgroundColor}}',
 							}
 						]
 
@@ -153,13 +154,15 @@
 								},
 								options: {
 									responsive: true,
-									title: {
-										text: "{{dep.label}} Revenue and % Change",
-										display: true,
-										padding: {
-											top: 10,
-											bottom: 30
-										}
+									plugins: {
+										title: {
+											text: "{{dep.label}} Revenue and % Change",
+											display: true,
+											padding: {
+												top: 10,
+												bottom: 30
+											}
+										}	
 									},
 									scales: {
 										'left-y-axis' :{
