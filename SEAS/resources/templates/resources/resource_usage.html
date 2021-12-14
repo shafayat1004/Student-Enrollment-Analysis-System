@@ -22,10 +22,14 @@
             <button type="submit">Load</button>
         </form> 
     </div>
+
     <div class="table row">
         <div class='col-xs-1 table'>
             <table class="mytable">
                 <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:center">Usage of the resources</th>
+                    </tr>
                     <tr>
                         {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
                     </tr>
@@ -116,10 +120,10 @@
                         <td colspan="2">Considering 3.5 average course load (7 slot)</td><td>{{avg7}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Considering free % for 6 slots capacity</td><td>{{free6}}</td>
+                        <td colspan="2">Considering free % for 6 slots capacity</td><td style="background-color:antiquewhite">{{free6}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Considering free % for 7 slots capacity</td><td>{{free7}}</td>
+                        <td colspan="2">Considering free % for 7 slots capacity</td><td style="background-color:antiquewhite">{{free7}}</td>
                     </tr>
                         
                 </tbody>
