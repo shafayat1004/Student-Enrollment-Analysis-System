@@ -45,42 +45,65 @@ def index(request):
         session = sessions[0][0]
 
     query = """
-            SELECT ( 
-                CASE 
-                    WHEN S.nEnrolled BETWEEN  1 AND 10 THEN '1-10'  
-                    WHEN S.nEnrolled BETWEEN 11 AND 20 THEN '11-20'  
-                    WHEN S.nEnrolled BETWEEN 21 AND 30 THEN '21-30'  
-                    WHEN S.nEnrolled BETWEEN 31 AND 35 THEN '31-35'  
-                    WHEN S.nEnrolled BETWEEN 36 AND 40 THEN '36-40'  
-                    WHEN S.nEnrolled BETWEEN 41 AND 50 THEN '41-50'  
-                    WHEN S.nEnrolled BETWEEN 51 AND 55 THEN '51-55' 
-                    WHEN S.nEnrolled BETWEEN 56 AND 65 THEN '56-65' 
-                    WHEN S.nEnrolled > 65 THEN '65+'
-                    ELSE '0'    
-                END 
-            ) AS Class_Size, COUNT(*) AS Sections, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
-            FROM Section_T S
-            WHERE 
-                    dYear = %(year)s 
-                AND eSession = %(session)s
-            GROUP BY Class_Size
-            HAVING Class_Size != '0'
+            SELECT *
+            FROM(
+                SELECT ( 
+                    CASE 
+                        WHEN S.nEnrolled BETWEEN  1 AND 10 THEN '1-10'  
+                        WHEN S.nEnrolled BETWEEN 11 AND 20 THEN '11-20'  
+                        WHEN S.nEnrolled BETWEEN 21 AND 30 THEN '21-30'  
+                        WHEN S.nEnrolled BETWEEN 31 AND 35 THEN '31-35'  
+                        WHEN S.nEnrolled BETWEEN 36 AND 40 THEN '36-40'  
+                        WHEN S.nEnrolled BETWEEN 41 AND 50 THEN '41-50'  
+                        WHEN S.nEnrolled BETWEEN 51 AND 55 THEN '51-55' 
+                        WHEN S.nEnrolled BETWEEN 56 AND 65 THEN '56-65' 
+                        ELSE '0'
+                    END 
+                ) AS Class_Size, COUNT(*) AS Sections, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
+                FROM Section_T S
+                WHERE 
+                        dYear = %(year)s 
+                    AND eSession = %(session)s
+                GROUP BY Class_Size
+                HAVING Class_Size != '0'
+                ORDER BY Class_Size ASC
+            ) X
 
             UNION
 
-            SELECT ( 
-                CASE 
-                    WHEN S.nEnrolled > 0 THEN 'Total'
-                    ELSE '0'
-                END 
-            ) AS Class_Size, COUNT(*), ROUND(COUNT(*)/12, 1), ROUND(COUNT(*)/14, 1)
-            FROM Section_T S
-            WHERE 
-                    dYear= %(year)s 
-                AND eSession = %(session)s
-            GROUP BY Class_Size
-            HAVING Class_Size != '0'
-            ORDER BY Class_Size ASC;
+            SELECT *
+            FROM(
+                SELECT ( 
+                    CASE 
+                        WHEN S.nEnrolled > 65 THEN S.nEnrolled
+                        ELSE 0
+                    END 
+                ) AS Class_Size, COUNT(*) AS Sections, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
+                FROM Section_T S
+                WHERE 
+                        dYear = %(year)s 
+                    AND eSession = %(session)s
+                GROUP BY Class_Size
+                HAVING Class_Size != 0
+                ORDER BY Class_Size ASC
+            ) Y
+
+            UNION
+
+            
+                SELECT ( 
+                    CASE 
+                        WHEN S.nEnrolled > 0 THEN 'Total'
+                        ELSE '0'
+                    END 
+                ) AS Class_Size, COUNT(*), ROUND(COUNT(*)/12, 1), ROUND(COUNT(*)/14, 1)
+                FROM Section_T S
+                WHERE 
+                        dYear= %(year)s 
+                    AND eSession = %(session)s
+                GROUP BY Class_Size
+                HAVING Class_Size != '0'
+            
             """
     values={
         "year" : str(year),
