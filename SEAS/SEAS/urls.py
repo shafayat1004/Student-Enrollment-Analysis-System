@@ -20,17 +20,17 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('login.urls')),
-    path('home/', include(('home.urls', 'home'), namespace='home')),
+    path('home/', include('home.urls', namespace='home')),
     path('admin/', admin.site.urls),
     
     # Fahim's stuff
-    path( 'revenue/', include('revenue.urls') ),
+    path( 'revenue/', include('revenue.urls', namespace='revenue')),
 
     # Suhailia's stuff
-    path( 'Enrollment/', include('Enrollment.urls') ),
+    path( 'Enrollment/', include('Enrollment.urls', namespace='enrollment')),
 
     # Shafayat's stuff
-    path('databaseupdate/', include('databaseupdate.urls')),
-    path('classroom_requirement/', include(('classroom_requirement.urls', 'index'), namespace='classReq')),
-    path('resources/', include('resources.urls')),
+    path('databaseupdate/',include('databaseupdate.urls', namespace='update')),
+    path('classroom_requirement/', include('classroom_requirement.urls', namespace='classReq')),
+    path('resources/', include('resources.urls', namespace='resources')),
 ]

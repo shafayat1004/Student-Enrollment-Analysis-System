@@ -3,11 +3,6 @@
 
 {% block content %}
 
-
-    <h1>Classroom Requirement As Per Course Requirement (Summary)</h1>
-    <div class= "title row">
-        <h1>{{selectedSession}}, {{selectedYear}}</h1>
-    </div>
     <div class= "searchRow">
         <form method="POST" class="semesterSelection">
             {% csrf_token %}
@@ -24,6 +19,11 @@
             </select>
             <button type="submit">Load</button>
         </form> 
+    </div>
+
+    <h1>Classroom Requirement As Per Course Requirement (Summary)</h1>
+    <div class= "title row">
+        <h1>{{selectedSession}}, {{selectedYear}}</h1>
     </div>
     <div class="table row">
         <div class='col-xs-1 table'>

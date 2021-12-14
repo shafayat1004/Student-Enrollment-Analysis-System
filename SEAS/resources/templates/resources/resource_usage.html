@@ -2,10 +2,6 @@
 {% block title %}Usage Of The Resources{% endblock title %}
 
 {% block content %}
-    <h1>Usage Of The Resources</h1>
-    <div class= "title row">
-        <h1>{{selectedSession}}, {{selectedYear}}</h1>
-    </div>
     <div class= "searchRow">
         <form method="POST" class="semesterSelection">
             {% csrf_token %}
@@ -16,13 +12,18 @@
             </select>
             <select name="selectedYear">
                 {% for year in years %}
-                    <option value="{{ year.0 }}">{{ year.0}}</option>
+                <option value="{{ year.0 }}">{{ year.0}}</option>
                 {% endfor %}
             </select>
             <button type="submit">Load</button>
         </form> 
     </div>
-
+    
+    <div class= "title row">
+        <h1>Usage Of The Resources</h1>
+        <h1>{{selectedSession}}, {{selectedYear}}</h1>
+    </div>
+    
     <div class="table row">
         <div class='col-xs-1 table'>
             <table class="mytable">
