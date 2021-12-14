@@ -58,9 +58,7 @@ def resourceUsage(request):
                     
                 FROM
                     Department_T AS D
-                    INNER JOIN Course_T AS C            ON D.cDepartment_ID = C.cDepartment_ID
-                    INNER JOIN CoOfferedCourse_T AS Co  ON C.cCourse_ID = Co.cCourse_ID
-                    INNER JOIN Section_T AS S           ON Co.cCoffCode_ID = S.cCoffCode_ID
+                    INNER JOIN Section_T AS S           ON D.cDepartment_ID = S.cDepartment_ID
                     INNER JOIN Classroom_T AS Cr        ON S.cRoom_ID = Cr.cRoom_ID
                 WHERE
                         S.eSession = %(session)s
@@ -79,9 +77,7 @@ def resourceUsage(request):
                 
             FROM
                 Department_T AS D
-                INNER JOIN Course_T AS C            ON D.cDepartment_ID = C.cDepartment_ID
-                INNER JOIN CoOfferedCourse_T AS Co  ON C.cCourse_ID = Co.cCourse_ID
-                INNER JOIN Section_T AS S           ON Co.cCoffCode_ID = S.cCoffCode_ID
+                INNER JOIN Section_T AS S           ON D.cDepartment_ID = S.cDepartment_ID
                 INNER JOIN Classroom_T AS Cr        ON S.cRoom_ID = Cr.cRoom_ID
             WHERE
                     S.eSession = %(session)s
