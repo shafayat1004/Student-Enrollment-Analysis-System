@@ -82,8 +82,8 @@ def fillDepartment_T(csvPath):
 
 def fillCourse_T(csvPath):
     table = 'Course_T'
-    csvColumns = ['COFFER_COURSE_ID', 'COURSE_NAME', 'CREDIT_HOUR', 'DEPARTMENT_ID']
-    tableColumns = ['cCourse_ID', 'cCourseName', 'nCreditHours', 'cDepartment_ID'] 
+    csvColumns = ['COFFER_COURSE_ID', 'COURSE_NAME', 'CREDIT_HOUR']
+    tableColumns = ['cCourse_ID', 'cCourseName', 'nCreditHours'] 
     
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
@@ -122,11 +122,11 @@ def fillCoOfferedCourse_T(csvPath):
 
 def fillSection_T(csvPath):
     table = 'Section_T'
-    csvColumns = ['Semester', 'ST_MW', 'Year', 'SECTION', 'CAPACITY', 'ENROLLED', 'BLOCKED', 'START_TIME', 'END_TIME', 'COFFER_COURSE_ID', 'FACULTY_ID', 'ROOM_ID'] 
+    csvColumns = ['Semester', 'ST_MW', 'Year', 'SECTION', 'CAPACITY', 'ENROLLED', 'BLOCKED', 'START_TIME', 'END_TIME', 'COFFER_COURSE_ID', 'DEPARTMENT_ID' , 'FACULTY_ID', 'ROOM_ID'] 
     #Took liberty here with start time. In dataset it's STRAT_TIME 
     
 
-    tableColumns = ['eSession', 'eDays', 'dYear', 'nSectionNumber', 'nSectionCapacity', 'nEnrolled', 'bIsBlocked', 'tStartTime', 'tEndTime', 'cCoffCode_ID', 'cFaculty_ID', 'cRoom_ID']
+    tableColumns = ['eSession', 'eDays', 'dYear', 'nSectionNumber', 'nSectionCapacity', 'nEnrolled', 'bIsBlocked', 'tStartTime', 'tEndTime', 'cCoffCode_ID', 'cDepartment_ID' , 'cFaculty_ID', 'cRoom_ID']
     return '-- Populating ' + table + '\n' + csvToMySQL(csvPath, csvColumns, table, tableColumns) + '\n\n\n'
 
 def xlsxToCSV(xlsxPath):

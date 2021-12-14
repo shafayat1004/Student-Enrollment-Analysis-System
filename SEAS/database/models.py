@@ -38,7 +38,6 @@ class CourseT(models.Model):
     cCourse_ID = FixedCharField(db_column='cCourse_ID', primary_key=True, max_length=7)
     cCourseName = models.CharField(db_column='cCourseName', max_length=50, blank=True, null=True)
     nCreditHours = models.IntegerField(db_column='nCreditHours', blank=True, null=True)
-    cDepartment_ID = models.ForeignKey('DepartmentT', models.DO_NOTHING, db_column='cDepartment_ID', blank=True, null=True)
 
     class Meta:
         db_table = 'Course_T'
@@ -73,6 +72,7 @@ class SectionT(models.Model):
     section_id = models.BigAutoField(db_column='section_ID', primary_key=True)
     
     cCoffCode_ID = models.ForeignKey(CoofferedcourseT, models.DO_NOTHING, db_column='cCoffCode_ID', blank=True, null=True)
+    cDepartment_ID = models.ForeignKey('DepartmentT', models.DO_NOTHING, db_column='cDepartment_ID', blank=True, null=True)
     
     eSession = EnumField(choices=['Autumn', 'Summer', 'Spring'], db_column='eSession')
     eDays = EnumField(choices=['ST', 'MW', 'S', 'M', 'T', 'W', 'R', 'F', 'A', 'AR', 'TR', 'MWA', 'STR', 'AMW', 'SMW'], db_column='eDays', blank=True, null=True)
@@ -92,5 +92,5 @@ class SectionT(models.Model):
 
     class Meta:
         db_table = 'Section_T'
-        unique_together = ('cCoffCode_ID', 'eSession', 'dYear', 'nSectionNumber')
+        unique_together = ('cCoffCode_ID', 'cDepartment_ID', 'eSession', 'dYear', 'nSectionNumber')
 
