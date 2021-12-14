@@ -34,13 +34,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in tableData %}
-                        <tr>
-                            {% for item in row %}
-                                <td>{{item}}</td>
-                            {% endfor %}
-                        </tr>
+                    {% for row in tableData|slice:":-1" %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{item}}</td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
+                    <tr>
+                    {% with lastTableRow=tableData|last %}
+                        {% for item in lastTableRow %}
+                            <th>{{item}}</th>
+                        {% endfor %}
+                    {% endwith %}
+                    </tr>
                 </tbody>
             </table>
         </div> 
@@ -81,7 +88,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Class size 6 requirement',
+                            text: 'Class size 6 requirement: {{selectedSession}}, {{selectedYear}}',
                             font: {
                                 size: 20
                             },
@@ -152,7 +159,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Class size 7 requirement',
+                            text: 'Class size 7 requirement: {{selectedSession}}, {{selectedYear}}',
                             font: {
                                 size: 20
                             },
