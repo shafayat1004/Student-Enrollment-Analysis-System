@@ -159,14 +159,13 @@ def deptRevenue( request ):
         labels = [ col[0] for col in cursor.description ]
         data = cursor.fetchall()
 
-    xAxis, yAxis, changes = deptRevenueChartDataPacker( data, labels )
+    xAxis, yAxis = deptRevenueChartDataPacker( data, labels )
         
     return render( request, "revenue/revenue_dept.html", { 
             'colNames': labels,
             'revenues': data,
             'xAxis': xAxis,
             'yAxis': yAxis,
-            'changes': changes,
             'schoolSelected': schoolSelected
         }
     )

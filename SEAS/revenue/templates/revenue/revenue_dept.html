@@ -32,14 +32,13 @@
 		<canvas id="schoolRevTrendChart"></canvas> 
 		<h1>Revenue Distribution among {{schoolSelected}} Departments</h1>
 		<canvas id="schoolRevDistChart"></canvas>
-
 		<script>
-			let ctx1 = document.getElementById("schoolRevTrendChart").getContext("2d");
-            let ctx2 = document.getElementById("schoolRevDistChart").getContext("2d");
+			let ctxTrend = document.getElementById("schoolRevTrendChart").getContext("2d");
+            let ctx2Dist = document.getElementById("schoolRevDistChart").getContext("2d");
 
 			let chartX = [ {% for semester in xAxis %} '{{semester}}', {% endfor %} ];
 
-			let chart1_Y = [ 
+			let chartTrend_Y = [ 
                 {% for key in yAxis %} 
                 {
                     label: '{{key.label}}',
@@ -50,11 +49,11 @@
                 {% endfor %}
             ]
 
-			const chartTrend = new Chart( ctx1, {
+			const chartTrend = new Chart( ctxTrend, {
 					type: "line",
 					data: {
 						labels:   chartX,
-						datasets: chart1_Y
+						datasets: chartTrend_Y
 					},
 					options: {
 						responsive: true,
@@ -70,7 +69,7 @@
 				}          
 			);
 
-			let chart2_Y = [ 
+			let chartDist_Y = [ 
 				{% for key in yAxis %} 
 				{
 					label: '{{key.label}}',
@@ -82,11 +81,11 @@
 				{% endfor %}
 			]
 
-			const chartDist = new Chart( ctx2, {
+			const chartDist = new Chart( ctx2Dist, {
 					type: "line",
 					data: {
 						labels:   chartX,
-						datasets: chart2_Y
+						datasets: chartDist_Y
 					},
 					options: {
 						responsive: true,
@@ -104,18 +103,98 @@
 					}
 				}          
 			);
+		</script>	
 
-		</script>		
+		<div class="panel-group">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h1 class="panel-title">
+					<a data-toggle="collapse" href="#collapse1">Click to view individual department's revenue and % changes</a>
+					</h1>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse">
+					{% for dep in yAxis %}
+					<h1>Revenue and % Change of {{dep.label}}</h1>
+					<canvas id="{{dep.label}}RevTrendChart"></canvas> 
+					{% endfor %}
+
+					<script>
+						let chartX2 = [ {% for semester in xAxis %} '{{semester}}', {% endfor %} ];
+
+						{% for dep in yAxis %}
+						let ctx{{dep.label}} = document.getElementById("{{dep.label}}RevTrendChart").getContext("2d");
+
+						let data{{dep.label}} = [ 
+							{
+								type: 'line',
+								yAxisID: "left-y-axis",
+								label: '{{dep.label}} revenue',
+								data: [ {% for rev in dep.data %} {{rev}}, {% endfor %} ],
+								borderColor: '{{dep.borderColor}}',
+								trendlineLinear: {
+									style: "rgba(255,105,180, .8)",
+									lineStyle: "dotted",
+									width: 2
+								}
+							}, {
+								type: 'bar',
+								yAxisID: "right-y-axis",
+								label: '% Change in Revenue',
+								data: [ {% for change in dep.change %} {{change}}, {% endfor %} ],
+								borderColor: '{{dep.backgroundColor}}',
+								backgroundColor: '{{dep.backgroundColor}}'
+							}
+						]
+
+						const chart{{dep.label}} = new Chart( ctx{{dep.label}}, {
+								data: {
+									labels:   chartX2,
+									datasets: data{{dep.label}}
+								},
+								options: {
+									responsive: true,
+									title: {
+										text: "{{dep.label}} Revenue and % Change",
+										display: true,
+										padding: {
+											top: 10,
+											bottom: 30
+										}
+									},
+									scales: {
+										'left-y-axis' :{
+											type: "linear",
+											position: "left",
+											grid: {
+												drawOnChartArea: false
+											}
+										}, 
+										'right-y-axis': {
+											type: "linear",
+											position: "right",
+											grid: {
+												drawOnChartArea: false
+											}
+										},
+									}, 
+								}
+							}          
+						);
+						{% endfor %}
+					</script>
+				</div>
+			</div>
+		</div> 	
 	</div>
 
 	<div class="panel-group">
 		<div class="panel panel-default">
-		  <div class="panel-heading">
-			<h1 class="panel-title">
-			  <a data-toggle="collapse" href="#collapse1">Revenue Data Table</a>
-			</h1>
-		  </div>
-		  <div id="collapse1" class="panel-collapse collapse">
+			<div class="panel-heading">
+				<h1 class="panel-title">
+				<a data-toggle="collapse" href="#collapse2">Click to view Revenue Data Table</a>
+				</h1>
+			</div>
+			<div id="collapse2" class="panel-collapse collapse">
 				<table class='table'>
 					<thead>
 						<tr><th colspan="10" style="text-align:center">Historical Revenue Data of {{schoolSelected}}</th></tr>
@@ -137,7 +216,7 @@
 						{% endfor %}
 					</tbody> 
 				</table>
-		  </div>
+			</div>
 		</div>
 	</div> 
 
