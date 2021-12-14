@@ -3,139 +3,143 @@
 
 {% block content %}
 
-  <h1> School Wise Enrollment Compact</h1>
-    <div class= "title row">
-        <h1>{{selectedSession}}, {{selectedYear}}</h1>
-    </div>
-    <div class= "searchRow">
-        <form method="POST" class="semesterSelection">
-            {% csrf_token %}
-            {% comment %} {{ forms }} {% endcomment %}
-            <select name="selectedSession">
-                {% for session in sessions %}
-                    <option value="{{ session.0 }}">{{session.0}}</option>
-                {% endfor %}
-            </select>
-            <select name="selectedYear">
-                {% for year in years %}
-                    <option value="{{ year.0 }}">{{ year.0}}</option>
-                {% endfor %}
-            </select>
-            <button type="submit">Load</button>
-        </form> 
-    </div>
-  <div class="row">
+<h1> School Wise Enrollment Compact</h1>
+<div class="title row">
+    <h1>{{selectedSession}}, {{selectedYear}}</h1>
+</div>
+
+<div class="searchRow">
+    <form method="POST" class="semesterSelection">
+        {% csrf_token %}
+        {% comment %} {{ forms }} {% endcomment %}
+        <select name="selectedSession">
+            {% for session in sessions %}
+            <option value="{{ session.0 }}">{{session.0}}</option>
+            {% endfor %}
+        </select>
+        <select name="selectedYear">
+            {% for year in years %}
+            <option value="{{ year.0 }}">{{ year.0}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Load</button>
+    </form>
+</div>
+
+<div class="row">
     <div class="col-md-6" style="width:100%; height:75%;">
-  <table class='table' style="width:90%">
-      ​​<thead style = "border: 1px solid black">
-          <tr> <th colspan="7", style="text-align:center">{{selectedSession}}</th></tr>
-          </thead>
-          <thead style = "border: 1px solid black">
-          <tr>
-          ​    {% for colName in labels %}​
-                  <th style="text-align:center">​{{colName}}​</th>
-          ​    {% endfor %} 
-          ​</tr> 
-      </thead>
-      <tbody style = "border: 1px solid black">
-          {% for row in data %} 
-​            ​<tr>
-              {% for item in row %} 
-  ​                ​​<td style="text-align:center">​{{item}}​</td> 
-  ​            {% endfor %}
-          </tr>
-​                {% endfor %}
-      </tbody> 
-  </table>
+        <table style="width:90%">
+            <thead style="border: 1px solid black">
+                <tr>
+                    <th colspan="7" , style="text-align:center">{{selectedSession}}</th>
+                </tr>
+            </thead>
+            <thead class="fixedHeader">
+                <tr>
+                    {% for colName in labels %}
+                    <th style="text-align:center">{{colName}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody style="border: 1px solid black">
+                {% for row in data %}
+                <tr>
+                    {% for item in row %}
+                    <td style="text-align:center">{{item}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-</div>
-<div class="col-md-6" style="width:50%; height:50%;">
-  <canvas id="myChart" width="400" height="400"></canvas>
-  <script>
+
+<div class="col-md-6 compactChart" style="width:50%; height:50%;">
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <script>
         Chart.register(ChartDataLabels);
-  const ctx = document.getElementById('myChart').getContext('2d');
-  
-  const myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          
-          labels: [{% for data in data %} '{{data.0}}', {% endfor %}],
-          
-          datasets: [
-               
-            { 
-                label: "SBE",
-                data: [{% for data in data %} '{{data.1}}', {% endfor %}],
-                backgroundColor:'#415c5c'
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        var options = {
+            responsive: true,
+            tooltips: {
+                enabled: false
             },
-            {
-                label: "SELS",
-                data: [{% for data in data %} '{{data.2}}', {% endfor %}],
-                backgroundColor: '#367a63'
-            },
-            {
-                label:"SETS",
-                data: [{% for data in data %} '{{data.3}}', {% endfor %}],
-                backgroundColor: '#5b944c'
-            },
-            {
-                label: "SLASS",
-                data: [{% for data in data %} '{{data.4}}', {% endfor %}],
-                backgroundColor: '#a2a51f'
-            },
-            {
-                label:"SPPH",
-                data: [{% for data in data %} '{{data.5}}', {% endfor %}],
-                backgroundColor: '#ffa600',
-                borderWidth: 1
-          },
-          {
-            label:"Total",
-           
-            data: [{% for data in data %} '{{data.6}}', {% endfor %}],
-            type: 'line',
-            borderColor: '#003f5c',
-            backgroundColor: '#003f5c',
-           // this dataset is drawn on top
-           order: 1
-          }]
-  }
-  
-  
-});
-var options = {
-    responsive: true,
-    tooltips: {
-        enabled: false
-    },
-    plugins: {
-        title: {
-            display: true,
-            text: 'View chart',
-            font: {
-                size: 20
-            },
-        },
-        datalabels: {
-            formatter: (value, context) => {
-                {% with lastTableRow=data|last %}
-                let total = {{lastTableRow.6}}
-                {% endwith %}
-                return (context.chart.data.labels[context.dataIndex]);
-            },
-            labels: {
-                value: {
-                    color: 'black'
-                }
-            },
-            anchor: 'end',
-            align: 'start'
+            scales: {
+                'left-y-axis' :{
+                    type: "linear",
+                    position: "left",
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    max: 200,
+                },
+                'right-y-axis': {
+                    type: "linear",
+                    position: "right",
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    min: -200,
+                },
+            }, 
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Class size distribution: {{selectedSession}}, {{selectedYear}}',
+                    font: {
+                        size: 20
+                    },
+                },
+            }
         }
-    }
-}
 
-  </script>
-</div>
-</div>
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for data in data %} '{{data.0}}', {% endfor %}],
+                datasets: [
+                    {
+                        label: "SBE",
+                        data: [{% for data in data %} '{{data.1}}', {% endfor %}],
+                        backgroundColor: '#415c5c'
+                    },
+                    {
+                        label: "SELS",
+                            data: [{% for data in data %} '{{data.2}}', {% endfor %}],
+                        backgroundColor: '#367a63'
+                        },
+                    {
+                        label: "SETS",
+                            data: [{% for data in data %} '{{data.3}}', {% endfor %}],
+                        backgroundColor: '#5b944c'
+                        },
+                    {
+                        label: "SLASS",
+                            data: [{% for data in data %} '{{data.4}}', {% endfor %}],
+                        backgroundColor: '#a2a51f'
+                        },
+                    {
+                        label: "SPPH",
+                        data: [{% for data in data %} '{{data.5}}', {% endfor %}],
+                        backgroundColor: '#ffa600',
+                        borderWidth: 1
+                    },
+                    {
+                        label: "Total",
 
+                        data: [{% for data in data %} '{{data.6}}', {% endfor %}],
+                        type: 'line',
+                        yAxisID: "right-y-axis",
+                        borderColor: '#003f5c',
+                        backgroundColor: '#003f5c',
+                        // this dataset is drawn on top
+                        order: 1
+                    }
+                ]
+            },
+            options: options
+        });
+    </script>
+</div>
 {% endblock content %}
