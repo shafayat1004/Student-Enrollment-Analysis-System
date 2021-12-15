@@ -4,9 +4,18 @@ from django.shortcuts import render
 from django.db import connection
 # from .forms import SessionSelectorForm
 
+"""  
+--------------------------------------------------------------------------------
+For Classroom Requirements page
+--------------------------------------------------------------------------------
+"""
 
 def index(request):
-
+    """  
+    --------------------------------------------------
+    Getting List of Years and Semesters from Database
+    --------------------------------------------------
+    """
     query = """     
             SELECT dYear
             FROM Section_T
@@ -28,7 +37,12 @@ def index(request):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
-        
+    """  
+    --------------------------------------------------
+    Checking to see if form in template returns value 
+    or else returns default value
+    --------------------------------------------------
+    """
     tableHeaders = []
     tableData = []
 
@@ -41,11 +55,20 @@ def index(request):
         session = request.POST.get('selectedSession', "Summer")
 
     else:
-        year = years[0][0]
-        session = sessions[0][0]
+        year = years[-1][0]
+        session = sessions[-1][0]
+
+    """  
+    --------------------------------------------------
+    Query that groups by enrollment ranges and does the
+    arithmetic needed to get required rooms for different
+    slots based on year and session selection. Any value
+    that does not fall in the range is shown separately.
+    --------------------------------------------------
+    """
 
     query = """
-            SELECT *
+            SELECT X.Class_Size AS "Class Size", X.Sections, X.Class_Room_6 AS "Class Room 6", X.Class_Room_7 AS "Class Room 7"
             FROM(
                 SELECT ( 
                     CASE 
@@ -89,20 +112,19 @@ def index(request):
             ) Y
 
             UNION
-
             
-                SELECT ( 
-                    CASE 
-                        WHEN S.nEnrolled > 0 THEN 'Total'
-                        ELSE '0'
-                    END 
-                ) AS Class_Size, COUNT(*), ROUND(COUNT(*)/12, 1), ROUND(COUNT(*)/14, 1)
-                FROM Section_T S
-                WHERE 
-                        dYear= %(year)s 
-                    AND eSession = %(session)s
-                GROUP BY Class_Size
-                HAVING Class_Size != '0'
+            SELECT ( 
+                CASE 
+                    WHEN S.nEnrolled > 0 THEN 'Total'
+                    ELSE '0'
+                END 
+            ) AS Class_Size, COUNT(*), ROUND(COUNT(*)/12, 1), ROUND(COUNT(*)/14, 1)
+            FROM Section_T S
+            WHERE 
+                    dYear= %(year)s 
+                AND eSession = %(session)s
+            GROUP BY Class_Size
+            HAVING Class_Size != '0'
             
             """
     values={

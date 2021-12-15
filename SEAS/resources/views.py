@@ -2,7 +2,18 @@ from django.shortcuts import render
 
 from django.db import connection
 
+"""  
+--------------------------------------------------------------------------------
+For USAGE OF THE RESUORCES page
+--------------------------------------------------------------------------------
+"""
+
 def resourceUsage(request):
+    """  
+    --------------------------------------------------
+    Getting List of Years and Semesters from Database
+    --------------------------------------------------
+    """
     query = """     
             SELECT dYear
             FROM Section_T
@@ -24,7 +35,13 @@ def resourceUsage(request):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
-        
+    """  
+    --------------------------------------------------
+    Checking to see if form in template returns value 
+    or else returns default value
+    --------------------------------------------------
+    """
+
     tableHeaders = []
     tableData = []
 
@@ -37,10 +54,18 @@ def resourceUsage(request):
         session = request.POST.get('selectedSession', "Summer")
 
     else:
-        year = years[0][0]
-        session = sessions[0][0]
+        year = years[-1][0]
+        session = sessions[-1][0]
 
-    query = """
+
+    """  
+    --------------------------------------------------
+    Run query based on selected year and session value
+    for USAGE OF RESOURCE TABLE
+    --------------------------------------------------
+    """
+
+    usageOfResourcesQuery = """
             SELECT
                 School AS '', 
                 Sum,
@@ -72,7 +97,6 @@ def resourceUsage(request):
                 ROUND( AVG( S.nEnrolled ), 2) AS AvgEnroll, 
                 ROUND( AVG( Cr.nRoomCapacity ), 2) AS AvgRoom,
                 ROUND( ( AVG( Cr.nRoomCapacity ) - AVG( S.nEnrolled ) ), 2) AS Difference,
-                -- ROUND( ( (Difference / AvgRoom)*100 ), 2 )
                 ROUND( ( (( AVG( Cr.nRoomCapacity ) - AVG( S.nEnrolled ) ) / (ROUND( AVG( Cr.nRoomCapacity ), 2)))*100 ), 2 )
                 
             FROM
@@ -89,61 +113,94 @@ def resourceUsage(request):
         "session" : session,
     }
     with connection.cursor() as cursor:
-        cursor.execute( query , values)
+        cursor.execute( usageOfResourcesQuery , values)
         # print(connection.queries)
         tableHeaders = [ col[0] for col in cursor.description ]
         tableData = cursor.fetchall()   
 
+    """  
+    --------------------------------------------------
+    Run a useless query based on hardcoded values
+    for IUB AVAILABLE RESOURCES TABLE
+    (scope for future custom room count form selection)
+    --------------------------------------------------
+    """
+
     tableHeaders2 = []
     tableData2 = []
 
-    query = """
-        SELECT 
-            C.nRoomCapacity AS "Class Size", 
-            COUNT(DISTINCT S.cRoom_ID) AS "IUB Resources",
-            (COUNT(DISTINCT S.cRoom_ID) * C.nRoomCapacity) AS "Capacity"
-        FROM Classroom_T C, Section_T S
-        WHERE C.cRoom_ID=S.cRoom_ID AND S.dYear >= 2019
-        GROUP BY C.nRoomCapacity
+    rooms = [(20, 20), (30, 3), (35, 18), (40, 10), (50, 34), (54, 1), (64, 2), (124, 3), (168, 1)]
 
-        UNION
+    roomGenerationQuery = ''
+    ranNever = True
+    for i, room in enumerate(rooms):
+        if ranNever:
+            roomGenerationQuery = "SELECT " + str(room[0]) + " AS Class_Size, " + str(room[1]) + " AS nRooms UNION"
+            ranNever = False
+        if i == len(rooms)-1:
+            roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1])    
+            break
+        roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1]) + " UNION"
 
-        SELECT "Total", SUM(X.resources), SUM(X.capacity)
-        FROM (
-            SELECT 
-                C.nRoomCapacity AS "Class Size", 
-                COUNT(DISTINCT S.cRoom_ID) AS resources,
-                (COUNT(DISTINCT S.cRoom_ID) * C.nRoomCapacity) AS capacity
-            FROM Classroom_T C, Section_T S
-            WHERE C.cRoom_ID=S.cRoom_ID AND S.dYear >= 2019
-            GROUP BY C.nRoomCapacity
-        ) AS X;
-        """
+    query = f"""
+            SELECT Class_Size AS "Class Size", nRooms AS "IUB Resource", (Class_Size*nRooms) AS "Capacity"
+            FROM(
+                {roomGenerationQuery}
+            ) AS iubResource
+                
+            UNION
+
+            SELECT "Total", SUM(nRooms) , SUM(Class_Size*nRooms)
+            FROM(
+                {roomGenerationQuery}
+            ) AS iubResource
+            """
     
     with connection.cursor() as cursor:
-        cursor.execute( query)
+        cursor.execute( query )
         # print(connection.queries)
         tableHeaders2 = [ col[0] for col in cursor.description ]
         tableData2 = cursor.fetchall()
 
-    totCap6  = float(tableData2[-1][-1] * 12)
-    totCap7 = float(tableData2[-1][-1] * 14)
-    avg6 = round(totCap6/3.5)
-    avg7 = round(totCap7/3.5)
-    free6 = round(avg6 * (100 - tableData[-1][-1])/100)
-    free7 = round(avg7 * (100 - tableData[-1][-1])/100)
+
+    """  
+    --------------------------------------------------
+    Calculations for lower half of
+    IUB AVAILABLE RESOURCES TABLE
+    Taking into account that user might load a 
+    semester that doesn't exist in database
+    --------------------------------------------------
+    """
+
+    try:
+        totCap6  = float(tableData2[-1][-1] * 12)
+        totCap7 = float(tableData2[-1][-1] * 14)
+        avg6 = round(totCap6/3.5)
+        avg7 = round(totCap7/3.5)
+        free6 = round(avg6 * (100 - tableData[-1][-1])/100)
+        free7 = round(avg7 * (100 - tableData[-1][-1])/100)
+        totCap6 = round(totCap6)
+        totCap7 = round(totCap7)
+    except:
+        free6 = free7 = avg6 = avg7 = totCap6 = totCap7 = "Unavailable"
     
+    """  
+    --------------------------------------------------
+    Dictionary that template uses to get data from
+    --------------------------------------------------
+    """
+
     context = {
-        'tableHeaders': tableHeaders,
-        'tableData'   : tableData,
+        'tableHeaders' : tableHeaders,
+        'tableData'    : tableData,
         'tableHeaders2': tableHeaders2,
         'tableData2'   : tableData2,
-        'years'       : years,
-        'sessions'    : sessions,
+        'years'        : years,
+        'sessions'     : sessions,
         'selectedSession' : session,
         'selectedYear'    : year,
-        'totCap6'     : round(totCap6),
-        'totCap7'     : round(totCap7),
+        'totCap6'     : totCap6,
+        'totCap7'     : totCap7,
         'avg6'        : avg6,
         'avg7'        : avg7,
         'free6'       : free6,
@@ -152,6 +209,11 @@ def resourceUsage(request):
 
     return render(request, 'resources/resource_usage.html', context)
 
+"""  
+--------------------------------------------------------------------------------
+For AVAILABILITY AND CCOURSE OFFERING COMPARISON page
+--------------------------------------------------------------------------------
+"""
 
 def resourceComp(request):
     query = """

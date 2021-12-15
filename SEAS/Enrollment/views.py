@@ -55,8 +55,8 @@ def schoolWiseEnrollExpand( request ):
         session = request.POST.get('selectedSession', "Summer")
 
     else:
-        year = years[0][0]
-        session = sessions[0][0]
+        year = years[-1][0]
+        session = sessions[-1][0]
     
     #create section view 
     query = '''
