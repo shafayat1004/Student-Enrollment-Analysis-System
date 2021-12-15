@@ -1,8 +1,173 @@
-{% extends 'base.html' %}
-{% block title %}Availability And Course Offering Comparison{% endblock title %}
+{% extends 'base.html' %} {% block title %} Availability And Course Offering
+Comparison {% endblock title %} {% block content %}
+<div class="searchRow">
+  <form method="POST" class="semesterSelection">
+    {% csrf_token %}
+    <select name="selectedSession">
+      {% for session in sessions %}
+      <option value="{{ session.0 }}">{{session.0}}</option>
+      {% endfor %}
+    </select>
+    <select name="selectedYear">
+      {% for year in years %}
+      <option value="{{ year.0 }}">{{ year.0}}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Load</button>
+  </form>
+</div>
 
-{% block content %}
+<div class="title row">
+  <h1>Resource Usage Comparison</h1>
+  <h1>{{selectedSession}}, {{selectedYear}}</h1>
+</div>
 
+<div class="table row">
+  <div class="col-xs-1 table">
+    <table class="mytable">
+      <thead>
+        <tr>
+          <th colspan="6" style="text-align: center">
+            Comparison of IUB resources
+          </th>
+        </tr>
+        <tr>
+          {% for colName in tableHeaders %}
+          <th>{{colName}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tableData|slice:":-1" %}
+        <tr>
+          {% for item in row %}
+          <td>{{item}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr>
+          {% with lastTableRow=tableData|last %} {% for item in lastTableRow %}
+          <th>{{item}}</th>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="col-md-6 compactChart" style="width: 50%; height: 50%">
+  <canvas id="myChart" width="400" height="400"></canvas>
+  <script>
+    Chart.register(ChartDataLabels);
+    const ctx = document.getElementById('myChart').getContext('2d');
 
+    var options = {
+        responsive: true,
+        tooltips: {
+            enabled: false
+        },
+        scales: {
+            'left-y-axis' :{
+                type: "linear",
+                position: "left",
+                grid: {
+                    drawOnChartArea: false
+                },
+            },
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 6',
+                font: {
+                    size: 20
+                },
+            },
+            datalabels:{
+              color: 'black',
+              anchor: 'end',
+              align: 'start',
+              offset: -14
+          }
+        }
+    }
 
-{% endblock content %}
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
+            datasets: [
+                {
+                    label: "IUB Resource",
+                    data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
+                    backgroundColor: '#415c5c'
+                },
+                {
+                    label: "{{selectedSession}}",
+                        data: [{% for data in tableData|slice:":-1" %} '{{data.2}}', {% endfor %}],
+                    backgroundColor: '#367a63'
+                },
+            ]
+        },
+        options: options
+    });
+  </script>
+</div>
+<div class="col-md-6 compactChart" style="width: 50%; height: 50%">
+  <canvas id="myChart1" width="400" height="400"></canvas>
+  <script>
+    Chart.register(ChartDataLabels);
+    const ctx1 = document.getElementById('myChart1').getContext('2d');
+
+    var options = {
+        responsive: true,
+        tooltips: {
+            enabled: false
+        },
+        scales: {
+            'left-y-axis' :{
+                type: "linear",
+                position: "left",
+                grid: {
+                    drawOnChartArea: false
+                },
+            },
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 7',
+                font: {
+                    size: 20
+                },
+            },
+            datalabels:{
+              color: 'black',
+              anchor: 'end',
+              align: 'start',
+              offset: -14
+          }
+        }
+    }
+
+    const myChart1 = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
+            datasets: [
+                {
+                    label: "IUB Resource",
+                    data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
+                    backgroundColor: '#415c5c'
+                },
+                {
+                    label: "{{selectedSession}}",
+                        data: [{% for data in tableData|slice:":-1" %} '{{data.4}}', {% endfor %}],
+                    backgroundColor: '#367a63'
+                },
+            ]
+        },
+        options: options
+    });
+  </script>
+</div>
+{% endwith %} {% endblock content %}
