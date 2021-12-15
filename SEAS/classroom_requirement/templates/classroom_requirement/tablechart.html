@@ -28,7 +28,7 @@
     <div class="table row">
         <div class='col-xs-1 table'>
             <table class="mytable">
-                <thead>
+                <thead class="fixedHeader">
                     <tr>
                         {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
                     </tr>
@@ -52,9 +52,9 @@
             </table>
         </div> 
     </div>
-    <div class="chart row">
-        <div class="col-xs-1" style="width:50%;">
-            <canvas id="pieChartD6" width="400" height="400"></canvas>
+    <div class="chart row" style="width:90%; margin-left: auto;margin-right: auto;">
+        <div class="column">
+            <canvas id="pieChartD6" width="100%"></canvas>
             <script>
                 Chart.register(ChartDataLabels);
                 const ctx1 = document.getElementById('pieChartD6').getContext('2d');
@@ -123,8 +123,8 @@
             </script>
         </div>
 
-        <div class="col-xs-1" style="width:50%;">
-            <canvas id="pieChartD7" width="400" height="400"></canvas>
+        <div class="column">
+            <canvas id="pieChartD7" width="100%"></canvas>
             <script>
                 const ctx2 = document.getElementById('pieChartD7').getContext('2d');
                 var data = [{
