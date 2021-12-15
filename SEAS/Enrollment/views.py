@@ -60,30 +60,31 @@ def schoolWiseEnrollExpand( request ):
     
     #create section view 
     query = '''
-            CREATE VIEW sections_v AS
-            SELECT *, ( T.Enrolled * T.Credits ) AS TotalCredits
-            FROM (
-                SELECT 
-                    CONCAT( C.cCourse_ID, '-', S.nSectionNumber ) AS Section, 
-                    S.dYear AS Years, 
-                    S.eSession AS Sessions,
-                    S.nEnrolled AS Enrolled,
-                    C.nCreditHours AS Credits,
-                    D.cDepartment_ID AS Department,
-                    D.cSchool_ID AS School
-                FROM 
-                    Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
-                WHERE 
-                        S.cCoffCode_ID = O.cCoffCode_ID
-                    AND O.cCourse_ID = C.cCourse_ID 
-                    AND S.cDepartment_ID = D.cDepartment_ID
-                ORDER BY Years, Sessions DESC, Section, Credits, Department, School
-            ) T;
-            '''
-    
-    try:
+        CREATE VIEW sections_v AS
+    SELECT *, ( T.Enrolled * T.Credits ) AS TotalCredits
+    FROM (
+        SELECT 
+            CONCAT( C.cCourse_ID, '-', S.nSectionNumber ) AS Section, 
+            S.dYear AS Years, 
+            S.eSession AS Sessions,
+            S.nEnrolled AS Enrolled,
+            C.nCreditHours AS Credits,
+            D.cDepartment_ID AS Department,
+            D.cSchool_ID AS School
+        FROM 
+            Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
+        WHERE 
+                S.cCoffCode_ID = O.cCoffCode_ID
+            AND O.cCourse_ID = C.cCourse_ID 
+           AND S.cDepartment_ID = D.cDepartment_ID
+		
+        ORDER BY Years, Sessions DESC, Section, Credits, Department, School
+    ) T;
+     
+    '''
+    try :
         with connection.cursor() as cursor:
-                cursor.execute( query )
+            cursor.execute( query )
     except:
         pass
       #  section = cursor.fetchall() 
@@ -97,31 +98,31 @@ def schoolWiseEnrollExpand( request ):
         FROM (
 		SELECT 
 			nEnrolled AS Enrollment, 
-			COUNT(nEnrolled) AS Counter , 
+			COUNT(nEnrolled) AS Counter, 
 			D.cSchool_ID AS School
-		FROM Section_T AS S, CoOfferedCourse_T O, Course_T C, Department_T D
+		FROM Section_T AS S, Department_T D
 		WHERE 
-				S.cCoffCode_ID = O.cCoffCode_ID
-			AND O.cCourse_ID = C.cCourse_ID 
-			AND S.cDepartment_ID = D.cDepartment_ID 
+				S.cDepartment_ID = D.cDepartment_ID 
 			AND dYear= '{year}'					 
 			AND eSession = '{session}'					
 			GROUP BY Enrollment, School
 			ORDER BY D.cSchool_ID, Enrollment ASC
+            
+       
         
-        ) E 
-        WHERE Enrollment > 0
-        GROUP BY Enrollment
-        UNION
-        SELECT 
-            9999,
-            {sqlClause}
-            SUM( Counter) AS T  
-            FROM
-            (SELECT School ,COUNT(Enrolled) AS Counter  FROM sections_v WHERE  Years = '{year}' AND Sessions = '{session}' AND Enrolled != 0
-            GROUP BY School) E
-            ORDER BY Enrollment ASC;
-        """
+    ) E 
+    WHERE Enrollment > 0
+    GROUP BY Enrollment
+    UNION
+    SELECT 
+        9999,
+		{sqlClause}
+        SUM( Counter) AS T  
+        FROM
+		(SELECT School ,COUNT(Enrolled) AS Counter  FROM sections_v WHERE  Years = '{year}' AND Sessions = '{session}' AND Enrolled != 0
+		GROUP BY School) E
+        ORDER BY Enrollment ASC;
+    """
 
     values={
         "year" : str(year),
@@ -214,11 +215,9 @@ def schoolWiseEnrollCompact( request ):
 				WHEN S.nEnrolled > 60 THEN ' 60+'
 			END 
 		) AS Enrollment, D.cSchool_ID AS School, COUNT(*) AS Counter
-		FROM Section_T S, CoOfferedCourse_T O, Course_T C, Department_T D
+		FROM Section_T S, Department_T D
 		WHERE 
-				S.cCoffCode_ID = O.cCoffCode_ID
-			AND O.cCourse_ID = C.cCourse_ID 
-			AND S.cDepartment_ID = D.cDepartment_ID 
+				S.cDepartment_ID = D.cDepartment_ID 
 			AND dYear= '{year}'					 -- replace with {{django}}
 			AND eSession = '{session}'				 -- replace ''     ''
 		GROUP BY Enrollment, School

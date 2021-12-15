@@ -39,7 +39,11 @@
             {% for row in tableRow|slice:":-1"%} 
              <tr>
                 {% for item in row %} 
-                    <td>{{item}}</td> 
+                    {% if item == 0 %}
+                        <td></td>
+                    {%else%}
+                        <td>{{item}}</td> 
+                    {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}

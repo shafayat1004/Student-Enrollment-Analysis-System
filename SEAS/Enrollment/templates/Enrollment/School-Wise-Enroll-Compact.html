@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Enrollment Data{% endblock title %}
+{% block title %}Enrollment Information{% endblock title %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
 </div>
 
 
-<h1> School Wise Enrollment Compact</h1>
+<h1> School Wise Enrollment Compact View</h1>
 <div class="title row">
     <h1>{{selectedSession}}, {{selectedYear}}</h1>
 </div>
@@ -75,6 +75,8 @@
                         drawOnChartArea: false
                     },
                     max: 175,
+                    anchor: 'end',
+                    align: 'start',
                 },
                 'right-y-axis': {
                     type: "linear",
@@ -84,6 +86,7 @@
                     },
                     min: -50,
                 },
+                
             }, 
             plugins: {
                 title: {
@@ -92,8 +95,17 @@
                     font: {
                         size: 20
                     },
+                    
                 },
+                datalabels:{
+                    color: 'black',
+                    anchor: 'end',
+                    align: 'start',
+                    offset: -14
+                }
+                
             }
+            
         }
 
         const myChart = new Chart(ctx, {
@@ -118,14 +130,16 @@
                         },
                     {
                         label: "SLASS",
-                            data: [{% for data in data %} '{{data.4}}', {% endfor %}],
-                        backgroundColor: '#a2a51f'
+                        data: [{% for data in data %} '{{data.4}}', {% endfor %}],
+                        backgroundColor: '#a2a51f',
+                       // borderWidth: -5
+                        
                         },
                     {
                         label: "SPPH",
                         data: [{% for data in data %} '{{data.5}}', {% endfor %}],
                         backgroundColor: '#ffa600',
-                        borderWidth: 1
+                      //  borderWidth: -15
                     },
                     {
                         label: "Total",
