@@ -154,11 +154,45 @@ def resourceUsage(request):
 
 
 def resourceComp(request):
+    query = """     
+            SELECT dYear
+            FROM Section_T
+            GROUP BY dYear
+            ORDER BY dYear
+            """
+    years = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        years = cursor.fetchall()
+
+    query = """     
+            SELECT eSession
+            FROM Section_T
+            GROUP BY eSession
+            """
+    sessions = []
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        sessions = cursor.fetchall()
+
+    tableHeaders = []
+    tableData = []
+
+    year = ''
+    session = ''
+
+
+    if request.method == 'POST':
+        year = request.POST.get('selectedYear', 2021)
+        session = request.POST.get('selectedSession', "Summer")
+
+    else:
+        year = years[0][0]
+        session = sessions[0][0]
+    
     query = """
-            set @y = 2021;
-            set @se = "Spring";
                 
-            SELECT iubResource.Class_Size AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Required If 6", (req.Class_Room_6 - iubResource.nRooms) AS "Difference If 6", req.Class_Room_7 AS "Required If 7", (req.Class_Room_7 - iubResource.nRooms) AS "Difference If 7"
+            SELECT iubResource.Class_Size AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6", (req.Class_Room_6 - iubResource.nRooms) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7", (req.Class_Room_7 - iubResource.nRooms) AS "Difference for Slot 7"
             FROM(
                 SELECT 20 AS Class_Size, 20 AS nRooms UNION SELECT 30, 3 UNION SELECT 35, 18 UNION SELECT 40, 10 UNION SELECT 50, 34 UNION SELECT 54, 1 UNION SELECT 64, 2 UNION SELECT 124, 3 UNION SELECT 168, 1
                 ) AS iubResource	
@@ -179,8 +213,8 @@ def resourceComp(request):
                     ) AS Class_Size, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
                     FROM Section_T S
                     WHERE 
-                            dYear= @y 
-                        AND eSession = @se
+                            dYear= %(year)s 
+                        AND eSession = %(session)s
                     GROUP BY Class_Size
                     HAVING Class_Size != 0
                     ORDER BY Class_Size
@@ -210,12 +244,31 @@ def resourceComp(request):
                     ) AS Class_Size, ROUND(COUNT(*)/12, 1) AS Class_Room_6, ROUND(COUNT(*)/14, 1) AS Class_Room_7
                     FROM Section_T S
                     WHERE 
-                            dYear= @y 
-                        AND eSession = @se
+                            dYear= %(year)s 
+                        AND eSession = %(session)s
                     GROUP BY Class_Size
                     HAVING Class_Size != 0
                     ORDER BY Class_Size
                 ) AS req 
                 ON req.Class_Size = iubResource.Class_Size
             """
-    return render(request, 'resources/resource_comparison.html')
+    values={
+        "year" : str(year),
+        "session" : session,
+    }
+    with connection.cursor() as cursor:
+        cursor.execute( query , values)
+        # print(connection.queries)
+        tableHeaders = [ col[0] for col in cursor.description ]
+        tableData = cursor.fetchall()
+
+    context = {
+        'tableHeaders': tableHeaders,
+        'tableData'   : tableData,
+        'years'       : years,
+        'sessions'    : sessions,
+        'selectedSession' : session,
+        'selectedYear'    : year,
+    }
+    
+    return render(request, 'resources/resource_comparison.html', context)

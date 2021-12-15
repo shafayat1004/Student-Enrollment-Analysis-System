@@ -1,134 +1,144 @@
-{% extends 'base.html' %}
-{% block title %}Usage Of The Resources{% endblock title %}
+{% extends 'base.html' %} {% block title %}Usage Of The Resources{% endblock
+title %} {% block content %}
+<div class="searchRow">
+  <form method="POST" class="semesterSelection">
+    {% csrf_token %}
+    <select name="selectedSession">
+      {% for session in sessions %}
+      <option value="{{ session.0 }}">{{session.0}}</option>
+      {% endfor %}
+    </select>
+    <select name="selectedYear">
+      {% for year in years %}
+      <option value="{{ year.0 }}">{{ year.0}}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Load</button>
+  </form>
+</div>
 
-{% block content %}
-    <div class= "searchRow">
-        <form method="POST" class="semesterSelection">
-            {% csrf_token %}
-            <select name="selectedSession">
-                {% for session in sessions %}
-                    <option value="{{ session.0 }}">{{session.0}}</option>
-                {% endfor %}
-            </select>
-            <select name="selectedYear">
-                {% for year in years %}
-                <option value="{{ year.0 }}">{{ year.0}}</option>
-                {% endfor %}
-            </select>
-            <button type="submit">Load</button>
-        </form> 
-    </div>
-    
-    <div class= "title row">
-        <h1>Usage Of The Resources</h1>
-        <h1>{{selectedSession}}, {{selectedYear}}</h1>
-    </div>
-    
-    <div class="table row">
-        <div class='col-xs-1 table'>
-            <table class="mytable">
-                <thead>
-                    <tr>
-                        <th colspan="6" style="text-align:center">Usage of the resources</th>
-                    </tr>
-                    <tr>
-                        {% for colName in tableHeaders %}<th>{{colName}}</th>{% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in tableData|slice:":-1" %}
-                    <tr>
-                        {% for item in row %}
-                            <td>{{item}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                    <tr>
-                        {% with lastTableRow=tableData|last %}
-                        {% for item in lastTableRow %}
-                            <th>{{item}}</th>
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
-        </div> 
-    </div>
-    <div class="table row">
-        <div class='col-xs-1 table'>
-            <table class="mytable">
-                {% comment %} 
-                <thead>
-                    <tr>
-                        <th></th><th>{{selectedSession}}, {{selectedYear}}</th>
-                    </tr>
-                </thead>
-                {% endcomment %}
-                <tbody>
-                    <tr>
-                        <td>Average Of Room Capacity</td><td>{{lastTableRow.3}}</td>
-                    </tr>
-                    <tr>
-                        <td>Average Of Enrolled</td><td>{{lastTableRow.2}}</td>
-                    </tr>
-                    <tr>
-                        <td>Average Of Unused Space</td><td>{{lastTableRow.4}}</td>
-                    </tr>
-                    <tr>
-                        <td>Unused Percent</td><td>{{lastTableRow.5}}</td>
-                        {% endwith %}
-                    </tr>
-                </tbody>
-            </table>
-        </div> 
-    </div>
-    <div class="table row">
-        <div class='col-xs-1 table'>
-            <table class="mytable" style="width:50%">
-                <thead>
-                    <tr>
-                        <th colspan="3" style="text-align:center">IUB Available Resources</th>
-                    </tr>
-                    <tr>
-                        {% for colName in tableHeaders2 %}<th>{{colName}}</th>{% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in tableData2|slice:":-1" %}
-                    <tr>
-                        
-                        {% for item in row %}
-                            <td>{{item}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                    <tr>
-                        {% with lastTableRow=tableData2|last %}
-                        {% for item in lastTableRow %}
-                            <th>{{item}}</th>
-                        {% endfor %}
-                        {% endwith %}
-                    </tr>
-                    <tr>
-                        <td colspan="2">Total Capacity with 6 slot 2 days</td><td>{{totCap6}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Total Capacity with 7 slot 2 days</td><td>{{totCap7}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Considering 3.5 average course load (6 slot)</td><td>{{avg6}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Considering 3.5 average course load (7 slot)</td><td>{{avg7}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Considering free % for 6 slots capacity</td><td style="background-color:antiquewhite">{{free6}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Considering free % for 7 slots capacity</td><td style="background-color:antiquewhite">{{free7}}</td>
-                    </tr>
-                        
-                </tbody>
-            </table>
-        </div> 
-    </div>
+<div class="title row">
+  <h1>Usage Of The Resources</h1>
+  <h1>{{selectedSession}}, {{selectedYear}}</h1>
+</div>
+
+<div class="table row">
+  <div class="col-xs-1 table">
+    <table class="mytable">
+      <thead>
+        <tr>
+          <th colspan="6" style="text-align: center">Usage of the resources</th>
+        </tr>
+        <tr>
+          {% for colName in tableHeaders %}
+          <th>{{colName}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tableData|slice:":-1" %}
+        <tr>
+          {% for item in row %}
+          <td>{{item}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr>
+          {% with lastTableRow=tableData|last %} {% for item in lastTableRow %}
+          <th>{{item}}</th>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table row">
+  <div class="col-xs-1 table">
+    <table class="mytable">
+      {% comment %}
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{selectedSession}}, {{selectedYear}}</th>
+        </tr>
+      </thead>
+      {% endcomment %}
+      <tbody>
+        <tr>
+          <td>Average Of Room Capacity</td>
+          <td>{{lastTableRow.3}}</td>
+        </tr>
+        <tr>
+          <td>Average Of Enrolled</td>
+          <td>{{lastTableRow.2}}</td>
+        </tr>
+        <tr>
+          <td>Average Of Unused Space</td>
+          <td>{{lastTableRow.4}}</td>
+        </tr>
+        <tr>
+          <td>Unused Percent</td>
+          <td>{{lastTableRow.5}}</td>
+          {% endwith %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table row">
+  <div class="col-xs-1 table">
+    <table class="mytable" style="width: 50%">
+      <thead>
+        <tr>
+          <th colspan="3" style="text-align: center">
+            IUB Available Resources
+          </th>
+        </tr>
+        <tr>
+          {% for colName in tableHeaders2 %}
+          <th>{{colName}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tableData2|slice:":-1" %}
+        <tr>
+          {% for item in row %}
+          <td>{{item}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr>
+          {% with lastTableRow=tableData2|last %} {% for item in lastTableRow %}
+          <th>{{item}}</th>
+          {% endfor %} {% endwith %}
+        </tr>
+        <tr>
+          <td colspan="2">Total Capacity with 6 slot 2 days</td>
+          <td>{{totCap6}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Total Capacity with 7 slot 2 days</td>
+          <td>{{totCap7}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Considering 3.5 average course load (6 slot)</td>
+          <td>{{avg6}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Considering 3.5 average course load (7 slot)</td>
+          <td>{{avg7}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Considering free % for 6 slots capacity</td>
+          <td style="background-color: antiquewhite">{{free6}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">Considering free % for 7 slots capacity</td>
+          <td style="background-color: antiquewhite">{{free7}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock content %}
