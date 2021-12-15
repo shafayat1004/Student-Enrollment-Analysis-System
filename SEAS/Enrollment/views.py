@@ -98,7 +98,7 @@ def schoolWiseEnrollExpand( request ):
         FROM (
 		SELECT 
 			nEnrolled AS Enrollment, 
-			COUNT(nEnrolled) AS Counter , 
+			COUNT(nEnrolled) AS Counter, 
 			D.cSchool_ID AS School
 		FROM Section_T AS S, Department_T D
 		WHERE 
@@ -107,6 +107,8 @@ def schoolWiseEnrollExpand( request ):
 			AND eSession = '{session}'					
 			GROUP BY Enrollment, School
 			ORDER BY D.cSchool_ID, Enrollment ASC
+            
+       
         
     ) E 
     WHERE Enrollment > 0

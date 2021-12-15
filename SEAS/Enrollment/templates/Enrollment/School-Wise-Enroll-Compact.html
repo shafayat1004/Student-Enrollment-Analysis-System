@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Enrollment Data{% endblock title %}
+{% block title %}Enrollment Information{% endblock title %}
 
 {% block content %}
 
@@ -100,8 +100,8 @@
                 datalabels:{
                     color: 'black',
                     anchor: 'end',
-                    align: 'top',
-                    offset: 1,
+                    align: 'start',
+                    offset: -14
                 }
                 
             }
@@ -130,14 +130,16 @@
                         },
                     {
                         label: "SLASS",
-                            data: [{% for data in data %} '{{data.4}}', {% endfor %}],
-                        backgroundColor: '#a2a51f'
+                        data: [{% for data in data %} '{{data.4}}', {% endfor %}],
+                        backgroundColor: '#a2a51f',
+                       // borderWidth: -5
+                        
                         },
                     {
                         label: "SPPH",
                         data: [{% for data in data %} '{{data.5}}', {% endfor %}],
                         backgroundColor: '#ffa600',
-                        borderWidth: 1
+                      //  borderWidth: -15
                     },
                     {
                         label: "Total",
