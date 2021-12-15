@@ -17,6 +17,8 @@ Comparison {% endblock title %} {% block content %}
   </form>
 </div>
 
+<br>
+
 <div class="title row">
   <h1>Resource Usage Comparison</h1>
   <h1>{{selectedSession}}, {{selectedYear}}</h1>
@@ -54,6 +56,9 @@ Comparison {% endblock title %} {% block content %}
     </table>
   </div>
 </div>
+<br>
+<br>
+<br>
 <div class="col-md-6 compactChart" style="width: 50%; height: 50%">
   <canvas id="myChart" width="400" height="400"></canvas>
   <script>
@@ -112,6 +117,7 @@ Comparison {% endblock title %} {% block content %}
     });
   </script>
 </div>
+<br>
 <br>
 <div class="col-md-6 compactChart" style="width: 50%; height: 50%">
   <canvas id="myChart1" width="400" height="400"></canvas>
