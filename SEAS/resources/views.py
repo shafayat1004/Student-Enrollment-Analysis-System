@@ -265,6 +265,7 @@ def resourceComp(request):
                                 WHEN S.nEnrolled BETWEEN 21 AND 30 THEN 30
                                 WHEN S.nEnrolled BETWEEN 31 AND 35 THEN 35
                                 WHEN S.nEnrolled BETWEEN 36 AND 40 THEN 40
+                                WHEN S.nEnrolled BETWEEN 41 AND 50 THEN 50
                                 WHEN S.nEnrolled BETWEEN 51 AND 54 THEN 54
                                 WHEN S.nEnrolled BETWEEN 55 AND 64 THEN 64
                                 WHEN S.nEnrolled BETWEEN 65 AND 124 THEN 124
@@ -296,6 +297,7 @@ def resourceComp(request):
                                 WHEN S.nEnrolled BETWEEN 21 AND 30 THEN 30
                                 WHEN S.nEnrolled BETWEEN 31 AND 35 THEN 35
                                 WHEN S.nEnrolled BETWEEN 36 AND 40 THEN 40
+                                WHEN S.nEnrolled BETWEEN 41 AND 50 THEN 50
                                 WHEN S.nEnrolled BETWEEN 51 AND 54 THEN 54
                                 WHEN S.nEnrolled BETWEEN 55 AND 64 THEN 64
                                 WHEN S.nEnrolled BETWEEN 65 AND 124 THEN 124
