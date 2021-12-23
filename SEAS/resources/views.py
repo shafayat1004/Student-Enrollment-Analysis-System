@@ -254,7 +254,7 @@ def resourceComp(request):
     
     query = """
                 
-            SELECT iubResource.Class_Size AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6", (req.Class_Room_6 - iubResource.nRooms) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7", (req.Class_Room_7 - iubResource.nRooms) AS "Difference for Slot 7"
+            SELECT iubResource.Class_Size AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6 Requirement", (req.Class_Room_6 - iubResource.nRooms) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7 Requirement", (req.Class_Room_7 - iubResource.nRooms) AS "Difference for Slot 7"
             FROM(
                 SELECT 20 AS Class_Size, 20 AS nRooms UNION SELECT 30, 3 UNION SELECT 35, 18 UNION SELECT 40, 10 UNION SELECT 50, 34 UNION SELECT 54, 1 UNION SELECT 64, 2 UNION SELECT 124, 3 UNION SELECT 168, 1
                 ) AS iubResource	

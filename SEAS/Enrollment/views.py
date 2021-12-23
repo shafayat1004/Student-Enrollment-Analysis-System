@@ -57,7 +57,14 @@ def schoolWiseEnrollExpand( request ):
     else:
         year = years[-1][0]
         session = sessions[-1][0]
-    
+
+    '''
+    SCHOOL WISE ENROLLMENT TABLE [Expanded]
+    ---------------------------------------------------------------------------------------------------------------
+    This query creates a view which contains which joins the section, course and school table together in a single
+    table.
+    ---------------------------------------------------------------------------------------------------------------
+    '''
     #create section view 
     query = '''
         CREATE VIEW sections_v AS
@@ -89,7 +96,12 @@ def schoolWiseEnrollExpand( request ):
         pass
       #  section = cursor.fetchall() 
 
-    # Run query for School wise enrollment data
+    ''''
+    --------------------------------------------------------------------------------------------------------------
+     This is the query for getting numbers of courses being offered in each school with respect
+     to the Enrollment which gets incremented by one.
+    -------------------------------------------------------------------------------------------------------------
+     '''
     query = f"""
         SELECT 
 		    Enrollment ,
@@ -115,7 +127,7 @@ def schoolWiseEnrollExpand( request ):
     GROUP BY Enrollment
     UNION
     SELECT 
-        9999,
+        9999, -- this should be "Total" but as we were facing issues with ordering we places this number. 
 		{sqlClause}
         SUM( Counter) AS T  
         FROM
@@ -194,7 +206,13 @@ def schoolWiseEnrollCompact( request ):
         year = years[0][0]
         session = sessions[0][0]
 
-    # Run query for school wise enrollment data
+    '''
+    SCHOOL WISE ENROLLMENT TABLE [COMPACT]
+    ---------------------------------------------------------------------------------------------------------------
+    This query generates school wise number of sections being offered with respect to the class sizes as well as total 
+    sections for all schools.
+    ---------------------------------------------------------------------------------------------------------------
+    '''
     query = f"""
         SELECT 
 		    Enrollment ,
@@ -218,8 +236,8 @@ def schoolWiseEnrollCompact( request ):
 		FROM Section_T S, Department_T D
 		WHERE 
 				S.cDepartment_ID = D.cDepartment_ID 
-			AND dYear= '{year}'					 -- replace with {{django}}
-			AND eSession = '{session}'				 -- replace ''     ''
+			AND dYear= '{year}'					 
+			AND eSession = '{session}'				 
 		GROUP BY Enrollment, School
 		ORDER BY School, Enrollment ASC
     ) E
