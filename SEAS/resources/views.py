@@ -59,9 +59,9 @@ def resourceUsage(request):
 
 
     """  
+    USAGE OF RESOURCE TABLE
     --------------------------------------------------
     Run query based on selected year and session value
-    for USAGE OF RESOURCE TABLE
     --------------------------------------------------
     """
 
@@ -118,10 +118,10 @@ def resourceUsage(request):
         tableHeaders = [ col[0] for col in cursor.description ]
         tableData = cursor.fetchall()   
 
-    """  
+    """ 
+    IUB AVAILABLE RESOURCES TABLE 
     --------------------------------------------------
     Run a useless query based on hardcoded values
-    for IUB AVAILABLE RESOURCES TABLE
     (scope for future custom room count form selection)
     --------------------------------------------------
     """
@@ -164,9 +164,9 @@ def resourceUsage(request):
 
 
     """  
-    --------------------------------------------------
-    Calculations for lower half of
     IUB AVAILABLE RESOURCES TABLE
+    --------------------------------------------------
+    Calculations for lower half.
     Taking into account that user might load a 
     semester that doesn't exist in database
     --------------------------------------------------

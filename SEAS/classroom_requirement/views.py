@@ -10,7 +10,7 @@ For Classroom Requirements page
 --------------------------------------------------------------------------------
 """
 
-def index(request):
+def classReq(request):
     """  
     --------------------------------------------------
     Getting List of Years and Semesters from Database
@@ -62,6 +62,7 @@ def index(request):
             pass
 
     """  
+    CLASSROOM REQUIREMENTS
     --------------------------------------------------
     Query that groups by enrollment ranges and does the
     arithmetic needed to get required rooms for different
