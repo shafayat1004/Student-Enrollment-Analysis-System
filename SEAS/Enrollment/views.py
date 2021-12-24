@@ -264,7 +264,7 @@ def schoolWiseEnrollCompact( request ):
         "year" : str(year),
         "session" : session,
     }
-    xAxis, yAxis, totals = schoolEnrollChartDataPacker( data, labels )
+    
     
     context = {
         'labels': labels,
