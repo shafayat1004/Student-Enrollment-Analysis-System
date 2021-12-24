@@ -60,122 +60,123 @@ Comparison {% endblock title %} {% block content %}
 <br>
 <br>
 <br>
-<div class="col-md-6 compactChart" style="width: 50%; height: 50%">
-  <canvas id="myChart" width="400" height="400"></canvas>
-  <script>
-    Chart.register(ChartDataLabels);
-    const ctx = document.getElementById('myChart').getContext('2d');
+<div class="chart row" style="width:90%; margin-left: auto;margin-right: auto;">
+  <div class="col-md-6">
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <script>
+      Chart.register(ChartDataLabels);
+      const ctx = document.getElementById('myChart').getContext('2d');
 
-    var options = {
-        responsive: true,
-        tooltips: {
-            enabled: false
-        },
-        scales: {
-            'left-y-axis' :{
-                type: "linear",
-                position: "left",
-                grid: {
-                    drawOnChartArea: false
-                },
-            },
-        },
-        plugins: {
-            title: {
-                display: true,
-                text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 6',
-                font: {
-                    size: 20
-                },
-            },
-            datalabels:{
-              color: 'black',
-              anchor: 'end',
-              align: 'start',
-              offset: -14
+      var options = {
+          responsive: true,
+          tooltips: {
+              enabled: false
+          },
+          scales: {
+              'left-y-axis' :{
+                  type: "linear",
+                  position: "left",
+                  grid: {
+                      drawOnChartArea: false
+                  },
+              },
+          },
+          plugins: {
+              title: {
+                  display: true,
+                  text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 6',
+                  font: {
+                      size: 20
+                  },
+              },
+              datalabels:{
+                color: 'black',
+                anchor: 'end',
+                align: 'start',
+                offset: -14
+            }
           }
-        }
-    }
+      }
 
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
-            datasets: [
-                {
-                    label: "IUB Resource",
-                    data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
-                    backgroundColor: '#415c5c'
-                },
-                {
-                    label: "{{selectedSession}}",
-                        data: [{% for data in tableData|slice:":-1" %} '{{data.2}}', {% endfor %}],
-                    backgroundColor: '#367a63'
-                },
-            ]
-        },
-        options: options
-    });
-  </script>
-</div>
-<br>
-<br>
-<div class="col-md-6 compactChart" style="width: 50%; height: 50%">
-  <canvas id="myChart1" width="400" height="400"></canvas>
-  <script>
-    Chart.register(ChartDataLabels);
-    const ctx1 = document.getElementById('myChart1').getContext('2d');
+      const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
+              datasets: [
+                  {
+                      label: "IUB Resource",
+                      data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
+                      backgroundColor: '#415c5c'
+                  },
+                  {
+                      label: "{{selectedSession}}",
+                          data: [{% for data in tableData|slice:":-1" %} '{{data.2}}', {% endfor %}],
+                      backgroundColor: '#367a63'
+                  },
+              ]
+          },
+          options: options
+      });
+    </script>
+  </div>
+  <br>
+  <br>
+  <div class="col-md-6">
+    <canvas id="myChart1" width="400" height="400"></canvas>
+    <script>
+      Chart.register(ChartDataLabels);
+      const ctx1 = document.getElementById('myChart1').getContext('2d');
 
-    var options = {
-        responsive: true,
-        tooltips: {
-            enabled: false
-        },
-        scales: {
-            'left-y-axis' :{
-                type: "linear",
-                position: "left",
-                grid: {
-                    drawOnChartArea: false
-                },
-            },
-        },
-        plugins: {
-            title: {
-                display: true,
-                text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 7',
-                font: {
-                    size: 20
-                },
-            },
-            datalabels:{
-              color: 'black',
-              anchor: 'end',
-              align: 'start',
-              offset: -14
+      var options = {
+          responsive: true,
+          tooltips: {
+              enabled: false
+          },
+          scales: {
+              'left-y-axis' :{
+                  type: "linear",
+                  position: "left",
+                  grid: {
+                      drawOnChartArea: false
+                  },
+              },
+          },
+          plugins: {
+              title: {
+                  display: true,
+                  text: 'Resource Usage Comparison: {{selectedSession}}, {{selectedYear}} for Slot 7',
+                  font: {
+                      size: 20
+                  },
+              },
+              datalabels:{
+                color: 'black',
+                anchor: 'end',
+                align: 'start',
+                offset: -14
+            }
           }
-        }
-    }
+      }
 
-    const myChart1 = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
-            datasets: [
-                {
-                    label: "IUB Resource",
-                    data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
-                    backgroundColor: '#415c5c'
-                },
-                {
-                    label: "{{selectedSession}}",
-                        data: [{% for data in tableData|slice:":-1" %} '{{data.4}}', {% endfor %}],
-                    backgroundColor: '#367a63'
-                },
-            ]
-        },
-        options: options
-    });
-  </script>
-</div>
+      const myChart1 = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+              labels: [{% for data in tableData|slice:":-1" %} '{{data.0}}', {% endfor %}],
+              datasets: [
+                  {
+                      label: "IUB Resource",
+                      data: [{% for data in tableData|slice:":-1" %} '{{data.1}}', {% endfor %}],
+                      backgroundColor: '#415c5c'
+                  },
+                  {
+                      label: "{{selectedSession}}",
+                          data: [{% for data in tableData|slice:":-1" %} '{{data.4}}', {% endfor %}],
+                      backgroundColor: '#367a63'
+                  },
+              ]
+          },
+          options: options
+      });
+    </script>
+  </div>
 {% endwith %} {% endblock content %}

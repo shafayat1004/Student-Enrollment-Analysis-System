@@ -33,7 +33,7 @@
   }
   .panel-footer {
     padding: 10px 15px;
-    background-color: #f5f5f5;
+    background-color: rgb(253, 251, 223);
     border-top: 1px solid #ddd;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
@@ -345,7 +345,7 @@
   }
   .panel-default > .panel-heading {
     color: #333;
-    background-color: #f5f5f5;
+    background-color: rgb(253, 251, 223);
     border-color: #ddd;
   }
   .panel-default > .panel-heading + .panel-collapse > .panel-body {
@@ -381,7 +381,7 @@
   }
   .panel-success > .panel-heading {
     color: #3c763d;
-    background-color: #dff0d8;
+    background-color: rgb(253, 251, 223);
     border-color: #d6e9c6;
   }
   .panel-success > .panel-heading + .panel-collapse > .panel-body {
