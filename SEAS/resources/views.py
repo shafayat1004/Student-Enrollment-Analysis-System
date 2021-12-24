@@ -141,7 +141,13 @@ def resourceUsage(request):
     #         roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1])    
     #         break
     #     roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1]) + " UNION"
-
+    """ 
+    IUB AVAILABLE RESOURCES TABLE 
+    --------------------------------------------------
+    Run a useless query based on hardcoded values
+    (scope for future custom room count form selection)
+    --------------------------------------------------
+    """
     query = """
             SELECT nCapacity AS "Class Size", nRooms AS "IUB Resource", (nCapacity*nRooms) AS "Capacity"
             FROM
@@ -207,11 +213,11 @@ def resourceUsage(request):
 
     return render(request, 'resources/resource_usage.html', context)
 
-"""  
---------------------------------------------------------------------------------
-For AVAILABILITY AND CCOURSE OFFERING COMPARISON page
---------------------------------------------------------------------------------
-"""
+    """  
+    --------------------------------------------------------------------------------
+    For AVAILABILITY AND CCOURSE OFFERING COMPARISON page
+    --------------------------------------------------------------------------------
+    """
 
 def resourceComp(request):
     query = """     
@@ -249,10 +255,21 @@ def resourceComp(request):
     else:
         year = years[0][0]
         session = sessions[0][0]
-    
+
+    """  
+    --------------------------------------------------------------------------------
+    For AVAILABILITY AND COURSE OFFERING COMPARISON page
+    --------------------------------------------------------------------------------
+    """
     query = """
                 
-            SELECT iubResource.nCapacity AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6 Requirement", (iubResource.nRooms - req.Class_Room_6) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7 Requirement", (iubResource.nRooms - req.Class_Room_7) AS "Difference for Slot 7"
+            SELECT 
+                iubResource.nCapacity AS "Class Size", 
+                iubResource.nRooms AS "IUB Resource", 
+                req.Class_Room_6 AS "Slot 6 Requirement",
+                (iubResource.nRooms - req.Class_Room_6) AS "Difference for 6 slots", 
+                req.Class_Room_7 AS "Slot 7 Requirement", 
+                (iubResource.nRooms - req.Class_Room_7) AS "Difference for Slot 7"
             FROM
                 Resources_T AS iubResource
                 INNER JOIN (
@@ -283,7 +300,13 @@ def resourceComp(request):
 
             UNION
 
-            SELECT "Total", SUM(iubResource.nRooms), SUM(req.Class_Room_6), SUM(iubResource.nRooms - req.Class_Room_6), SUM(req.Class_Room_7), SUM(iubResource.nRooms - req.Class_Room_7)
+            SELECT 
+                "Total", 
+                SUM(iubResource.nRooms), 
+                SUM(req.Class_Room_6), 
+                SUM(iubResource.nRooms - req.Class_Room_6), 
+                SUM(req.Class_Room_7), 
+                SUM(iubResource.nRooms - req.Class_Room_7)
             FROM
                 Resources_T AS iubResource
                 INNER JOIN (

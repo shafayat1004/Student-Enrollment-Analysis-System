@@ -44,7 +44,11 @@ def iubRevenue( request ):
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
             {sqlClause}
             SUM( Revenue ) AS Total,
-            ROUND( 100 * ( SUM( Revenue ) - LAG( SUM( Revenue ), 3,  SUM( Revenue ) ) OVER () ) / SUM( Revenue ) ) AS '% Change'
+            ROUND( 
+                100 * ( 
+                    SUM( Revenue ) - LAG( SUM( Revenue ), 3,  SUM( Revenue ) ) OVER () 
+                ) / SUM( Revenue ) 
+            ) AS '% Change'
         FROM (
             SELECT 
                 Years, 
@@ -92,6 +96,7 @@ def iubRevenue( request ):
 
 
 def deptRevenue( request ):
+    ''' Historical revenue data and change of all the departments in a school'''
     # Fetch all schools for form
     query = """
         SELECT cSchool_ID AS sch
@@ -140,7 +145,11 @@ def deptRevenue( request ):
             {depNames}
             {schoolSelected},
             {depPercentColSqlClause}
-            ROUND( 100 * ( {schoolSelected} - ( LAG( {schoolSelected}, 3,  {schoolSelected} )  OVER () ) ) / SUM( {schoolSelected} ) ) AS '%{schoolSelected}'
+            ROUND( 
+                100 * (
+                    {schoolSelected} - ( LAG( {schoolSelected}, 3,  {schoolSelected} )  OVER () ) 
+                ) / SUM( {schoolSelected} ) 
+            ) AS '%{schoolSelected}'
         FROM (
             SELECT 
                 Years,
