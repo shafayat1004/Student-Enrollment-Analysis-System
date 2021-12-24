@@ -34,18 +34,12 @@ def schoolWiseEnrollExpand( request ):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
-    # Fetch all schools and create select clause for them
-    query = """
-        SELECT cSchool_ID AS sch
-	    FROM School_T;
-    """
+    
     with connection.cursor() as cursor:
         cursor.execute( query )
         schools = [ row[0] for row in cursor.fetchall() ]
 
-        sqlClause = ""
-        for school in schools:
-            sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
+        
     
     year = ''
     session = ''
@@ -97,42 +91,59 @@ def schoolWiseEnrollExpand( request ):
       #  section = cursor.fetchall() 
 
     ''''
-    --------------------------------------------------------------------------------------------------------------
-     This is the query for getting numbers of courses being offered in each school with respect
+    SCHOOL WISE ENROLLMENT TABLE [Expanded]
+    --------------------------------------------------
+     This is the query for getting numbers of courses 
+     being offered in each school with respect
      to the Enrollment which gets incremented by one.
-    -------------------------------------------------------------------------------------------------------------
-     '''
+    --------------------------------------------------
+    '''
+    # Fetch all schools and create select clause for them
+    query = """
+        SELECT cSchool_ID AS sch
+	    FROM School_T;
+    """
+
+    sqlClause = ""
+    for school in schools:
+        sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
+     
     query = f"""
         SELECT 
 		    Enrollment ,
             {sqlClause}
             SUM( Counter ) AS Total
         FROM (
-		SELECT 
-			nEnrolled AS Enrollment, 
-			COUNT(nEnrolled) AS Counter, 
-			D.cSchool_ID AS School
-		FROM Section_T AS S, Department_T D
-		WHERE 
-				S.cDepartment_ID = D.cDepartment_ID 
-			AND dYear= '{year}'					 
-			AND eSession = '{session}'					
-			GROUP BY Enrollment, School
-			ORDER BY D.cSchool_ID, Enrollment ASC
-            
-       
-        
-    ) E 
-    WHERE Enrollment > 0
-    GROUP BY Enrollment
-    UNION
-    SELECT 
-        9999, -- this should be "Total" but as we were facing issues with ordering we places this number. 
-		{sqlClause}
-        SUM( Counter) AS T  
-        FROM
-		(SELECT School ,COUNT(Enrolled) AS Counter  FROM sections_v WHERE  Years = '{year}' AND Sessions = '{session}' AND Enrolled != 0
-		GROUP BY School) E
+            SELECT 
+                nEnrolled AS Enrollment, 
+                COUNT(nEnrolled) AS Counter, 
+                D.cSchool_ID AS School
+            FROM Section_T AS S, Department_T D
+            WHERE 
+                    S.cDepartment_ID = D.cDepartment_ID 
+                AND dYear= '{year}'					 
+                AND eSession = '{session}'					
+                GROUP BY Enrollment, School
+                ORDER BY D.cSchool_ID, Enrollment ASC    
+        ) E 
+        WHERE Enrollment > 0
+        GROUP BY Enrollment
+        UNION
+        SELECT 
+            9999,                   -- this should be "Total" but as we were facing issues with ordering we places this number. 
+            {sqlClause}
+            SUM( Counter) AS T  
+        FROM (
+            SELECT 
+                School,
+                COUNT(Enrolled) AS Counter  
+            FROM sections_v 
+            WHERE  
+                    Years = '{year}' 
+                AND Sessions = '{session}' 
+                AND Enrolled != 0
+            GROUP BY School
+        ) E
         ORDER BY Enrollment ASC;
     """
 
@@ -182,18 +193,10 @@ def schoolWiseEnrollCompact( request ):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
-    # Fetch all schools and create select clause for them
-    query = """
-        SELECT cSchool_ID AS sch
-	    FROM School_T;
-    """
+    
     with connection.cursor() as cursor:
         cursor.execute( query )
         schools = [ row[0] for row in cursor.fetchall() ]
-
-        sqlClause = ""
-        for school in schools:
-            sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
 
     year = ''
     session = ''
@@ -208,11 +211,21 @@ def schoolWiseEnrollCompact( request ):
 
     '''
     SCHOOL WISE ENROLLMENT TABLE [COMPACT]
-    ---------------------------------------------------------------------------------------------------------------
-    This query generates school wise number of sections being offered with respect to the class sizes as well as total 
-    sections for all schools.
-    ---------------------------------------------------------------------------------------------------------------
+    --------------------------------------------------
+    This query generates school wise number of sections 
+    being offered with respect to the class sizes as well 
+    as total sections for all schools.
+    --------------------------------------------------
     '''
+    # Fetch all schools and create select clause for them
+    query = """
+        SELECT cSchool_ID AS sch
+	    FROM School_T;
+    """
+    sqlClause = ""
+    for school in schools:
+        sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
+
     query = f"""
         SELECT 
 		    Enrollment ,
