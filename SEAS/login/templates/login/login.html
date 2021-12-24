@@ -12,43 +12,80 @@
       crossorigin="anonymous"
     />
     <title>Student Enrollment Analysis System</title>
+    <style>
+      .app-title {
+        margin-bottom: 25px;
+      }
+      .full-page-wrapper {
+        background-color: rgb(253, 251, 223);
+        color: black;
+        height: 100vh;
+      }
+      .login-form {
+        background-color: rgb(214, 255, 241);
+      }
+      .enter-btn {
+        margin-top: 10px;
+      }
+    </style>
   </head>
   <body>
-    <div class="login-register-container">
-      <h1 class="app-title">Student Enrollment Analysis System</h1>
-      <form action="" method="POST" class="login-register-form">
-        {% csrf_token %}
-        <p class="username-title">Username</p>
-        <input type="text" name="username" class="username-input" />
-        <p class="password-title">Password</p>
-        <input type="password" name="password" class="password-input" /> <br />
-        <div class="actions">
-          <input type="submit" name="login" value="LOGIN" class="login-btn" />
-          {% comment %}
-          <input
-            type="submit"
-            name="register"
-            value="REGISTER"
-            class="register-btn"
-          />
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+          <div
+            class="
+              content-wrapper
+              full-page-wrapper
+              d-flex
+              align-items-center
+              auth
+              login-bg
+            "
+          >
+            <div class="card col-lg-4 mx-auto login-form">
+              <div class="card-body px-5 py-5">
+                <h1 class="text-center app-title">
+                  STUDENT ENROLLMENT ANALYSIS SYSTEM
+                </h1>
+                <p class="login-title text-left mb-3">
+                  Please enter your login details below...
+                </p>
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input
+                      type="text"
+                      name="username"
+                      class="p_input form-control"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input
+                      type="text"
+                      name="password"
+                      class="form-control p_input"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <input
+                      type="submit"
+                      class="btn btn-primary btn-block enter-btn"
+                      value="Login"
+                      name="login"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
         </div>
-        {% endcomment %} {% for message in messages %}
-        <p
-          class="error-message"
-          style="
-            position: absolute;
-            width: 425px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            white-space: nowrap;
-          "
-        >
-          {{message}}
-        </p>
-        {% endfor %}
-      </form>
+        <!-- row ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
     </div>
   </body>
 </html>
