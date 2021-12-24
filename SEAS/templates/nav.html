@@ -50,13 +50,13 @@
                 Update Database
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'classReq:classReq' %}">
                 Classroom Requirements
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'revenue:iubRevenue' %}">
                 Revenue Of IUB
@@ -67,7 +67,7 @@
                 School Revenue Breakdown
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'enrollment:expanded' %}">
                 Enrollment Information (Expanded)
@@ -78,18 +78,24 @@
                 Enrollment Information (Compact)
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item" href="{% url 'resources:Resource_Usage' %}">
+              <a
+                class="dropdown-item"
+                href="{% url 'resources:Resource_Usage' %}"
+              >
                 Usage Of The Resources
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'resources:Resource_Comparison' %}">
+              <a
+                class="dropdown-item"
+                href="{% url 'resources:Resource_Comparison' %}"
+              >
                 Availability and course offering comparison
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'admin:index' %}">
                 Administration
@@ -105,7 +111,7 @@
           <a
             class="nav-link active"
             aria-current="page"
-            href="{% url 'login:login' %}"
+            href="logout"
             method="post"
             >Logout</a
           >

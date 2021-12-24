@@ -35,3 +35,8 @@ def index(request):
         #             return redirect('/')
     else:
         return render(request, 'login/login.html')
+
+def logout(request):
+    auth.logout(request)
+    messages.info(request, 'Logged Out Successfully!')
+    return index(request)
