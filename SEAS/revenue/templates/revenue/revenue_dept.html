@@ -20,6 +20,7 @@
 				{% endfor %}
 			</select>
 			<button type="submit">Load</button>
+			<button onclick="window.print()">Print this page</button>
 		</form> 
 	</div>
 
@@ -200,16 +201,16 @@
 					</thead>
 					<thead class="fixedHeader">
 						<tr>
-							{% for colName in colNames %}​
-							<th>​{{colName}}​</th>
-							​{% endfor %} 
-						​</tr> 
+							{% for colName in colNames %}
+							<th>{{colName}}</th>
+							{% endfor %} 
+						</tr> 
 					</thead>
 					<tbody>
 						{% for row in revenues %} 
 						<tr>
 							{% for item in row %}
-							<td>​{{item}}​</td> 
+							<td>{{item}}</td> 
 							{% endfor %}
 						</tr>
 						{% endfor %}

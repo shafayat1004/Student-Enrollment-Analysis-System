@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block title %}Usage Of The Resources{% endblock
-title %} {% block content %}
+{% extends 'base.html' %} {% block title %}Usage Of The Resources 
+{% endblock title %} 
+{% block content %}
 <div class="searchRow">
   <form method="POST" class="semesterSelection">
     {% csrf_token %}
@@ -14,6 +15,7 @@ title %} {% block content %}
       {% endfor %}
     </select>
     <button type="submit">Load</button>
+    <button onclick="window.print()">Print this page</button>
   </form>
 </div>
 

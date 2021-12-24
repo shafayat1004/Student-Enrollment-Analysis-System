@@ -2,6 +2,8 @@ h1{
     text-align: center;
 }
 table{
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
     margin-left: auto;
     margin-right: auto;
     text-align:center;

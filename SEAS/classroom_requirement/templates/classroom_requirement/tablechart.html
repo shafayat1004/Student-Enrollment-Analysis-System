@@ -19,6 +19,7 @@
             </select>
             <button type="submit">Load</button>
         </form> 
+        <button onclick="window.print()">Print this page</button>
     </div>
 
     <h1>Classroom Requirement As Per Course Requirement (Summary)</h1>
@@ -53,7 +54,7 @@
         </div> 
     </div>
     <div class="chart row" style="width:90%; margin-left: auto;margin-right: auto;">
-        <div class="column">
+        <div class="col-md-6">
             <canvas id="pieChartD6" width="100%"></canvas>
             <script>
                 Chart.register(ChartDataLabels);
@@ -123,7 +124,7 @@
             </script>
         </div>
 
-        <div class="column">
+        <div class="col-md-6">
             <canvas id="pieChartD7" width="100%"></canvas>
             <script>
                 const ctx2 = document.getElementById('pieChartD7').getContext('2d');
