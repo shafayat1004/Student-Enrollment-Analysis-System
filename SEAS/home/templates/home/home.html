@@ -2,19 +2,47 @@
 
 {% block content %}
 <style>
-.col-md-3{
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-  margin-top: 15px;
+.card{
   background-color: rgb(206, 255, 178);
+  overflow: hidden;
+  padding: 15px;
+}
+
+.card:hover {
+  background-color: rgb(149, 243, 94);
+  border-radius: 20px;
+}
+
+.card-container-content {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.admin-btn-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-btn {
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: rgb(99, 99, 209);
+  color: white;
+}
+
+.admin-btn:hover {
+  background-color: rgb(80, 80, 214);
+  color: white;
 }
 </style>
-
-<div class="row" style="margin-left: auto;margin-right: auto;">
-  <div class="col-md-3 card" style="width: 18rem;">
+<div class="card-container-content">
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Classroom Requirements</h5>
       <p class="card-text">View classroom requirement summary and percentage distribution of classrooms per class size pie chart.</p>
       <a class="stretched-link" href="{% url 'classReq:classReq' %}">
@@ -22,9 +50,9 @@
     </div>
   </div>
   
-  <div class="col-md-3 card" style="width: 18rem;">
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Enrollment Information (Compact)</h5>
       <p class="card-text">View comparison of the number of sections offered across schools for a range of class sizes.</p>
       <a class="stretched-link" href="{% url 'enrollment:compact' %}">
@@ -33,9 +61,9 @@
   </div>
   
 
-  <div class="col-md-3 card" style="width: 18rem;">
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Usage Of The Resources</h5>
       <p class="card-text"> Compare average room capacity per room vs. average enrollment per course</p>
       <a class="stretched-link" href="{% url 'resources:Resource_Usage' %}">
@@ -44,23 +72,20 @@
   </div>
   
 
-  <div class="col-md-3 card" style="width: 18rem;">
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Availability and course offering comparison</h5>
       <p class="card-text">View available classrooms summary. Compare available rooms of different capacities vs the required number between semesters</p>
       <a class="stretched-link" href="{% url 'resources:Resource_Comparison' %}">
       </a>
     </div>
   </div>
-  
 
-</div>
-<div class="row" style="margin-left: auto;margin-right: auto;">
-  
-  <div class="col-md-3 card" style="width: 18rem;">
+    
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Enrollment Information (Expanded)</h5>
       <p class="card-text">View enrollment breakdown incremented by 1 for all schools</p>
       <a class="stretched-link" href="{% url 'enrollment:expanded' %}">
@@ -68,10 +93,10 @@
     </div>
   </div>
   
-
-  <div class="col-md-3 card" style="width: 18rem;">
+  
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Revenue Of IUB</h5>
       <p class="card-text">View historical revenue breakdown by school of IUB.</p>
       <a class="stretched-link" href="{% url 'revenue:iubRevenue' %}">
@@ -79,33 +104,34 @@
     </div>
   </div>
   
-
-  <div class="col-md-3 card" style="width: 18rem;">
+  
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Revenue Of School</h5>
       <p class="card-text">View historical revenue breakdown of all departments of a selected school </p>
       <a class="stretched-link" href="{% url 'revenue:schoolRevenue' %}">
       </a>
     </div>
   </div>
-
   
-  <div class="col-md-3 card" style="width: 18rem;">
+  
+  <div class="card">
     <img class="card-img-top" src="..." alt="Card image cap">
-    <div class="card-body">
+    <div class="">
       <h5 class="card-title">Add New Semester Data</h5>
       <p class="card-text">Upload a new tally sheet to update database.</p>
-      <a class="stretched-link" href="{% url 'update:upload_file' %}">
-      </a>
+      <a class="stretched-link" href="{% url 'update:upload_file' %}"></a>
     </div>
   </div>
 </div>
-<div class="row" style="margin-left: auto;margin-right: auto;text-align:center;">
-  <a class="dropdown-item" href="{% url 'admin:index' %}">
+<div class="admin-btn-container">
+  <a class="admin-btn" href="{% url 'admin:index' %}">
     Administration
   </a>
 </div>
+
+
 
 
 {% endblock content%}
