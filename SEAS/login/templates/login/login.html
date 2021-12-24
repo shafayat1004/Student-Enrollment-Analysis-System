@@ -43,14 +43,11 @@
               login-bg
             "
           >
-            <div class="card col-lg-4 mx-auto login-form">
+            <div class="card col-lg-4 mx-auto login-form" style="width:450px">
               <div class="card-body px-5 py-5">
                 <h1 class="text-center app-title">
                   STUDENT ENROLLMENT ANALYSIS SYSTEM
                 </h1>
-                <p class="login-title text-left mb-3">
-                  Please enter your login details below...
-                </p>
                 <form action="" method="POST">
                   {% csrf_token %}
                   <div class="form-group">
@@ -69,6 +66,13 @@
                       class="form-control p_input"
                     />
                   </div>
+                  {% if messages %}
+                  <ul class="messages">
+                      {% for message in messages %}
+                      <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                      {% endfor %}
+                  </ul>
+                  {% endif %}
                   <div class="text-center">
                     <input
                       type="submit"

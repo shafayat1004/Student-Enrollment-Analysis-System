@@ -82,16 +82,14 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{% url 'resources:Resource_Usage' %}"
-              >
+                href="{% url 'resources:Resource_Usage' %}">
                 Usage Of The Resources
               </a>
             </li>
             <li>
               <a
                 class="dropdown-item"
-                href="{% url 'resources:Resource_Comparison' %}"
-              >
+                href="{% url 'resources:Resource_Comparison' %}">
                 Availability and course offering comparison
               </a>
             </li>
@@ -111,7 +109,7 @@
           <a
             class="nav-link active"
             aria-current="page"
-            href="logout"
+            href="{% url 'login:logout' %}"
             method="post"
             >Logout</a
           >

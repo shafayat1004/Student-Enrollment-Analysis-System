@@ -39,4 +39,4 @@ def index(request):
 def logout(request):
     auth.logout(request)
     messages.info(request, 'Logged Out Successfully!')
-    return index(request)
+    return redirect('/')
