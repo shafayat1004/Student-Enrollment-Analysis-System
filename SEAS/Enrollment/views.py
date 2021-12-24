@@ -34,12 +34,14 @@ def schoolWiseEnrollExpand( request ):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
-    
+    # Fetch all schools and create select clause for them
+    query = """
+        SELECT cSchool_ID AS sch
+	    FROM School_T;
+    """
     with connection.cursor() as cursor:
         cursor.execute( query )
-        schools = [ row[0] for row in cursor.fetchall() ]
-
-        
+        schools = [ row[0] for row in cursor.fetchall() ]  
     
     year = ''
     session = ''
@@ -98,11 +100,6 @@ def schoolWiseEnrollExpand( request ):
      to the Enrollment which gets incremented by one.
     --------------------------------------------------
     '''
-    # Fetch all schools and create select clause for them
-    query = """
-        SELECT cSchool_ID AS sch
-	    FROM School_T;
-    """
 
     sqlClause = ""
     for school in schools:
@@ -193,6 +190,11 @@ def schoolWiseEnrollCompact( request ):
         cursor.execute(query)
         sessions = cursor.fetchall()
 
+    # Fetch all schools and create select clause for them
+    query = """
+        SELECT cSchool_ID AS sch
+	    FROM School_T;
+    """
     
     with connection.cursor() as cursor:
         cursor.execute( query )
@@ -217,11 +219,7 @@ def schoolWiseEnrollCompact( request ):
     as total sections for all schools.
     --------------------------------------------------
     '''
-    # Fetch all schools and create select clause for them
-    query = """
-        SELECT cSchool_ID AS sch
-	    FROM School_T;
-    """
+    
     sqlClause = ""
     for school in schools:
         sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Counter ELSE 0 END ) AS {school},\n"
