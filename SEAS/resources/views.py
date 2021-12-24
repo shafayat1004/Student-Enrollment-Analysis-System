@@ -131,29 +131,27 @@ def resourceUsage(request):
 
     rooms = [(20, 20), (30, 3), (35, 18), (40, 10), (50, 34), (54, 1), (64, 2), (124, 3), (168, 1)]
 
-    roomGenerationQuery = ''
-    ranNever = True
-    for i, room in enumerate(rooms):
-        if ranNever:
-            roomGenerationQuery = "SELECT " + str(room[0]) + " AS Class_Size, " + str(room[1]) + " AS nRooms UNION"
-            ranNever = False
-        if i == len(rooms)-1:
-            roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1])    
-            break
-        roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1]) + " UNION"
+    # roomGenerationQuery = ''
+    # ranNever = True
+    # for i, room in enumerate(rooms):
+    #     if ranNever:
+    #         roomGenerationQuery = "SELECT " + str(room[0]) + " AS Class_Size, " + str(room[1]) + " AS nRooms UNION"
+    #         ranNever = False
+    #     if i == len(rooms)-1:
+    #         roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1])    
+    #         break
+    #     roomGenerationQuery += "\nSELECT " + str(room[0]) + " , " + str(room[1]) + " UNION"
 
-    query = f"""
-            SELECT Class_Size AS "Class Size", nRooms AS "IUB Resource", (Class_Size*nRooms) AS "Capacity"
-            FROM(
-                {roomGenerationQuery}
-            ) AS iubResource
+    query = """
+            SELECT nCapacity AS "Class Size", nRooms AS "IUB Resource", (nCapacity*nRooms) AS "Capacity"
+            FROM
+                Resources_T AS iubResource
                 
             UNION
 
-            SELECT "Total", SUM(nRooms) , SUM(Class_Size*nRooms)
-            FROM(
-                {roomGenerationQuery}
-            ) AS iubResource
+            SELECT "Total", SUM(nRooms) , SUM(nCapacity*nRooms)
+            FROM
+                Resources_T AS iubResource
             """
     
     with connection.cursor() as cursor:
@@ -254,10 +252,9 @@ def resourceComp(request):
     
     query = """
                 
-            SELECT iubResource.Class_Size AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6 Requirement", (req.Class_Room_6 - iubResource.nRooms) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7 Requirement", (req.Class_Room_7 - iubResource.nRooms) AS "Difference for Slot 7"
-            FROM(
-                SELECT 20 AS Class_Size, 20 AS nRooms UNION SELECT 30, 3 UNION SELECT 35, 18 UNION SELECT 40, 10 UNION SELECT 50, 34 UNION SELECT 54, 1 UNION SELECT 64, 2 UNION SELECT 124, 3 UNION SELECT 168, 1
-                ) AS iubResource	
+            SELECT iubResource.nCapacity AS "Class Size", iubResource.nRooms AS "IUB Resource", req.Class_Room_6 AS "Slot 6 Requirement", (iubResource.nRooms - req.Class_Room_6) AS "Difference for 6 slots", req.Class_Room_7 AS "Slot 7 Requirement", (iubResource.nRooms - req.Class_Room_7) AS "Difference for Slot 7"
+            FROM
+                Resources_T AS iubResource
                 INNER JOIN (
                     SELECT ( 
                         CASE 
@@ -282,14 +279,13 @@ def resourceComp(request):
                     HAVING Class_Size != 0
                     ORDER BY Class_Size
                 ) AS req 
-                ON req.Class_Size = iubResource.Class_Size
+                ON req.Class_Size = iubResource.nCapacity
 
             UNION
 
-            SELECT "Total", SUM(iubResource.nRooms), SUM(req.Class_Room_6), SUM(req.Class_Room_6 - iubResource.nRooms), SUM(req.Class_Room_7), SUM(req.Class_Room_7 - iubResource.nRooms)
-            FROM(
-                SELECT 20 AS Class_Size, 20 AS nRooms UNION SELECT 30, 3 UNION SELECT 35, 18 UNION SELECT 40, 10 UNION SELECT 50, 34 UNION SELECT 54, 1 UNION SELECT 64, 2 UNION SELECT 124, 3 UNION SELECT 168, 1
-                ) AS iubResource	
+            SELECT "Total", SUM(iubResource.nRooms), SUM(req.Class_Room_6), SUM(iubResource.nRooms - req.Class_Room_6), SUM(req.Class_Room_7), SUM(iubResource.nRooms - req.Class_Room_7)
+            FROM
+                Resources_T AS iubResource
                 INNER JOIN (
                     SELECT ( 
                         CASE 
@@ -314,7 +310,7 @@ def resourceComp(request):
                     HAVING Class_Size != 0
                     ORDER BY Class_Size
                 ) AS req 
-                ON req.Class_Size = iubResource.Class_Size
+                ON req.Class_Size = iubResource.nCapacity
             """
     values={
         "year" : str(year),

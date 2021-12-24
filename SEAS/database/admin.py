@@ -3,6 +3,13 @@ from django.contrib import admin
 # Register your models here.
 from database import models
 
+class ResourcesAdmin(admin.ModelAdmin):  
+    model = models.ResourcesT
+    list_display = [field.name for field in model._meta.fields]
+    search_fields = [model._meta.pk.name]
+
+admin.site.register(models.ResourcesT,  ResourcesAdmin)
+
 class ClassroomAdmin(admin.ModelAdmin):  
     model = models.ClassroomT
     list_display = [field.name for field in model._meta.fields]

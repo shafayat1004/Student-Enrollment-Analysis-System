@@ -94,3 +94,9 @@ class SectionT(models.Model):
         db_table = 'Section_T'
         unique_together = ('cCoffCode_ID', 'cDepartment_ID', 'eSession', 'dYear', 'nSectionNumber')
 
+class ResourcesT(models.Model):
+    nCapacity = models.IntegerField(db_column='nCapacity', primary_key=True, null=False, blank=False)
+    nRooms = models.IntegerField(db_column='nRooms', blank=False, null=False)
+
+    class Meta:
+        db_table = 'Resources_T'
