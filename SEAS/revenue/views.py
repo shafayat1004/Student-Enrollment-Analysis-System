@@ -28,7 +28,17 @@ def iubRevenue( request ):
     for school in schools:
         sqlClause += f"SUM( CASE WHEN E.School = '{school}' THEN Revenue ELSE 0 END ) AS {school},\n"
 
-    # Run query for revenue data of all schools
+
+    """
+    REVENUE OF IUB
+    --------------------------------------------------------
+    Query that sums up the revenue of all sections by school
+    and groups them by semester and year. Percentage change 
+    in revenue is calculated by using the current semester 
+    revenue total and the revenue total of the same semester 
+    session of the previous year.
+    --------------------------------------------------------
+    """
     query = f"""
         SELECT 
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
@@ -114,7 +124,16 @@ def deptRevenue( request ):
         depColSqlClause += f"SUM( CASE WHEN Department = '{dept}' THEN Revenue ELSE 0 END ) AS {dept},\n"
         depPercentColSqlClause += f"ROUND( 100 * ( SUM( {dept} ) - LAG( SUM( {dept} ), 3,  SUM( {dept} ) ) OVER () ) / SUM( {dept} ) ) AS '%{dept}',\n"
   
-    # Run query for revenue data for the departments
+    """  
+    REVENUE OF THE SELECTED SCHOOL
+    --------------------------------------------------------
+    Query that sums up the revenue of each section of the
+    selected school by department and groups them by semester 
+    and year. Percentage change in revenue is calculated by 
+    using the current semester revenue and the revenue
+    of the same semester session of the previous year.
+    --------------------------------------------------------
+    """
     query = f"""
         SELECT 
             CONCAT( Years, ' ',  Sessions ) AS 'Semester',
