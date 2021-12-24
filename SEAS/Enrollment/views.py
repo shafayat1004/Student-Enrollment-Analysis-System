@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
-from .utils import schoolEnrollChartDataPacker
 # Suhaila's stuff
 
 

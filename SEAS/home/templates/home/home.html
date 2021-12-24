@@ -1,6 +1,9 @@
-{% extends 'base.html' %} {% block title %}Home{% endblock title %} 
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %} 
 
 {% block content %}
+{% load static %} 
 <style>
 .card{
   background-color: rgb(206, 255, 178);
@@ -10,11 +13,12 @@
 
 .card:hover {
   background-color: rgb(149, 243, 94);
-  border-radius: 20px;
+  border-radius: 15px;
+  transform: scale(1.05);
 }
 
 .card-container-content {
-  margin-top: 50px;
+  margin-top: 15px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 15px;
@@ -24,6 +28,11 @@
   margin-top: 15px;
   display: flex;
   justify-content: center;
+}
+
+.card-img-top {
+  height: 65px;
+  margin-bottom: 10px;
 }
 
 .admin-btn {
@@ -37,11 +46,12 @@
 .admin-btn:hover {
   background-color: rgb(80, 80, 214);
   color: white;
+  transform: scale(1.05);
 }
 </style>
 <div class="card-container-content">
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/class-req.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Classroom Requirements</h5>
       <p class="card-text">View classroom requirement summary and percentage distribution of classrooms per class size pie chart.</p>
@@ -51,7 +61,7 @@
   </div>
   
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/enrollment-1.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Enrollment Information (Compact)</h5>
       <p class="card-text">View comparison of the number of sections offered across schools for a range of class sizes.</p>
@@ -62,7 +72,7 @@
   
 
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/resources.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Usage Of The Resources</h5>
       <p class="card-text"> Compare average room capacity per room vs. average enrollment per course</p>
@@ -73,7 +83,7 @@
   
 
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/course.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Availability and course offering comparison</h5>
       <p class="card-text">View available classrooms summary. Compare available rooms of different capacities vs the required number between semesters</p>
@@ -84,7 +94,7 @@
 
     
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/enrollment-2.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Enrollment Information (Expanded)</h5>
       <p class="card-text">View enrollment breakdown incremented by 1 for all schools</p>
@@ -95,7 +105,7 @@
   
   
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/revenue-iub.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Revenue Of IUB</h5>
       <p class="card-text">View historical revenue breakdown by school of IUB.</p>
@@ -106,7 +116,7 @@
   
   
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/revenue-school.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Revenue Of School</h5>
       <p class="card-text">View historical revenue breakdown of all departments of a selected school </p>
@@ -117,7 +127,7 @@
   
   
   <div class="card">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{% static 'assets/update-database.svg' %}" alt="Card image cap">
     <div class="">
       <h5 class="card-title">Add New Semester Data</h5>
       <p class="card-text">Upload a new tally sheet to update database.</p>
@@ -130,8 +140,4 @@
     Administration
   </a>
 </div>
-
-
-
-
 {% endblock content%}
