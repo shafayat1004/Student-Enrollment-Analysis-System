@@ -1,18 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form class="searchRow" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Upload</button>
-    </form>
-        
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <style>
+    .searchRow{
+        margin-left : auto;
+        margin-right : auto;
+        margin-top : auto;
+        margin-bottom : auto;
+    }
+    .center {
+        padding: 50px 0;
+        }
+    </style>
+    <div class='center'>    
+        <form class="searchRow" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Upload</button>
+        </form>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
 
 {% endblock content %}
