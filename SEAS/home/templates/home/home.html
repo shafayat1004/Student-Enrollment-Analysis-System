@@ -1,8 +1,111 @@
-{% extends 'base.html' %} {% block title %}Home{% endblock title %} {% block
-content %}
+{% extends 'base.html' %} {% block title %}Home{% endblock title %} 
 
-<div class="card-container">
-  <div class="card-1">CARD</div>
+{% block content %}
+<style>
+.col-md-3{
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  background-color: rgb(206, 255, 178);
+}
+</style>
+
+<div class="row" style="margin-left: auto;margin-right: auto;">
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Classroom Requirements</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'classReq:classReq' %}">
+      </a>
+    </div>
+  </div>
+  
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Enrollment Information (Compact)</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'enrollment:compact' %}">
+      </a>
+    </div>
+  </div>
+  
+
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Usage Of The Resources</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'resources:Resource_Usage' %}">
+      </a>
+    </div>
+  </div>
+  
+
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Availability and course offering comparison</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'resources:Resource_Comparison' %}">
+      </a>
+    </div>
+  </div>
+  
+
 </div>
+<div class="row" style="margin-left: auto;margin-right: auto;">
+  
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Enrollment Information (Expanded)</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'enrollment:expanded' %}">
+      </a>
+    </div>
+  </div>
+  
+
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Revenue Of IUB</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'revenue:iubRevenue' %}">
+      </a>
+    </div>
+  </div>
+  
+
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Revenue Of School</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'revenue:schoolRevenue' %}">
+      </a>
+    </div>
+  </div>
+
+  
+  <div class="col-md-3 card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Add New Semester Data</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <a class="stretched-link" href="{% url 'update:upload_file' %}">
+      </a>
+    </div>
+  </div>
+</div>
+<div class="row" style="margin-left: auto;margin-right: auto;text-align:center;">
+  <a class="dropdown-item" href="{% url 'admin:index' %}">
+    Administration
+  </a>
+</div>
+
 
 {% endblock content%}
