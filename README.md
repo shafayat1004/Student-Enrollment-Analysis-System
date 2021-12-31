@@ -34,76 +34,61 @@ Department of Computer Science & Engineering
 
 *Date of Submission: 31<sup>st</sup> October, 2021*
 
-**Table of Contents**
+# **Table of Contents**
 
-[Chapter 1: Introduction](#chapter-1-introduction)
+## [Chapter 1: Introduction](#chapter-1-introduction)
 
-[A. Background of the Organization
-[2](#background-of-the-organization)](#background-of-the-organization)
+[A. Background of the Organization](#background-of-the-organization)
 
-[B. Background of the Project
-[2](#background-of-the-project)](#background-of-the-project)
+[B. Background of the Project](#background-of-the-project)
 
-[C. Objectives of the Project
-[3](#objectives-of-the-project)](#objectives-of-the-project)
+[C. Objectives of the Project](#objectives-of-the-project)
 
-[D. Scope of the Project
-[3](#scope-of-the-project)](#scope-of-the-project)
+[D. Scope of the Project](#scope-of-the-project)
 
-[Chapter 2: Requirement Analysis
-[4](#chapter-2-requirement-analysis)](#chapter-2-requirement-analysis)
+## [Chapter 2: Requirement Analysis](#chapter-2-requirement-analysis)
 
-[A. Rich Picture - Existing System [4](#_Toc91299041)](#_Toc91299041)
+[A. Rich Picture - Existing System](#_Toc91299041)
 
-[B. Six Elements Analysis - Existing System
-[5](#six-elements-analysis---existing-system)](#six-elements-analysis---existing-system)
+[B. Six Elements Analysis - Existing System](#six-elements-analysis---existing-system)
 
-[C. Business Process Model and Notation 2.0 – Existing System
-[15](#business-process-model-and-notation-2.0-existing-system)](#business-process-model-and-notation-2.0-existing-system)
+[C. Business Process Model and Notation 2.0 – Existing System](#business-process-model-and-notation-2.0-existing-system)
 
-[D. Problem Analysis – Existing System
-[18](#d.-problem-analysis-existing-system)](#d.-problem-analysis-existing-system)
+[D. Problem Analysis – Existing System](#d.-problem-analysis-existing-system)
 
-[D. Rich Picture - Proposed System
-[21](#rich-picture---proposed-system)](#rich-picture---proposed-system)
+[D. Rich Picture - Proposed System](#rich-picture---proposed-system)
 
-[E. Six Elements Analysis - Proposed System
-[22](#six-elements-analysis---proposed-system)](#six-elements-analysis---proposed-system)
+[E. Six Elements Analysis - Proposed System](#six-elements-analysis---proposed-system)
 
-[F. BUsiness Process Model and Notation 2.0 – Proposed System
-[29](#business-process-model-and-notation-2.0-proposed-system)](#business-process-model-and-notation-2.0-proposed-system)
+[F. BUsiness Process Model and Notation 2.0 – Proposed System](#business-process-model-and-notation-2.0-proposed-system)
 
-[Chapter 3: Logical System design
-[34](#chapter-3-logical-system-design)](#chapter-3-logical-system-design)
+## [Chapter 3: Logical System design](#chapter-3-logical-system-design)
 
-[A. Business Rules [34](#business-rules)](#business-rules)
+[A. Business Rules](#business-rules)
 
-[B. ERD [35](#erd)](#erd)
+[B. ERD](#erd)
 
-[C. Relational Schema [36](#relational-schema)](#relational-schema)
+[C. Relational Schema](#relational-schema)
 
-[D. Normalization [37](#normalization)](#normalization)
+[D. Normalization](#normalization)
 
-[E. DATA DICTIONARY [38](#data-dictionary)](#data-dictionary)
+[E. Datat Dictionary](#data-dictionary)
 
-[Chapter 4: Physical System Design
-[40](#chapter-4-physical-system-design)](#chapter-4-physical-system-design)
+## [Chapter 4: Physical System Design](#chapter-4-physical-system-design)
 
-[A. Input Forms [40](#input-forms)](#input-forms)
+[A. Input Forms](#input-forms)
 
-[B. Output Query & Reports
-[43](#output-query-reports)](#output-query-reports)
+[B. Output Query & Reports](#output-query-reports)
 
-[CHAPTER 5: Conclusion
-[61](#chapter-5-conclusion)](#chapter-5-conclusion)
+## [Chapter 5: Conclusion](#chapter-5-conclusion)
 
-[A. Problems and solution
-[61](#problems-and-solution)](#problems-and-solution)
+[A. Problems and solution](#problems-and-solution)
 
-[B. Additional feature and future development
-[62](#b.-additional-feature-and-future-development)](#b.-additional-feature-and-future-development)
+[B. Additional feature and future development](#b.-additional-feature-and-future-development)
 
-[References [63](#_Toc91299060)](#_Toc91299060)
+## [References](#_Toc91299060)
+
+## Figures
 
 [Figure 1 Rich Picture of Existing System](#_Toc91299061)
 
