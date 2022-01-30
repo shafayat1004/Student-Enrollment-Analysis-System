@@ -1,3 +1,7 @@
+#### Project Videos
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/JD5bnZqs2-8/0.jpg)](https://youtu.be/JD5bnZqs2-8)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/olExNtIXbC8/0.jpg)](https://youtu.be/olExNtIXbC8)
+
 # Setup
 
 1.  Clone the repository
