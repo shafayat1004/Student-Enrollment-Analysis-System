@@ -45,7 +45,7 @@ Latest (Shorter Video)
     ```
     CREATE DATABASE SEAS_Database;
     CREATE USER 'djangouser'@'localhost' IDENTIFIED WITH mysql_native_password BY '12345';
-    GRANT ALL ON blog_data.* TO 'djangouser'@'localhost';
+    GRANT ALL ON SEAS_Database.* TO 'djangouser'@'localhost';
     FLUSH PRIVILEGES;
     ```
 1.  In the SEAS folder:
