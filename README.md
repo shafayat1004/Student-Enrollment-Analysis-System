@@ -1,6 +1,9 @@
 #### Project Videos
 Longer (Older Video)
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/JD5bnZqs2-8/0.jpg)](https://youtu.be/JD5bnZqs2-8)
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=JD5bnZqs2-8" target="_blank">
+ <img src="http://img.youtube.com/vi/nTQUwghvy5Q/mqdefault.jpg" alt="Watch the video" width="240" height="180" border="10" />
+</a>
 
 
 Latest (Shorter Video)
